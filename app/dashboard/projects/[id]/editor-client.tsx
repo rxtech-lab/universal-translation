@@ -8,6 +8,13 @@ import { TranslationEditor } from "@/lib/translation/components/translation-edit
 import { useAutoSave } from "@/lib/translation/components/use-auto-save";
 import { useTranslationProject } from "@/lib/translation/components/use-translation-project";
 import { useTranslationStream } from "@/lib/translation/components/use-translation-stream";
+import {
+  DocumentClient,
+  type DocumentFormatData,
+} from "@/lib/translation/document/client";
+import { DocumentEditor } from "@/lib/translation/document/document-editor";
+import { PoClient, type PoFormatData } from "@/lib/translation/po/client";
+import { PoEditor } from "@/lib/translation/po/po-editor";
 import { SrtClient, type SrtFormatData } from "@/lib/translation/srt/client";
 import { SrtEditor } from "@/lib/translation/srt/srt-editor";
 import type { Term } from "@/lib/translation/tools/term-tools";
@@ -44,6 +51,34 @@ export function EditorClient({
   initialTerms,
 }: EditorClientProps) {
   const [client] = useState(() => {
+    if (dbProject.formatId === "document") {
+      const c = new DocumentClient();
+      if (dbProject.content && dbProject.formatData) {
+        c.loadFromJson(
+          dbProject.content as TranslationProject,
+          dbProject.formatData as unknown as DocumentFormatData,
+          {
+            blobUrl: dbProject.blobUrl ?? undefined,
+            projectId: dbProject.id,
+          },
+        );
+      }
+      return c;
+    }
+    if (dbProject.formatId === "po") {
+      const c = new PoClient();
+      if (dbProject.content && dbProject.formatData) {
+        c.loadFromJson(
+          dbProject.content as TranslationProject,
+          dbProject.formatData as unknown as PoFormatData,
+          {
+            blobUrl: dbProject.blobUrl ?? undefined,
+            projectId: dbProject.id,
+          },
+        );
+      }
+      return c;
+    }
     if (dbProject.formatId === "srt") {
       const c = new SrtClient();
       if (dbProject.content && dbProject.formatData) {
@@ -269,7 +304,11 @@ export function EditorClient({
       ? "Xcode Localization Catalog"
       : dbProject.formatId === "srt"
         ? "SubRip Subtitles"
-        : dbProject.formatId;
+        : dbProject.formatId === "po"
+          ? "Gettext PO"
+          : dbProject.formatId === "document"
+            ? "Document"
+            : dbProject.formatId;
 
   return (
     <TranslationEditor
@@ -291,7 +330,21 @@ export function EditorClient({
       onTranslationUpdated={handleTranslationUpdated}
       onClearAllTranslations={handleClearAllTranslations}
     >
-      {dbProject.formatId === "srt" ? (
+      {dbProject.formatId === "document" ? (
+        <DocumentEditor
+          project={project}
+          onEntryUpdate={handleEntryUpdate}
+          streamingEntryIds={streamingEntryIds}
+          terms={terms}
+        />
+      ) : dbProject.formatId === "po" ? (
+        <PoEditor
+          project={project}
+          onEntryUpdate={handleEntryUpdate}
+          streamingEntryIds={streamingEntryIds}
+          terms={terms}
+        />
+      ) : dbProject.formatId === "srt" ? (
         <SrtEditor
           project={project}
           onEntryUpdate={handleEntryUpdate}

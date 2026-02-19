@@ -18,11 +18,7 @@ import {
   uniqueTermId,
 } from "../tools/term-tools";
 import type { XclocTranslationEvent } from "./events";
-
-// ---- Constants -------------------------------------------------
-
-const BATCH_SIZE = 20;
-const DEFAULT_MODEL = "google/gemini-3-flash";
+import { BATCH_SIZE, DEFAULT_MODEL } from "../config";
 
 // ---- Term template resolution ----------------------------------
 
@@ -99,7 +95,9 @@ async function* scanTerminology(params: {
   const domainContext =
     params.formatContext === "subtitle"
       ? "subtitle translation"
-      : "software localization";
+      : params.formatContext === "document"
+        ? "document translation"
+        : "software localization";
 
   const result = await generateText({
     model: params.model,
@@ -111,7 +109,7 @@ Target language: ${params.targetLanguage}
 Analyze the source texts and identify terms that need consistent translation:
 - Brand names and product names
 - Technical terms specific to this domain
-${params.formatContext === "subtitle" ? "- Character names and recurring phrases\n- Location names mentioned in dialogue" : "- UI element names appearing in multiple strings"}
+${params.formatContext === "subtitle" ? "- Character names and recurring phrases\n- Location names mentioned in dialogue" : params.formatContext === "document" ? "- Domain-specific terminology\n- Recurring phrases and key concepts" : "- UI element names appearing in multiple strings"}
 - Proper nouns and abbreviations
 
 For each term, provide a kebab-case ID, the original text, a recommended translation, and a brief comment.
@@ -190,23 +188,49 @@ async function* translateBatch(params: {
   const exampleTemplate = "${{argo-trading}}";
 
   const isSubtitle = params.formatContext === "subtitle";
-  const systemRole = isSubtitle
-    ? "You are a professional subtitle translator."
-    : "You are a professional translator for software localization.";
-  const formatRules = isSubtitle
-    ? `1. For recognized terminology, use the template format ${templateFormat} instead of translating directly.
+  const isPo = params.formatContext === "po-localization";
+
+  let systemRole: string;
+  let formatRules: string;
+
+  if (isSubtitle) {
+    systemRole = "You are a professional subtitle translator.";
+    formatRules = `1. For recognized terminology, use the template format ${templateFormat} instead of translating directly.
    Example: if "Argo Trading" has ID "argo-trading", translate "About Argo Trading" as "关于 ${exampleTemplate}".
 2. Keep translations concise — subtitles must be readable within the cue's time window.
 3. Preserve line breaks within cues when present.
 4. Maintain the tone and register of spoken dialogue.
-5. Use lookup tools if you need context about surrounding subtitle cues.`
-    : `1. For recognized terminology, use the template format ${templateFormat} instead of translating directly.
+5. Use lookup tools if you need context about surrounding subtitle cues.`;
+  } else if (isPo) {
+    systemRole =
+      "You are a professional translator for software and website localization.";
+    formatRules = `1. For recognized terminology, use the template format ${templateFormat} instead of translating directly.
+   Example: if "Argo Trading" has ID "argo-trading", translate "About Argo Trading" as "关于 ${exampleTemplate}".
+2. Preserve printf-style format specifiers exactly: %s, %d, %f, %ld, %1$s, %2$d, %%, etc.
+3. Preserve Python-style format specifiers: {0}, {name}, %(name)s, etc.
+4. Preserve markdown formatting (**bold**, etc.).
+5. Use lookup tools if you need context about surrounding strings.
+6. Keep translations natural and appropriate for app/website UI.
+7. For strings that are only format specifiers or symbols, keep them as-is.
+8. Preserve literal \\n newline sequences in translations.`;
+  } else if (params.formatContext === "document") {
+    systemRole = "You are a professional document translator.";
+    formatRules = `1. For recognized terminology, use the template format ${templateFormat} instead of translating directly.
+   Example: if "Argo Trading" has ID "argo-trading", translate "About Argo Trading" as "关于 ${exampleTemplate}".
+2. Preserve markdown formatting (headings, bold, italic, links, code spans) exactly as-is.
+3. Preserve paragraph structure — do not merge or split paragraphs.
+4. Maintain the tone, register, and style of the original document.
+5. Use lookup tools if you need context about surrounding paragraphs.`;
+  } else {
+    systemRole = "You are a professional translator for software localization.";
+    formatRules = `1. For recognized terminology, use the template format ${templateFormat} instead of translating directly.
    Example: if "Argo Trading" has ID "argo-trading", translate "About Argo Trading" as "关于 ${exampleTemplate}".
 2. Preserve format specifiers exactly: %@, %lld, %1$@, %2$@, %%, etc.
 3. Preserve markdown formatting (**bold**, etc.).
 4. Use lookup tools if you need context about surrounding strings.
 5. Keep translations natural and appropriate for a mobile/desktop app UI.
 6. For strings that are only format specifiers or symbols (like "%@", "|", "•"), keep them as-is.`;
+  }
 
   const result = streamText({
     model: params.model,

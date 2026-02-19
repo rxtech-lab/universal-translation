@@ -1,24 +1,24 @@
 import type { EntryWithResource } from "../tools/context-tools";
 import { translateEntries } from "../xcloc/agent";
-import type { SrtTranslationEvent } from "./events";
+import type { DocumentTranslationEvent } from "./events";
 import { DEFAULT_MODEL } from "../config";
 
 export { resolveTermTemplates } from "../xcloc/agent";
 
 /**
- * Translate SRT subtitle entries using the shared translation pipeline
- * with subtitle-specific system prompts.
+ * Translate document entries using the shared translation pipeline
+ * with document-specific system prompts.
  */
-export async function* translateSrtEntries(params: {
+export async function* translateDocumentEntries(params: {
   entries: EntryWithResource[];
   sourceLanguage: string;
   targetLanguage: string;
   projectId: string;
   model?: string;
-}): AsyncGenerator<SrtTranslationEvent> {
+}): AsyncGenerator<DocumentTranslationEvent> {
   yield* translateEntries({
     ...params,
     model: params.model ?? DEFAULT_MODEL,
-    formatContext: "subtitle",
-  }) as AsyncGenerator<SrtTranslationEvent>;
+    formatContext: "document",
+  }) as AsyncGenerator<DocumentTranslationEvent>;
 }

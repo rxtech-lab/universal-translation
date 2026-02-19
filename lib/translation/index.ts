@@ -41,6 +41,25 @@ export {
   FflateZipDecompressor,
 } from "./upload-processor";
 export { translateEntries } from "./xcloc/agent";
+export type { DocumentFormatData } from "./document/client";
+// Document
+export { DocumentClient } from "./document/client";
+export { documentDescriptor } from "./document/descriptor";
+export type { DocumentTranslationEvent } from "./document/events";
+export {
+  parseTxt,
+  parseMd,
+  parseDocxXml,
+  serializeTxt,
+  serializeMd,
+  serializeDocxXml,
+} from "./document/parser";
+export type { PoFormatData } from "./po/client";
+// PO
+export { PoClient } from "./po/client";
+export { poDescriptor } from "./po/descriptor";
+export type { PoTranslationEvent } from "./po/events";
+export { parsePo, serializePo } from "./po/parser";
 export type { XclocFormatData } from "./xcloc/client";
 // Xcloc
 export { XclocClient } from "./xcloc/client";

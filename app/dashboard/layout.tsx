@@ -25,9 +25,7 @@ export default async function DashboardLayout({
       <SidebarInset>
         <SiteHeader />
         <div className="flex flex-1 flex-col">
-          <div className="@container/main flex flex-1 flex-col gap-2">
-            {children}
-          </div>
+          <div className="@container/main flex flex-1 flex-col">{children}</div>
         </div>
       </SidebarInset>
     </SidebarProvider>
