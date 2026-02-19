@@ -97,10 +97,7 @@ describe("uniqueTermId", () => {
 
 	it("appends -3 when -2 is also taken", () => {
 		expect(
-			uniqueTermId(
-				"argo-trading",
-				new Set(["argo-trading", "argo-trading-2"]),
-			),
+			uniqueTermId("argo-trading", new Set(["argo-trading", "argo-trading-2"])),
 		).toBe("argo-trading-3");
 	});
 });

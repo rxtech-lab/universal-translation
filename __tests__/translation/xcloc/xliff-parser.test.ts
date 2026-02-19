@@ -27,9 +27,7 @@ describe("parseXliff", () => {
 
 	it("parses all <file> elements", () => {
 		expect(doc.files).toHaveLength(2);
-		expect(doc.files[0].original).toBe(
-			"ArgoTradingSwift/InfoPlist.xcstrings",
-		);
+		expect(doc.files[0].original).toBe("ArgoTradingSwift/InfoPlist.xcstrings");
 		expect(doc.files[1].original).toBe(
 			"ArgoTradingSwift/Localizable.xcstrings",
 		);
@@ -79,9 +77,7 @@ describe("parseXliff", () => {
 	});
 
 	it("preserves format specifiers in source text", () => {
-		const percentAt = doc.files[1].transUnits.find(
-			(t) => t.id === "About %@",
-		);
+		const percentAt = doc.files[1].transUnits.find((t) => t.id === "About %@");
 		expect(percentAt).toBeDefined();
 		expect(percentAt!.source).toBe("About %@");
 
@@ -159,9 +155,7 @@ describe("serializeXliff", () => {
 			files: doc.files.map((f) => ({
 				...f,
 				transUnits: f.transUnits.map((tu) =>
-					tu.id === "All"
-						? { ...tu, target: "全部" }
-						: tu,
+					tu.id === "All" ? { ...tu, target: "全部" } : tu,
 				),
 			})),
 		};
@@ -170,9 +164,7 @@ describe("serializeXliff", () => {
 		expect(serialized).toContain("<target>全部</target>");
 
 		const reparsed = parseXliff(serialized);
-		const allEntry = reparsed.files[1].transUnits.find(
-			(t) => t.id === "All",
-		);
+		const allEntry = reparsed.files[1].transUnits.find((t) => t.id === "All");
 		expect(allEntry!.target).toBe("全部");
 	});
 

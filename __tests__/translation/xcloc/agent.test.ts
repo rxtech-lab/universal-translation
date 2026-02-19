@@ -146,9 +146,7 @@ describe("translateProject (mocked AI)", () => {
 		const client = new XclocClient();
 		await client.load(loadTestPayload());
 
-		const { translateProject } = await import(
-			"@/lib/translation/xcloc/agent"
-		);
+		const { translateProject } = await import("@/lib/translation/xcloc/agent");
 		const events = await collectEvents(
 			translateProject({
 				client,
@@ -189,9 +187,7 @@ describe("translateProject (mocked AI)", () => {
 		const client = new XclocClient();
 		await client.load(loadTestPayload());
 
-		const { translateProject } = await import(
-			"@/lib/translation/xcloc/agent"
-		);
+		const { translateProject } = await import("@/lib/translation/xcloc/agent");
 		const events = await collectEvents(
 			translateProject({
 				client,
@@ -236,9 +232,7 @@ describe("translateProject (mocked AI)", () => {
 		const client = new XclocClient();
 		await client.load(loadTestPayload());
 
-		const { translateProject } = await import(
-			"@/lib/translation/xcloc/agent"
-		);
+		const { translateProject } = await import("@/lib/translation/xcloc/agent");
 		await collectEvents(
 			translateProject({
 				client,
@@ -246,12 +240,13 @@ describe("translateProject (mocked AI)", () => {
 			}),
 		);
 
-		// The term template should be resolved to the actual translation
+		// Term templates are preserved (resolved at render/export time)
 		const resource = client.getResource(
 			"ArgoTradingSwift/Localizable.xcstrings",
 		);
 		const entry = resource?.entries.find((e) => e.id === "Argo Trading");
-		expect(entry?.targetText).toBe("Argo交易");
+		// eslint-disable-next-line no-template-curly-in-string
+		expect(entry?.targetText).toBe("${{argo-trading}}");
 	});
 
 	it("splits entries into batches of 20", async () => {
@@ -265,9 +260,7 @@ describe("translateProject (mocked AI)", () => {
 		const client = new XclocClient();
 		await client.load(loadTestPayload());
 
-		const { translateProject } = await import(
-			"@/lib/translation/xcloc/agent"
-		);
+		const { translateProject } = await import("@/lib/translation/xcloc/agent");
 		const events = await collectEvents(
 			translateProject({
 				client,
@@ -296,9 +289,7 @@ describe("translateProject (mocked AI)", () => {
 		const client = new XclocClient();
 		await client.load(loadTestPayload());
 
-		const { translateProject } = await import(
-			"@/lib/translation/xcloc/agent"
-		);
+		const { translateProject } = await import("@/lib/translation/xcloc/agent");
 		const events = await collectEvents(
 			translateProject({
 				client,

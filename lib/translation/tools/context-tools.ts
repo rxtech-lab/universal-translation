@@ -57,16 +57,12 @@ export function createContextTools(allEntries: EntryWithResource[]) {
 			description:
 				"Search all translation entries by source text content. Returns up to 10 matching entries.",
 			inputSchema: z.object({
-				query: z
-					.string()
-					.describe("Search text to find in source entries"),
+				query: z.string().describe("Search text to find in source entries"),
 			}),
 			execute: async ({ query }) => {
 				const lowerQuery = query.toLowerCase();
 				return allEntries
-					.filter((e) =>
-						e.sourceText.toLowerCase().includes(lowerQuery),
-					)
+					.filter((e) => e.sourceText.toLowerCase().includes(lowerQuery))
 					.slice(0, 10)
 					.map((e) => ({
 						index: allEntries.indexOf(e),

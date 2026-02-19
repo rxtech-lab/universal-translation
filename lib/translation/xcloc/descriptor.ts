@@ -1,4 +1,7 @@
-import type { DetectionConfidence, TranslationFormatDescriptor } from "../detection";
+import type {
+	DetectionConfidence,
+	TranslationFormatDescriptor,
+} from "../detection";
 import type { UploadPayload } from "../types";
 import { XclocClient } from "./client";
 
@@ -28,9 +31,7 @@ export const xclocDescriptor: TranslationFormatDescriptor = {
 		if (contentsFile && hasXliff) {
 			// Validate contents.json structure
 			try {
-				const json = JSON.parse(
-					new TextDecoder().decode(contentsFile.content),
-				);
+				const json = JSON.parse(new TextDecoder().decode(contentsFile.content));
 				if (json.targetLocale && json.developmentRegion && json.version) {
 					return {
 						score: 1.0,

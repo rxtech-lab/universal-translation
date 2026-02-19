@@ -35,5 +35,10 @@ export {
 
 // Xcloc
 export { XclocClient } from "./xcloc/client";
+export type { XclocFormatData } from "./xcloc/client";
 export { xclocDescriptor } from "./xcloc/descriptor";
 export type { XclocTranslationEvent } from "./xcloc/events";
+export { translateEntries } from "./xcloc/agent";
+
+// Editor components
+export type { EditorStatus, TranslationEditorProps } from "./components/types";

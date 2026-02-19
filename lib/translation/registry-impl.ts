@@ -1,8 +1,5 @@
 import type { TranslationFormatDescriptor } from "./detection";
-import type {
-	DetectionMatch,
-	TranslationClientRegistry,
-} from "./registry";
+import type { DetectionMatch, TranslationClientRegistry } from "./registry";
 import type { UploadPayload } from "./types";
 
 /**
@@ -48,10 +45,7 @@ export class DefaultTranslationClientRegistry
 			.sort((a, b) => b.confidence.score - a.confidence.score);
 	}
 
-	async resolve(
-		payload: UploadPayload,
-		minConfidence = 0.5,
-	) {
+	async resolve(payload: UploadPayload, minConfidence = 0.5) {
 		const matches = await this.detect(payload);
 		const best = matches[0];
 

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="50%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#a78bfa"/>
+    </linearGradient>
+  </defs>
+  <!-- Rounded square background -->
+  <rect width="128" height="128" rx="28" fill="url(#bg)"/>
+  <!-- Subtle globe arcs -->
+  <circle cx="16" cy="16" r="40" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="2"/>
+  <circle cx="112" cy="112" r="32" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="2"/>
+  <!-- Bold "T" letterform -->
+  <text x="64" y="90" text-anchor="middle" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="80" font-weight="800" fill="white" letter-spacing="-2">T</text>
+</svg>

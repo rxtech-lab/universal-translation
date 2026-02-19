@@ -33,9 +33,7 @@ describe("FflateZipDecompressor", () => {
 		if (result.hasError) return;
 
 		const paths = result.data.files.map((f) => f.path);
-		expect(paths).toContain(
-			"zh-Hans.xcloc/Localized Contents/zh-Hans.xliff",
-		);
+		expect(paths).toContain("zh-Hans.xcloc/Localized Contents/zh-Hans.xliff");
 		expect(paths).toContain("zh-Hans.xcloc/contents.json");
 	});
 

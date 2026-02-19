@@ -196,19 +196,15 @@ describe("XclocClient", () => {
 			const client = new XclocClient();
 			await client.load(loadTestPayload());
 
-			client.updateEntry(
-				"ArgoTradingSwift/Localizable.xcstrings",
-				"All",
-				{ targetText: "全部" },
-			);
+			client.updateEntry("ArgoTradingSwift/Localizable.xcstrings", "All", {
+				targetText: "全部",
+			});
 
 			const result = await client.exportFile();
 			if (result.hasError) return;
 
 			// Decompress the exported zip and parse the XLIFF
-			const zipBuffer = new Uint8Array(
-				await result.data.blob!.arrayBuffer(),
-			);
+			const zipBuffer = new Uint8Array(await result.data.blob!.arrayBuffer());
 			const entries = unzipSync(zipBuffer);
 			const xliffContent =
 				entries["zh-Hans.xcloc/Localized Contents/zh-Hans.xliff"];
@@ -267,9 +263,9 @@ describe("XclocClient", () => {
 			expect(resource.entries.find((e) => e.id === "Back")!.targetText).toBe(
 				"返回",
 			);
-			expect(
-				resource.entries.find((e) => e.id === "Version")!.targetText,
-			).toBe("版本");
+			expect(resource.entries.find((e) => e.id === "Version")!.targetText).toBe(
+				"版本",
+			);
 
 			// Verify total entry count unchanged
 			const totalEntries = client2

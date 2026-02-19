@@ -49,16 +49,16 @@ function unescapeXml(text: string): string {
 
 /** Extract text content between an opening and closing XML tag.
  *  Handles self-closing tags like <source/> and empty tags like <source></source>. */
-function extractTagContent(
-	xml: string,
-	tagName: string,
-): string | undefined {
+function extractTagContent(xml: string, tagName: string): string | undefined {
 	// Match self-closing <tag/> — content is empty string
 	const selfCloseRe = new RegExp(`<${tagName}\\s*/>`);
 	if (selfCloseRe.test(xml)) return "";
 
 	// Match <tag>...</tag> or <tag ...>...</tag> (non-greedy, dotAll)
-	const re = new RegExp(`<${tagName}(?:\\s[^>]*)?>([\\s\\S]*?)</${tagName}>`, "m");
+	const re = new RegExp(
+		`<${tagName}(?:\\s[^>]*)?>([\\s\\S]*?)</${tagName}>`,
+		"m",
+	);
 	const match = xml.match(re);
 	if (!match) return undefined;
 	return unescapeXml(match[1]);

@@ -1,4 +1,5 @@
 import type { TranslationClient } from "../client";
+import type { Term } from "../tools/term-tools";
 import type {
 	OperationResult,
 	TranslationEntry,
@@ -7,17 +8,19 @@ import type {
 	UploadPayload,
 	VirtualFileTree,
 } from "../types";
-import {
-	parseContentsJson,
-	type XclocContentsJson,
-} from "./contents-json";
+import { resolveTermTemplates } from "./agent";
+import { parseContentsJson, type XclocContentsJson } from "./contents-json";
 import type { XclocTranslationEvent } from "./events";
-import {
-	parseXliff,
-	serializeXliff,
-	type XliffDocument,
-} from "./xliff-parser";
-import { zipSync, strToU8 } from "fflate";
+import { parseXliff, serializeXliff, type XliffDocument } from "./xliff-parser";
+import { zipSync, unzipSync, strToU8 } from "fflate";
+
+/** Shape of the format-specific data stored in the DB. */
+export interface XclocFormatData {
+	xliffDoc: XliffDocument;
+	contentsJson: XclocContentsJson;
+	xliffPath: string;
+	originalFileName: string;
+}
 
 export class XclocClient implements TranslationClient<XclocTranslationEvent> {
 	private xliffDoc: XliffDocument = { version: "1.2", files: [] };
@@ -26,6 +29,8 @@ export class XclocClient implements TranslationClient<XclocTranslationEvent> {
 	private originalTree: VirtualFileTree = { files: [] };
 	private xliffPath = "";
 	private originalFileName = "";
+	private blobUrl: string | null = null;
+	private projectId: string | null = null;
 
 	async load(payload: UploadPayload): Promise<OperationResult> {
 		if (payload.kind !== "archive") {
@@ -63,8 +68,7 @@ export class XclocClient implements TranslationClient<XclocTranslationEvent> {
 		if (!xliffFile) {
 			return {
 				hasError: true,
-				errorMessage:
-					"No XLIFF file found in Localized Contents/ directory",
+				errorMessage: "No XLIFF file found in Localized Contents/ directory",
 			};
 		}
 
@@ -181,20 +185,168 @@ export class XclocClient implements TranslationClient<XclocTranslationEvent> {
 		return null;
 	}
 
-	async exportFile(): Promise<
+	/**
+	 * Load from DB-stored JSON content instead of a file payload.
+	 * Used when opening an existing project from the database.
+	 */
+	loadFromJson(
+		content: TranslationProject,
+		formatData: XclocFormatData,
+		opts?: { blobUrl?: string; projectId?: string },
+	): OperationResult {
+		this.project = content;
+		this.xliffDoc = formatData.xliffDoc;
+		this.contentsJson = formatData.contentsJson;
+		this.xliffPath = formatData.xliffPath;
+		this.originalFileName = formatData.originalFileName;
+		this.blobUrl = opts?.blobUrl ?? null;
+		this.projectId = opts?.projectId ?? null;
+		return { hasError: false, data: undefined };
+	}
+
+	/** Get the format-specific data needed for DB persistence. */
+	getFormatData(): XclocFormatData {
+		return {
+			xliffDoc: this.xliffDoc,
+			contentsJson: this.contentsJson ?? {
+				developmentRegion: this.project.sourceLanguage ?? "en",
+				targetLocale: this.project.targetLanguages?.[0] ?? "",
+				toolInfo: {
+					toolBuildNumber: "",
+					toolID: "",
+					toolName: "",
+					toolVersion: "",
+				},
+				version: "1.0",
+				project: "",
+			},
+			xliffPath: this.xliffPath,
+			originalFileName: this.originalFileName,
+		};
+	}
+
+	/** Get the blob URL for the original uploaded file. */
+	getBlobUrl(): string | null {
+		return this.blobUrl;
+	}
+
+	async exportFile(
+		terms?: Term[],
+	): Promise<
 		OperationResult<{ downloadUrl?: string; blob?: Blob; fileName: string }>
 	> {
+		// Resolve term templates in a clone before serializing
+		let docToSerialize = this.xliffDoc;
+		if (terms && terms.length > 0) {
+			const termsMap = new Map(terms.map((t) => [t.id, t]));
+			docToSerialize = structuredClone(this.xliffDoc);
+			for (const file of docToSerialize.files) {
+				for (const tu of file.transUnits) {
+					if (tu.target) {
+						tu.target = resolveTermTemplates(tu.target, termsMap);
+					}
+				}
+			}
+		}
+
 		// Serialize XLIFF back to XML
-		const xliffXml = serializeXliff(this.xliffDoc);
+		const xliffXml = serializeXliff(docToSerialize);
 		const xliffBytes = strToU8(xliffXml);
 
-		// Build zip entries from original tree, replacing the XLIFF
+		// If we have the original tree in memory, use it directly
+		if (this.originalTree.files.length > 0) {
+			return this.buildExportZip(xliffBytes);
+		}
+
+		// Otherwise download the original blob and reconstruct
+		if (this.blobUrl) {
+			try {
+				const response = await fetch(this.blobUrl);
+				const buffer = new Uint8Array(await response.arrayBuffer());
+				const entries = unzipSync(buffer);
+
+				const zipEntries: Record<string, Uint8Array> = {};
+				for (const [path, content] of Object.entries(entries)) {
+					if (path.endsWith("/") || path.includes("__MACOSX")) continue;
+					if (path === this.xliffPath) {
+						zipEntries[path] = xliffBytes;
+					} else {
+						zipEntries[path] = content;
+					}
+				}
+
+				const zipped = zipSync(zipEntries);
+				const blob = new Blob([zipped.buffer as ArrayBuffer], {
+					type: "application/zip",
+				});
+				const fileName = this.originalFileName || "translated.xcloc.zip";
+
+				return { hasError: false, data: { blob, fileName } };
+			} catch (err) {
+				return {
+					hasError: true,
+					errorMessage: `Failed to download original file: ${err instanceof Error ? err.message : String(err)}`,
+				};
+			}
+		}
+
+		// Fallback: build from xliff only (no other bundle files)
+		return this.buildExportZip(xliffBytes);
+	}
+
+	async save(): Promise<OperationResult<{ projectId: string }>> {
+		if (!this.projectId) {
+			return {
+				hasError: true,
+				errorMessage: "No project ID set. Save via server action instead.",
+			};
+		}
+
+		const { updateProjectContent, updateProjectFormatData } = await import(
+			"@/app/actions/projects"
+		);
+		await updateProjectContent(this.projectId, this.project);
+		await updateProjectFormatData(
+			this.projectId,
+			this.getFormatData() as unknown as Record<string, unknown>,
+		);
+
+		return { hasError: false, data: { projectId: this.projectId } };
+	}
+
+	async open(openProjectId: string): Promise<OperationResult> {
+		const { getProject } = await import("@/app/actions/projects");
+		const dbProject = await getProject(openProjectId);
+		if (!dbProject) {
+			return { hasError: true, errorMessage: "Project not found" };
+		}
+
+		const content = dbProject.content as TranslationProject | null;
+		const formatData =
+			dbProject.formatData as unknown as XclocFormatData | null;
+
+		if (!content || !formatData) {
+			return {
+				hasError: true,
+				errorMessage: "Project has no content data",
+			};
+		}
+
+		return this.loadFromJson(content, formatData, {
+			blobUrl: dbProject.blobUrl ?? undefined,
+			projectId: openProjectId,
+		});
+	}
+
+	// ---- Internal helpers ----------------------------------------
+
+	private buildExportZip(
+		xliffBytes: Uint8Array,
+	): OperationResult<{ downloadUrl?: string; blob?: Blob; fileName: string }> {
 		const zipEntries: Record<string, Uint8Array> = {};
 
 		for (const file of this.originalTree.files) {
-			// Skip __MACOSX entries and directories
 			if (file.path.includes("__MACOSX")) continue;
-
 			if (file.path === this.xliffPath) {
 				zipEntries[file.path] = xliffBytes;
 			} else {
@@ -202,27 +354,19 @@ export class XclocClient implements TranslationClient<XclocTranslationEvent> {
 			}
 		}
 
+		// If no original tree files, at least include the XLIFF
+		if (Object.keys(zipEntries).length === 0 && this.xliffPath) {
+			zipEntries[this.xliffPath] = xliffBytes;
+		}
+
 		const zipped = zipSync(zipEntries);
-		const blob = new Blob([zipped.buffer as ArrayBuffer], { type: "application/zip" });
+		const blob = new Blob([zipped.buffer as ArrayBuffer], {
+			type: "application/zip",
+		});
 		const fileName = this.originalFileName || "translated.xcloc.zip";
 
-		return {
-			hasError: false,
-			data: { blob, fileName },
-		};
+		return { hasError: false, data: { blob, fileName } };
 	}
-
-	async save(): Promise<OperationResult<{ projectId: string }>> {
-		// TODO: implement database persistence
-		return { hasError: false, data: { projectId: "" } };
-	}
-
-	async open(_projectId: string): Promise<OperationResult> {
-		// TODO: implement database restore
-		return { hasError: false, data: undefined };
-	}
-
-	// ---- Internal helpers ----------------------------------------
 
 	private syncToXliff(
 		resourceId: string,

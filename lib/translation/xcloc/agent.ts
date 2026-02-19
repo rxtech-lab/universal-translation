@@ -22,7 +22,7 @@ import type { XclocTranslationEvent } from "./events";
 // ---- Constants -------------------------------------------------
 
 const BATCH_SIZE = 20;
-const DEFAULT_MODEL = "anthropic/claude-sonnet-4-20250514";
+const DEFAULT_MODEL = "google/gemini-3-flash";
 
 // ---- Term template resolution ----------------------------------
 
@@ -159,7 +159,13 @@ async function* translateBatch(params: {
 }): AsyncGenerator<XclocTranslationEvent> {
 	const termListLines = params.terms.map(
 		(t) =>
-			"- ${{" + t.id + '}} = "' + t.originalText + '" → "' + t.translation + '"',
+			"- ${{" +
+			t.id +
+			'}} = "' +
+			t.originalText +
+			'" → "' +
+			t.translation +
+			'"',
 	);
 	const termList = termListLines.join("\n");
 
@@ -204,11 +210,48 @@ You MUST include all entries in the output. Use the exact entry IDs as given.`,
 		prompt: `Translate these entries:\n\n${entryList}`,
 	});
 
-	// Collect the full text response
+	// Collect the full text response while emitting agent events
 	let fullText = "";
-	for await (const textChunk of result.textStream) {
-		fullText += textChunk;
+	let lastEmitTime = 0;
+	const THROTTLE_MS = 300;
+
+	for await (const part of result.fullStream) {
+		if (part.type === "text-delta") {
+			fullText += part.text;
+
+			const now = Date.now();
+			if (now - lastEmitTime >= THROTTLE_MS) {
+				lastEmitTime = now;
+				yield {
+					type: "agent-text-delta" as const,
+					batchIndex: params.batchIndex,
+					text: fullText.slice(-200),
+				};
+			}
+		} else if (part.type === "tool-call") {
+			yield {
+				type: "agent-tool-call" as const,
+				batchIndex: params.batchIndex,
+				toolCallId: part.toolCallId,
+				toolName: part.toolName,
+				args: part.input as Record<string, unknown>,
+			};
+		} else if (part.type === "tool-result") {
+			yield {
+				type: "agent-tool-result" as const,
+				batchIndex: params.batchIndex,
+				toolCallId: part.toolCallId,
+				toolName: part.toolName,
+			};
+		}
 	}
+
+	// Final text delta so the frontend always gets the latest state
+	yield {
+		type: "agent-text-delta" as const,
+		batchIndex: params.batchIndex,
+		text: fullText.slice(-200),
+	};
 
 	// Parse the JSON from the response
 	const jsonMatch = fullText.match(/\{[\s\S]*"translations"[\s\S]*\}/);
@@ -250,7 +293,65 @@ You MUST include all entries in the output. Use the exact entry IDs as given.`,
 	};
 }
 
-// ---- Full orchestrator -----------------------------------------
+// ---- Standalone entry translator (no client dependency) --------
+
+/**
+ * Translate entries without needing a full TranslationClient instance.
+ * Used by the SSE API route — accepts raw data and streams events back.
+ * Term templates (${{term-id}}) are preserved in targetText for client-side resolution.
+ */
+export async function* translateEntries(params: {
+	entries: EntryWithResource[];
+	sourceLanguage: string;
+	targetLanguage: string;
+	projectId: string;
+	model?: string;
+}): AsyncGenerator<XclocTranslationEvent> {
+	const model = createModel(params.model);
+
+	// Phase 1: Scan terminology
+	let terms: Term[] = [];
+	const scanner = scanTerminology({
+		entries: params.entries,
+		sourceLanguage: params.sourceLanguage,
+		targetLanguage: params.targetLanguage,
+		model,
+	});
+
+	for await (const event of scanner) {
+		yield event;
+		if (event.type === "terminology-found") {
+			terms = event.terms;
+		}
+	}
+
+	// Phase 2: Translate in batches (templates kept as-is)
+	const batches = chunk(params.entries, BATCH_SIZE);
+	yield { type: "translate-start", total: params.entries.length };
+
+	for (let i = 0; i < batches.length; i++) {
+		const batchGen = translateBatch({
+			batch: batches[i],
+			batchIndex: i,
+			totalBatches: batches.length,
+			allEntries: params.entries,
+			terms,
+			sourceLanguage: params.sourceLanguage,
+			targetLanguage: params.targetLanguage,
+			model,
+			globalOffset: i * BATCH_SIZE,
+		});
+
+		for await (const event of batchGen) {
+			yield event;
+		}
+	}
+
+	yield { type: "term-resolution-complete" };
+	yield { type: "complete" };
+}
+
+// ---- Full orchestrator (with client) ---------------------------
 
 export async function* translateProject(params: {
 	client: TranslationClient<XclocTranslationEvent>;
@@ -314,16 +415,8 @@ export async function* translateProject(params: {
 		}
 	}
 
-	// Phase 3: Resolve term templates and apply updates
-	const termsMap = new Map(terms.map((t) => [t.id, t]));
-	const resolvedUpdates = updates.map((u) => ({
-		...u,
-		update: {
-			targetText: resolveTermTemplates(u.update.targetText, termsMap),
-		},
-	}));
-
-	params.client.updateEntries(resolvedUpdates);
+	// Phase 3: Apply updates (templates kept as-is for client-side resolution)
+	params.client.updateEntries(updates);
 
 	yield { type: "term-resolution-complete" };
 	yield { type: "complete" };
