@@ -1,10 +1,10 @@
-import React from "react";
+import type React from "react";
 import type {
-	OperationResult,
-	TranslationEntry,
-	TranslationProject,
-	TranslationResource,
-	UploadPayload,
+  OperationResult,
+  TranslationEntry,
+  TranslationProject,
+  TranslationResource,
+  UploadPayload,
 } from "./types";
 
 // ============================================================
@@ -21,89 +21,89 @@ import type {
  *   4. The user exports via `exportFile()` or persists via `save()`.
  */
 export interface TranslationClient<TEvent = unknown> {
-	// ---- Lifecycle --------------------------------------------------
+  // ---- Lifecycle --------------------------------------------------
 
-	/**
-	 * Parse the uploaded content and populate internal state.
-	 * Called exactly once after construction.
-	 */
-	load(payload: UploadPayload): Promise<OperationResult>;
+  /**
+   * Parse the uploaded content and populate internal state.
+   * Called exactly once after construction.
+   */
+  load(payload: UploadPayload): Promise<OperationResult>;
 
-	// ---- Data access ------------------------------------------------
+  // ---- Data access ------------------------------------------------
 
-	/** Return the full parsed project data. */
-	getProject(): TranslationProject;
+  /** Return the full parsed project data. */
+  getProject(): TranslationProject;
 
-	/** Return a single resource by id. */
-	getResource(resourceId: string): TranslationResource | undefined;
+  /** Return a single resource by id. */
+  getResource(resourceId: string): TranslationResource | undefined;
 
-	/** Return detected source language, if any. */
-	getSourceLanguage(): string | undefined;
+  /** Return detected source language, if any. */
+  getSourceLanguage(): string | undefined;
 
-	/** Return detected/configured target languages. */
-	getTargetLanguages(): string[];
+  /** Return detected/configured target languages. */
+  getTargetLanguages(): string[];
 
-	// ---- Mutations --------------------------------------------------
+  // ---- Mutations --------------------------------------------------
 
-	/**
-	 * Update a single translation entry.
-	 * The client is responsible for updating its internal state.
-	 */
-	updateEntry(
-		resourceId: string,
-		entryId: string,
-		update: Partial<Pick<TranslationEntry, "targetText" | "comment">>,
-	): OperationResult;
+  /**
+   * Update a single translation entry.
+   * The client is responsible for updating its internal state.
+   */
+  updateEntry(
+    resourceId: string,
+    entryId: string,
+    update: Partial<Pick<TranslationEntry, "targetText" | "comment">>,
+  ): OperationResult;
 
-	/**
-	 * Bulk-update multiple entries at once (e.g., after AI batch translation).
-	 */
-	updateEntries(
-		updates: Array<{
-			resourceId: string;
-			entryId: string;
-			update: Partial<Pick<TranslationEntry, "targetText" | "comment">>;
-		}>,
-	): OperationResult;
+  /**
+   * Bulk-update multiple entries at once (e.g., after AI batch translation).
+   */
+  updateEntries(
+    updates: Array<{
+      resourceId: string;
+      entryId: string;
+      update: Partial<Pick<TranslationEntry, "targetText" | "comment">>;
+    }>,
+  ): OperationResult;
 
-	// ---- Rendering --------------------------------------------------
+  // ---- Rendering --------------------------------------------------
 
-	/**
-	 * Render the translation editor UI for this format.
-	 * The client manages its own internal state and renders accordingly.
-	 */
-	render(): React.ReactNode;
+  /**
+   * Render the translation editor UI for this format.
+   * The client manages its own internal state and renders accordingly.
+   */
+  render(): React.ReactNode;
 
-	// ---- Translation ------------------------------------------------
+  // ---- Translation ------------------------------------------------
 
-	/**
-	 * Run AI translation. Returns an async stream of format-specific events.
-	 * Each format client defines its own TEvent type so format-specific
-	 * frontends can listen to events they understand.
-	 */
-	translate(options: {
-		model?: string;
-		projectId: string;
-	}): AsyncIterable<TEvent>;
+  /**
+   * Run AI translation. Returns an async stream of format-specific events.
+   * Each format client defines its own TEvent type so format-specific
+   * frontends can listen to events they understand.
+   */
+  translate(options: {
+    model?: string;
+    projectId: string;
+  }): AsyncIterable<TEvent>;
 
-	// ---- Export & Persistence ---------------------------------------
+  // ---- Export & Persistence ---------------------------------------
 
-	/**
-	 * Export the translated content back to its original format.
-	 * Returns a download URL or a Blob the caller can trigger a download from.
-	 */
-	exportFile(): Promise<
-		OperationResult<{ downloadUrl?: string; blob?: Blob; fileName: string }>
-	>;
+  /**
+   * Export the translated content back to its original format.
+   * Returns a download URL or a Blob the caller can trigger a download from.
+   */
+  exportFile(): Promise<
+    OperationResult<{ downloadUrl?: string; blob?: Blob; fileName: string }>
+  >;
 
-	/**
-	 * Persist the current state to the database (server-side save).
-	 * Returns a project/document ID for later retrieval.
-	 */
-	save(): Promise<OperationResult<{ projectId: string }>>;
+  /**
+   * Persist the current state to the database (server-side save).
+   * Returns a project/document ID for later retrieval.
+   */
+  save(): Promise<OperationResult<{ projectId: string }>>;
 
-	/**
-	 * Restore state from a previously saved project.
-	 */
-	open(projectId: string): Promise<OperationResult>;
+  /**
+   * Restore state from a previously saved project.
+   */
+  open(projectId: string): Promise<OperationResult>;
 }
