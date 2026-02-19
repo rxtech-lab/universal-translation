@@ -20,7 +20,7 @@ import type {
  *   3. The UI calls `getProject()`, `render()`, `updateEntry()`, etc.
  *   4. The user exports via `exportFile()` or persists via `save()`.
  */
-export interface TranslationClient {
+export interface TranslationClient<TEvent = unknown> {
 	// ---- Lifecycle --------------------------------------------------
 
 	/**
@@ -73,6 +73,18 @@ export interface TranslationClient {
 	 * The client manages its own internal state and renders accordingly.
 	 */
 	render(): React.ReactNode;
+
+	// ---- Translation ------------------------------------------------
+
+	/**
+	 * Run AI translation. Returns an async stream of format-specific events.
+	 * Each format client defines its own TEvent type so format-specific
+	 * frontends can listen to events they understand.
+	 */
+	translate(options: {
+		model?: string;
+		projectId: string;
+	}): AsyncIterable<TEvent>;
 
 	// ---- Export & Persistence ---------------------------------------
 
