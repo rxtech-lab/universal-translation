@@ -9,17 +9,17 @@ import type { OperationResult, UploadPayload, VirtualFileTree } from "./types";
  * into an UploadPayload suitable for detection and client loading.
  */
 export interface UploadProcessor {
-	/**
-	 * Process a raw File upload.
-	 *
-	 * - If the file is a zip archive, decompress it into a VirtualFileTree
-	 *   and return an "archive" payload.
-	 * - Otherwise, return a "single-file" payload.
-	 *
-	 * The implementation should detect zip files by magic bytes (PK header),
-	 * not just by file extension.
-	 */
-	process(file: File): Promise<OperationResult<UploadPayload>>;
+  /**
+   * Process a raw File upload.
+   *
+   * - If the file is a zip archive, decompress it into a VirtualFileTree
+   *   and return an "archive" payload.
+   * - Otherwise, return a "single-file" payload.
+   *
+   * The implementation should detect zip files by magic bytes (PK header),
+   * not just by file extension.
+   */
+  process(file: File): Promise<OperationResult<UploadPayload>>;
 }
 
 /**
@@ -27,5 +27,5 @@ export interface UploadProcessor {
  * Implementations will use a library like fflate or JSZip.
  */
 export interface ZipDecompressor {
-	decompress(file: File): Promise<OperationResult<VirtualFileTree>>;
+  decompress(file: File): Promise<OperationResult<VirtualFileTree>>;
 }

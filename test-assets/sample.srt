@@ -1,0 +1,47 @@
+1
+00:00:01,000 --> 00:00:04,500
+Welcome to the Universal Translation demo.
+
+2
+00:00:05,000 --> 00:00:08,200
+In this video, we'll show you
+how subtitle translation works.
+
+3
+00:00:09,000 --> 00:00:12,800
+First, upload your SRT file
+to the translation platform.
+
+4
+00:00:13,500 --> 00:00:17,000
+Then select your source and target languages.
+
+5
+00:00:18,000 --> 00:00:22,500
+The AI will automatically detect terminology
+that needs consistent translation.
+
+6
+00:00:23,000 --> 00:00:26,300
+You can review and edit
+each subtitle individually.
+
+7
+00:00:27,000 --> 00:00:31,000
+Timestamps are preserved exactly
+as they appear in the original file.
+
+8
+00:00:32,000 --> 00:00:35,500
+When you're done, export the translated
+subtitles as a new SRT file.
+
+9
+00:00:36,000 --> 00:00:39,800
+The platform supports multiple languages
+including Chinese, Japanese, and Korean.
+
+10
+00:00:40,500 --> 00:00:44,000
+Thank you for watching!
+We hope you enjoy using Universal Translation.
