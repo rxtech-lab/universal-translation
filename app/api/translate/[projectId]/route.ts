@@ -54,7 +54,12 @@ export async function POST(
           sourceLanguage: body.sourceLanguage,
           targetLanguage: body.targetLanguage,
           projectId,
-          formatContext: dbProject.formatId === "srt" ? "subtitle" : undefined,
+          formatContext:
+            dbProject.formatId === "srt"
+              ? "subtitle"
+              : dbProject.formatId === "po"
+                ? "po-localization"
+                : undefined,
         });
 
         for await (const event of events) {

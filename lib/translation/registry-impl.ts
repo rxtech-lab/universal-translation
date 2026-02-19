@@ -71,5 +71,8 @@ export async function createDefaultRegistry(): Promise<TranslationClientRegistry
   const { srtDescriptor } = await import("./srt/descriptor");
   registry.register(srtDescriptor);
 
+  const { poDescriptor } = await import("./po/descriptor");
+  registry.register(poDescriptor);
+
   return registry;
 }

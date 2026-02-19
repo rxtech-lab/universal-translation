@@ -41,6 +41,12 @@ export {
   FflateZipDecompressor,
 } from "./upload-processor";
 export { translateEntries } from "./xcloc/agent";
+export type { PoFormatData } from "./po/client";
+// PO
+export { PoClient } from "./po/client";
+export { poDescriptor } from "./po/descriptor";
+export type { PoTranslationEvent } from "./po/events";
+export { parsePo, serializePo } from "./po/parser";
 export type { XclocFormatData } from "./xcloc/client";
 // Xcloc
 export { XclocClient } from "./xcloc/client";

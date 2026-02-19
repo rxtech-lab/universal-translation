@@ -1,0 +1,15 @@
+Welcome to Universal Translation
+
+Universal Translation is a powerful tool that helps you translate your content into multiple languages. It supports various file formats including Xcode localization catalogs, subtitle files, and text documents.
+
+Getting Started
+
+To begin translating, upload your file and select the source and target languages. The AI-powered translation engine will analyze your content, extract terminology, and produce high-quality translations.
+
+Features
+
+Our platform offers batch translation, terminology management, and real-time preview. You can edit translations manually and export the results in the original format.
+
+Contact Us
+
+For questions or feedback, please visit our website or send us an email. We are always happy to help.

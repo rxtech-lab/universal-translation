@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/card";
 import type { TranslationClient } from "@/lib/translation/client";
 import { createDefaultRegistry } from "@/lib/translation/registry-impl";
+import { PoLanguageSelector } from "@/lib/translation/po/language-selector";
 import { SrtLanguageSelector } from "@/lib/translation/srt/language-selector";
 import type { TranslationProject } from "@/lib/translation/types";
 import { DefaultUploadProcessor } from "@/lib/translation/upload-processor";
@@ -69,7 +70,7 @@ export function UploadClient() {
           setState({
             step: "error",
             message:
-              "Unsupported file format. Supported: .xcloc (as .zip), .srt",
+              "Unsupported file format. Supported: .xcloc (as .zip), .srt, .po",
           });
           return;
         }
@@ -97,8 +98,8 @@ export function UploadClient() {
           >;
         }
 
-        // SRT files need language selection before project creation
-        if (formatId === "srt") {
+        // Single-file formats need language selection before project creation
+        if (formatId === "srt" || formatId === "po") {
           setState({
             step: "language-select",
             client: resolved.client,
@@ -171,7 +172,7 @@ export function UploadClient() {
 
         setState({ step: "creating" });
         const projectId = await createProjectFromParsed({
-          name: fileName.replace(/\.srt$/i, ""),
+          name: fileName.replace(/\.(srt|po)$/i, ""),
           formatId,
           blobUrl,
           content: project as TranslationProject,
@@ -212,10 +213,12 @@ export function UploadClient() {
     [processFile],
   );
 
-  // Show language selector for SRT files
+  // Show language selector for single-file formats
   if (state.step === "language-select") {
+    const LangSelector =
+      state.formatId === "po" ? PoLanguageSelector : SrtLanguageSelector;
     return (
-      <SrtLanguageSelector
+      <LangSelector
         fileName={state.fileName}
         onConfirm={handleLanguageConfirm}
         onCancel={() => setState({ step: "idle" })}
@@ -259,7 +262,7 @@ export function UploadClient() {
           <input
             ref={inputRef}
             type="file"
-            accept=".zip,.xcloc,.srt"
+            accept=".zip,.xcloc,.srt,.po"
             onChange={handleFileSelect}
             className="hidden"
           />
@@ -272,7 +275,8 @@ export function UploadClient() {
                   Drop your file here or click to browse
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Supports .xcloc bundles (as .zip) and .srt subtitles
+                  Supports .xcloc bundles (as .zip), .srt subtitles, and .po
+                  localization files
                 </p>
               </div>
               <div className="flex gap-2">
@@ -283,6 +287,10 @@ export function UploadClient() {
                 <Badge variant="outline">
                   <FileText className="h-3 w-3 mr-1" />
                   .srt
+                </Badge>
+                <Badge variant="outline">
+                  <FileText className="h-3 w-3 mr-1" />
+                  .po
                 </Badge>
               </div>
             </div>

@@ -1,24 +1,24 @@
 import type { EntryWithResource } from "../tools/context-tools";
 import { translateEntries } from "../xcloc/agent";
-import type { SrtTranslationEvent } from "./events";
+import type { PoTranslationEvent } from "./events";
 import { DEFAULT_MODEL } from "../config";
 
 export { resolveTermTemplates } from "../xcloc/agent";
 
 /**
- * Translate SRT subtitle entries using the shared translation pipeline
- * with subtitle-specific system prompts.
+ * Translate PO localization entries using the shared translation pipeline
+ * with PO-specific system prompts.
  */
-export async function* translateSrtEntries(params: {
+export async function* translatePoEntries(params: {
   entries: EntryWithResource[];
   sourceLanguage: string;
   targetLanguage: string;
   projectId: string;
   model?: string;
-}): AsyncGenerator<SrtTranslationEvent> {
+}): AsyncGenerator<PoTranslationEvent> {
   yield* translateEntries({
     ...params,
     model: params.model ?? DEFAULT_MODEL,
-    formatContext: "subtitle",
-  }) as AsyncGenerator<SrtTranslationEvent>;
+    formatContext: "po-localization",
+  }) as AsyncGenerator<PoTranslationEvent>;
 }
