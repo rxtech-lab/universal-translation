@@ -62,7 +62,10 @@ function escapePo(str: string): string {
 // ---- Parse helpers -----------------------------------------
 
 /** Extract the string value from a quoted PO string, handling multiline concatenation. */
-function extractQuotedString(lines: string[], startIdx: number): {
+function extractQuotedString(
+  lines: string[],
+  startIdx: number,
+): {
   value: string;
   nextIdx: number;
 } {
@@ -82,7 +85,9 @@ function extractQuotedString(lines: string[], startIdx: number): {
 
 /** Parse a keyword line (e.g. `msgid "text"`) and return the inline string content. */
 function parseKeywordLine(line: string): string | null {
-  const match = line.match(/^(?:msgid|msgstr|msgid_plural|msgctxt|msgstr\[\d+\])\s+"(.*)"$/);
+  const match = line.match(
+    /^(?:msgid|msgstr|msgid_plural|msgctxt|msgstr\[\d+\])\s+"(.*)"$/,
+  );
   if (!match) return null;
   return unescapePo(match[1]);
 }
@@ -143,7 +148,12 @@ export function parsePo(text: string): PoDocument {
       } else if (line.startsWith("#: ")) {
         references.push(line.slice(3));
       } else if (line.startsWith("#, ")) {
-        flags.push(...line.slice(3).split(",").map((f) => f.trim()));
+        flags.push(
+          ...line
+            .slice(3)
+            .split(",")
+            .map((f) => f.trim()),
+        );
       } else if (line.startsWith("#| msgid ")) {
         const match = line.match(/^#\| msgid "(.*)"$/);
         if (match) previousMsgid = unescapePo(match[1]);

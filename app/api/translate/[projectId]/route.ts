@@ -59,7 +59,9 @@ export async function POST(
               ? "subtitle"
               : dbProject.formatId === "po"
                 ? "po-localization"
-                : undefined,
+                : dbProject.formatId === "document"
+                  ? "document"
+                  : undefined,
         });
 
         for await (const event of events) {

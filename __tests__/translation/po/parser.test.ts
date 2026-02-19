@@ -1,10 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-import {
-  parsePo,
-  serializePo,
-} from "@/lib/translation/po/parser";
+import { parsePo, serializePo } from "@/lib/translation/po/parser";
 
 function loadTestPo(): string {
   const poPath = resolve(__dirname, "../../../test-assets/test.po");
@@ -22,9 +19,7 @@ describe("parsePo", () => {
   });
 
   it("parses header metadata", () => {
-    expect(doc.header.raw["Content-Type"]).toBe(
-      "text/plain; charset=UTF-8",
-    );
+    expect(doc.header.raw["Content-Type"]).toBe("text/plain; charset=UTF-8");
     expect(doc.header.raw["Language"]).toBe("zh-Hans");
     expect(doc.header.raw["MIME-Version"]).toBe("1.0");
   });
@@ -95,9 +90,7 @@ describe("parsePo", () => {
     expect(entry.msgid).toBe(
       "Welcome to our application.\nPlease log in to continue.",
     );
-    expect(entry.msgstr).toBe(
-      "欢迎使用我们的应用。\n请登录以继续。",
-    );
+    expect(entry.msgstr).toBe("欢迎使用我们的应用。\n请登录以继续。");
   });
 
   it("parses escape sequences", () => {
@@ -187,9 +180,7 @@ describe("serializePo", () => {
 
 describe("poDescriptor", () => {
   it("detects .po files with valid content", async () => {
-    const { poDescriptor } = await import(
-      "@/lib/translation/po/descriptor"
-    );
+    const { poDescriptor } = await import("@/lib/translation/po/descriptor");
     const text = loadTestPo();
     const file = new File([text], "messages.po", { type: "text/plain" });
     const result = await poDescriptor.detect({
@@ -200,9 +191,7 @@ describe("poDescriptor", () => {
   });
 
   it("returns 0 for non-.po files", async () => {
-    const { poDescriptor } = await import(
-      "@/lib/translation/po/descriptor"
-    );
+    const { poDescriptor } = await import("@/lib/translation/po/descriptor");
     const file = new File(["hello"], "test.txt", { type: "text/plain" });
     const result = await poDescriptor.detect({
       kind: "single-file",
@@ -212,9 +201,7 @@ describe("poDescriptor", () => {
   });
 
   it("returns 0 for archive payloads", async () => {
-    const { poDescriptor } = await import(
-      "@/lib/translation/po/descriptor"
-    );
+    const { poDescriptor } = await import("@/lib/translation/po/descriptor");
     const result = await poDescriptor.detect({
       kind: "archive",
       tree: { files: [] },
@@ -274,9 +261,7 @@ describe("PoClient", () => {
     const entries = client.getProject().resources[0].entries;
 
     // First entry has extracted comment and reference
-    expect(entries[0].comment).toBe(
-      "Extracted comment: shown on home page",
-    );
+    expect(entries[0].comment).toBe("Extracted comment: shown on home page");
     expect(entries[0].context).toBe("src/components/Header.tsx:42");
   });
 

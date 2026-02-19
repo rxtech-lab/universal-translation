@@ -70,7 +70,7 @@ export function UploadClient() {
           setState({
             step: "error",
             message:
-              "Unsupported file format. Supported: .xcloc (as .zip), .srt, .po",
+              "Unsupported file format. Supported: .xcloc (as .zip), .srt, .po, .txt, .md, .docx",
           });
           return;
         }
@@ -99,7 +99,11 @@ export function UploadClient() {
         }
 
         // Single-file formats need language selection before project creation
-        if (formatId === "srt" || formatId === "po") {
+        if (
+          formatId === "srt" ||
+          formatId === "po" ||
+          formatId === "document"
+        ) {
           setState({
             step: "language-select",
             client: resolved.client,
@@ -172,7 +176,7 @@ export function UploadClient() {
 
         setState({ step: "creating" });
         const projectId = await createProjectFromParsed({
-          name: fileName.replace(/\.(srt|po)$/i, ""),
+          name: fileName.replace(/\.(srt|po|txt|md|markdown|docx)$/i, ""),
           formatId,
           blobUrl,
           content: project as TranslationProject,
@@ -262,7 +266,7 @@ export function UploadClient() {
           <input
             ref={inputRef}
             type="file"
-            accept=".zip,.xcloc,.srt,.po"
+            accept=".zip,.xcloc,.srt,.po,.txt,.md,.markdown,.docx"
             onChange={handleFileSelect}
             className="hidden"
           />
@@ -275,8 +279,7 @@ export function UploadClient() {
                   Drop your file here or click to browse
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Supports .xcloc bundles (as .zip), .srt subtitles, and .po
-                  localization files
+                  Supports .xcloc (as .zip), .srt, .po, .txt, .md, and .docx
                 </p>
               </div>
               <div className="flex gap-2">
@@ -291,6 +294,18 @@ export function UploadClient() {
                 <Badge variant="outline">
                   <FileText className="h-3 w-3 mr-1" />
                   .po
+                </Badge>
+                <Badge variant="outline">
+                  <FileText className="h-3 w-3 mr-1" />
+                  .txt
+                </Badge>
+                <Badge variant="outline">
+                  <FileText className="h-3 w-3 mr-1" />
+                  .md
+                </Badge>
+                <Badge variant="outline">
+                  <FileArchive className="h-3 w-3 mr-1" />
+                  .docx
                 </Badge>
               </div>
             </div>

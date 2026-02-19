@@ -8,6 +8,11 @@ import { TranslationEditor } from "@/lib/translation/components/translation-edit
 import { useAutoSave } from "@/lib/translation/components/use-auto-save";
 import { useTranslationProject } from "@/lib/translation/components/use-translation-project";
 import { useTranslationStream } from "@/lib/translation/components/use-translation-stream";
+import {
+  DocumentClient,
+  type DocumentFormatData,
+} from "@/lib/translation/document/client";
+import { DocumentEditor } from "@/lib/translation/document/document-editor";
 import { PoClient, type PoFormatData } from "@/lib/translation/po/client";
 import { PoEditor } from "@/lib/translation/po/po-editor";
 import { SrtClient, type SrtFormatData } from "@/lib/translation/srt/client";
@@ -46,6 +51,20 @@ export function EditorClient({
   initialTerms,
 }: EditorClientProps) {
   const [client] = useState(() => {
+    if (dbProject.formatId === "document") {
+      const c = new DocumentClient();
+      if (dbProject.content && dbProject.formatData) {
+        c.loadFromJson(
+          dbProject.content as TranslationProject,
+          dbProject.formatData as unknown as DocumentFormatData,
+          {
+            blobUrl: dbProject.blobUrl ?? undefined,
+            projectId: dbProject.id,
+          },
+        );
+      }
+      return c;
+    }
     if (dbProject.formatId === "po") {
       const c = new PoClient();
       if (dbProject.content && dbProject.formatData) {
@@ -287,7 +306,9 @@ export function EditorClient({
         ? "SubRip Subtitles"
         : dbProject.formatId === "po"
           ? "Gettext PO"
-          : dbProject.formatId;
+          : dbProject.formatId === "document"
+            ? "Document"
+            : dbProject.formatId;
 
   return (
     <TranslationEditor
@@ -309,7 +330,14 @@ export function EditorClient({
       onTranslationUpdated={handleTranslationUpdated}
       onClearAllTranslations={handleClearAllTranslations}
     >
-      {dbProject.formatId === "po" ? (
+      {dbProject.formatId === "document" ? (
+        <DocumentEditor
+          project={project}
+          onEntryUpdate={handleEntryUpdate}
+          streamingEntryIds={streamingEntryIds}
+          terms={terms}
+        />
+      ) : dbProject.formatId === "po" ? (
         <PoEditor
           project={project}
           onEntryUpdate={handleEntryUpdate}

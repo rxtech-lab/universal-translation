@@ -25,7 +25,10 @@ export interface ParsedDocument {
 // ============================================================
 
 export function parseTxt(text: string): DocumentParagraph[] {
-  const cleaned = text.replace(/^\uFEFF/, "").replace(/\r\n/g, "\n").trim();
+  const cleaned = text
+    .replace(/^\uFEFF/, "")
+    .replace(/\r\n/g, "\n")
+    .trim();
   if (!cleaned) return [];
 
   return cleaned
@@ -38,9 +41,7 @@ export function parseTxt(text: string): DocumentParagraph[] {
     }));
 }
 
-export function serializeTxt(
-  paragraphs: { text: string }[],
-): string {
+export function serializeTxt(paragraphs: { text: string }[]): string {
   return paragraphs.map((p) => p.text).join("\n\n") + "\n";
 }
 
@@ -54,7 +55,10 @@ export interface ParsedMarkdown {
 }
 
 export function parseMd(text: string): ParsedMarkdown {
-  const cleaned = text.replace(/^\uFEFF/, "").replace(/\r\n/g, "\n").trim();
+  const cleaned = text
+    .replace(/^\uFEFF/, "")
+    .replace(/\r\n/g, "\n")
+    .trim();
   if (!cleaned) return { paragraphs: [] };
 
   let body = cleaned;
@@ -122,18 +126,14 @@ export function parseMd(text: string): ParsedMarkdown {
   return { frontmatter, paragraphs };
 }
 
-function classifyMdBlock(
-  block: string,
-): DocumentParagraph["kind"] {
+function classifyMdBlock(block: string): DocumentParagraph["kind"] {
   if (/^```/.test(block)) return "code-block";
   if (/^#{1,6}\s/.test(block)) return "heading";
   if (/^[-*+]\s/m.test(block) || /^\d+\.\s/m.test(block)) return "list";
   return "paragraph";
 }
 
-export function serializeMd(
-  parsed: ParsedMarkdown,
-): string {
+export function serializeMd(parsed: ParsedMarkdown): string {
   const parts: string[] = [];
   if (parsed.frontmatter) {
     parts.push(parsed.frontmatter);
@@ -201,48 +201,45 @@ export function serializeDocxXml(
   let paragraphIndex = 1;
 
   // Process each <w:p> element
-  result = result.replace(
-    /(<w:p[\s>][\s\S]*?<\/w:p>)/g,
-    (pXml) => {
-      // Check if this paragraph has any text
-      const tRegex = /<w:t[^>]*>[\s\S]*?<\/w:t>/g;
-      const tMatches = [...pXml.matchAll(tRegex)];
+  result = result.replace(/(<w:p[\s>][\s\S]*?<\/w:p>)/g, (pXml) => {
+    // Check if this paragraph has any text
+    const tRegex = /<w:t[^>]*>[\s\S]*?<\/w:t>/g;
+    const tMatches = [...pXml.matchAll(tRegex)];
 
-      if (tMatches.length === 0) return pXml;
+    if (tMatches.length === 0) return pXml;
 
-      // Check if this paragraph has actual text content
-      const hasText = tMatches.some((m) => {
-        const textMatch = m[0].match(/<w:t[^>]*>([\s\S]*?)<\/w:t>/);
-        return textMatch && textMatch[1].trim();
-      });
+    // Check if this paragraph has actual text content
+    const hasText = tMatches.some((m) => {
+      const textMatch = m[0].match(/<w:t[^>]*>([\s\S]*?)<\/w:t>/);
+      return textMatch && textMatch[1].trim();
+    });
 
-      if (!hasText) return pXml;
+    if (!hasText) return pXml;
 
-      const translated = translatedParagraphs.get(paragraphIndex);
-      paragraphIndex++;
+    const translated = translatedParagraphs.get(paragraphIndex);
+    paragraphIndex++;
 
-      if (translated === undefined) return pXml;
+    if (translated === undefined) return pXml;
 
-      // Replace: put all text in the first <w:t>, clear the rest
-      let firstReplaced = false;
-      return pXml.replace(
-        /<w:t([^>]*)>([\s\S]*?)<\/w:t>/g,
-        (_match, attrs: string, _text: string) => {
-          if (!firstReplaced) {
-            firstReplaced = true;
-            // Ensure xml:space="preserve" to maintain whitespace
-            const hasPreserve = attrs.includes('xml:space="preserve"');
-            const newAttrs = hasPreserve
-              ? attrs
-              : ` xml:space="preserve"${attrs}`;
-            return `<w:t${newAttrs}>${escapeXml(translated)}</w:t>`;
-          }
-          // Clear subsequent <w:t> elements
-          return `<w:t${attrs}></w:t>`;
-        },
-      );
-    },
-  );
+    // Replace: put all text in the first <w:t>, clear the rest
+    let firstReplaced = false;
+    return pXml.replace(
+      /<w:t([^>]*)>([\s\S]*?)<\/w:t>/g,
+      (_match, attrs: string, _text: string) => {
+        if (!firstReplaced) {
+          firstReplaced = true;
+          // Ensure xml:space="preserve" to maintain whitespace
+          const hasPreserve = attrs.includes('xml:space="preserve"');
+          const newAttrs = hasPreserve
+            ? attrs
+            : ` xml:space="preserve"${attrs}`;
+          return `<w:t${newAttrs}>${escapeXml(translated)}</w:t>`;
+        }
+        // Clear subsequent <w:t> elements
+        return `<w:t${attrs}></w:t>`;
+      },
+    );
+  });
 
   return result;
 }

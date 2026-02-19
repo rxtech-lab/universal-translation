@@ -226,7 +226,9 @@ export class PoClient implements TranslationClient<PoTranslationEvent> {
     this.syncAllToDocument(docToSerialize);
 
     const poContent = serializePo(docToSerialize);
-    const blob = new Blob([poContent], { type: "text/x-gettext-translation;charset=utf-8" });
+    const blob = new Blob([poContent], {
+      type: "text/x-gettext-translation;charset=utf-8",
+    });
     const baseName = this.originalFileName.replace(/\.po$/i, "");
     const fileName = `${baseName}_${this.targetLanguage || "translated"}.po`;
 
@@ -285,12 +287,14 @@ export class PoClient implements TranslationClient<PoTranslationEvent> {
     for (let i = 0; i < this.document.entries.length; i++) {
       const poEntry = this.document.entries[i];
 
-      const comment = poEntry.extractedComments.length > 0
-        ? poEntry.extractedComments.join("\n")
-        : undefined;
-      const context = poEntry.references.length > 0
-        ? poEntry.references.join(", ")
-        : undefined;
+      const comment =
+        poEntry.extractedComments.length > 0
+          ? poEntry.extractedComments.join("\n")
+          : undefined;
+      const context =
+        poEntry.references.length > 0
+          ? poEntry.references.join(", ")
+          : undefined;
 
       const baseMetadata: Record<string, unknown> = {
         entryIndex: i,
