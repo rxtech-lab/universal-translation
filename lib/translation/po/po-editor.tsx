@@ -2,6 +2,7 @@
 
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useCallback, useMemo, useRef } from "react";
+import { useExtracted } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Term } from "../tools/term-tools";
@@ -31,6 +32,7 @@ export function PoEditor({
   streamingEntryIds,
   terms,
 }: PoEditorProps) {
+  const t = useExtracted();
   const resource = project.resources[0];
   const entries = useMemo(() => resource?.entries ?? [], [resource?.entries]);
   const resourceId = resource?.id ?? "po-main";
@@ -62,7 +64,7 @@ export function PoEditor({
       <CardHeader className="border-b shrink-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <CardTitle>{resource?.label ?? "PO Translations"}</CardTitle>
+            <CardTitle>{resource?.label ?? t("PO Translations")}</CardTitle>
             {project.sourceLanguage && project.targetLanguages?.[0] && (
               <Badge variant="secondary" className="text-xs">
                 {project.sourceLanguage} → {project.targetLanguages[0]}
@@ -70,7 +72,10 @@ export function PoEditor({
             )}
           </div>
           <Badge variant="outline">
-            {stats.translated}/{stats.total} translated
+            {t("{translated}/{total} translated", {
+              translated: String(stats.translated),
+              total: String(stats.total),
+            })}
           </Badge>
         </div>
       </CardHeader>
@@ -111,7 +116,7 @@ export function PoEditor({
           </div>
         ) : (
           <div className="flex items-center justify-center py-12 text-sm text-muted-foreground">
-            No entries in this PO file
+            {t("No entries in this PO file")}
           </div>
         )}
       </CardContent>

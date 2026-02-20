@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
+import { useExtracted } from "next-intl";
 import { toast } from "sonner";
 import { renameProject, updateProjectContent } from "@/app/actions/projects";
 import { saveProjectTerms } from "@/app/actions/terms";
@@ -25,6 +26,7 @@ import {
 import { LyricsEditor } from "@/lib/translation/lyrics/lyrics-editor";
 import { PoClient, type PoFormatData } from "@/lib/translation/po/client";
 import { PoEditor } from "@/lib/translation/po/po-editor";
+import { PoUpdateDialog } from "@/lib/translation/po/po-update-dialog";
 import { SrtClient, type SrtFormatData } from "@/lib/translation/srt/client";
 import { SrtEditor } from "@/lib/translation/srt/srt-editor";
 import type { Term } from "@/lib/translation/tools/term-tools";
@@ -60,6 +62,7 @@ export function EditorClient({
   project: dbProject,
   initialTerms,
 }: EditorClientProps) {
+  const t = useExtracted();
   const [client] = useState(() => {
     if (dbProject.formatId === "lyrics") {
       const c = new LyricsClient();
@@ -145,6 +148,7 @@ export function EditorClient({
   });
 
   const [projectName, setProjectName] = useState(dbProject.name);
+  const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
 
   const { project, updateEntry, applyStreamUpdate, refreshFromClient } =
     useTranslationProject(client);
@@ -208,14 +212,14 @@ export function EditorClient({
 
   const handleAgentTextDelta = useCallback(
     (_batchIndex: number, text: string) => {
-      toast.loading("Translating...", {
+      toast.loading(t("Translating..."), {
         id: TOAST_ID,
         description: text,
         duration: Infinity,
         classNames: { description: "!text-foreground" },
       });
     },
-    [],
+    [t],
   );
 
   const handleAgentToolCall = useCallback(
@@ -227,14 +231,14 @@ export function EditorClient({
     ) => {
       const title = TOOL_DISPLAY_NAMES[toolName] ?? toolName;
       const desc = "query" in args ? `${title}: "${args.query}"` : title;
-      toast.loading("Translating...", {
+      toast.loading(t("Translating..."), {
         id: TOAST_ID,
         description: desc,
         duration: Infinity,
         classNames: { description: "!text-foreground" },
       });
     },
-    [],
+    [t],
   );
 
   const handleAgentToolResult = useCallback(
@@ -307,9 +311,9 @@ export function EditorClient({
 
     if (flatEntries.length === 0) return;
 
-    toast.loading("Translating...", {
+    toast.loading(t("Translating..."), {
       id: TOAST_ID,
-      description: "Starting translation...",
+      description: t("Starting translation..."),
       duration: Infinity,
       classNames: { description: "!text-foreground" },
     });
@@ -343,6 +347,7 @@ export function EditorClient({
       dismissTranslationToast();
     }
   }, [
+    t,
     project,
     dbProject,
     startStream,
@@ -363,9 +368,9 @@ export function EditorClient({
       const entry = resource.entries.find((e) => e.id === entryId);
       if (!entry) return;
 
-      toast.loading("Translating line...", {
+      toast.loading(t("Translating line..."), {
         id: TOAST_ID,
-        description: `Translating line #${entry.id}...`,
+        description: t("Translating line #{id}...", { id: entry.id }),
         duration: Infinity,
         classNames: { description: "!text-foreground" },
       });
@@ -398,6 +403,7 @@ export function EditorClient({
       }
     },
     [
+      t,
       project,
       dbProject,
       startStream,
@@ -413,8 +419,8 @@ export function EditorClient({
 
   const handleStopTranslation = useCallback(() => {
     cancelStream();
-    toast.info("Translation stopped", { id: TOAST_ID, duration: 2000 });
-  }, [cancelStream]);
+    toast.info(t("Translation stopped"), { id: TOAST_ID, duration: 2000 });
+  }, [cancelStream, t]);
 
   const handleClearAllTranslations = useCallback(() => {
     const proj = client.getProject();
@@ -441,23 +447,47 @@ export function EditorClient({
       resolve();
     });
     toast.promise(promise, {
-      loading: "Clearing translations...",
-      success: "All translations cleared",
-      error: "Failed to clear translations",
+      loading: t("Clearing translations..."),
+      success: t("All translations cleared"),
+      error: t("Failed to clear translations"),
     });
-  }, [client, clearLyricsAnalysis, refreshFromClient, markDirty]);
+  }, [client, clearLyricsAnalysis, refreshFromClient, markDirty, t]);
+
+  const handleUpdatePo = useCallback(
+    (newPoText: string, referencePoText?: string) => {
+      const result = (client as PoClient).updateFromPo(
+        newPoText,
+        referencePoText,
+      );
+      if (result.hasError) {
+        toast.error(result.errorMessage);
+        return;
+      }
+      refreshFromClient();
+      markDirty();
+      setUpdateDialogOpen(false);
+      toast.success(
+        t("Updated: {preserved} preserved, {added} new, {removed} removed", {
+          preserved: String(result.data.preserved),
+          added: String(result.data.added),
+          removed: String(result.data.removed),
+        }),
+      );
+    },
+    [client, refreshFromClient, markDirty, t],
+  );
 
   const handleRename = useCallback(
     async (newName: string) => {
       try {
         await renameProject(dbProject.id, newName);
         setProjectName(newName);
-        toast.success("Project renamed");
+        toast.success(t("Project renamed"));
       } catch {
-        toast.error("Failed to rename project");
+        toast.error(t("Failed to rename project"));
       }
     },
-    [dbProject.id],
+    [dbProject.id, t],
   );
 
   const handleExport = useCallback(async () => {
@@ -508,77 +538,95 @@ export function EditorClient({
                 : dbProject.formatId;
 
   return (
-    <TranslationEditor
-      projectId={dbProject.id}
-      projectName={projectName}
-      formatId={dbProject.formatId}
-      formatDisplayName={formatDisplayName}
-      sourceLanguage={dbProject.sourceLanguage ?? undefined}
-      targetLanguage={dbProject.targetLanguage ?? undefined}
-      status={status}
-      errors={errors}
-      onClearErrors={clearErrors}
-      onTranslate={handleTranslate}
-      onStopTranslation={handleStopTranslation}
-      onExport={handleExport}
-      onSave={handleSave}
-      terms={terms}
-      onTermsChange={setTerms}
-      onTranslationUpdated={handleTranslationUpdated}
-      onClearAllTranslations={handleClearAllTranslations}
-      onRename={handleRename}
-    >
-      {dbProject.formatId === "lyrics" ? (
-        <LyricsEditor
-          project={project}
-          onEntryUpdate={handleEntryUpdate}
-          onTranslateLine={handleTranslateLine}
-          streamingEntryIds={streamingEntryIds}
-          terms={terms}
-          lyricsAnalysis={mergedLyricsAnalysis}
-        />
-      ) : dbProject.formatId === "document" ? (
-        <DocumentEditor
-          project={project}
-          onEntryUpdate={handleEntryUpdate}
-          onTranslateLine={handleTranslateLine}
-          streamingEntryIds={streamingEntryIds}
-          terms={terms}
-        />
-      ) : dbProject.formatId === "po" ? (
-        <PoEditor
-          project={project}
-          onEntryUpdate={handleEntryUpdate}
-          onTranslateLine={handleTranslateLine}
-          streamingEntryIds={streamingEntryIds}
-          terms={terms}
-        />
-      ) : dbProject.formatId === "srt" ? (
-        <SrtEditor
-          project={project}
-          onEntryUpdate={handleEntryUpdate}
-          onTranslateLine={handleTranslateLine}
-          streamingEntryIds={streamingEntryIds}
-          terms={terms}
-        />
-      ) : dbProject.formatId === "html" ? (
-        <HtmlEditor
-          project={project}
-          client={client as HtmlClient}
-          onEntryUpdate={handleEntryUpdate}
-          onTranslateLine={handleTranslateLine}
-          streamingEntryIds={streamingEntryIds}
-          terms={terms}
-        />
-      ) : (
-        <XclocEditor
-          project={project}
-          onEntryUpdate={handleEntryUpdate}
-          onTranslateLine={handleTranslateLine}
-          streamingEntryIds={streamingEntryIds}
-          terms={terms}
+    <>
+      <TranslationEditor
+        projectId={dbProject.id}
+        projectName={projectName}
+        formatId={dbProject.formatId}
+        formatDisplayName={formatDisplayName}
+        sourceLanguage={dbProject.sourceLanguage ?? undefined}
+        targetLanguage={dbProject.targetLanguage ?? undefined}
+        status={status}
+        errors={errors}
+        onClearErrors={clearErrors}
+        onTranslate={handleTranslate}
+        onStopTranslation={handleStopTranslation}
+        onExport={handleExport}
+        onSave={handleSave}
+        terms={terms}
+        onTermsChange={setTerms}
+        onTranslationUpdated={handleTranslationUpdated}
+        onClearAllTranslations={handleClearAllTranslations}
+        onRename={handleRename}
+        onUpdatePo={
+          dbProject.formatId === "po"
+            ? () => setUpdateDialogOpen(true)
+            : undefined
+        }
+      >
+        {dbProject.formatId === "lyrics" ? (
+          <LyricsEditor
+            project={project}
+            onEntryUpdate={handleEntryUpdate}
+            onTranslateLine={handleTranslateLine}
+            streamingEntryIds={streamingEntryIds}
+            terms={terms}
+            lyricsAnalysis={mergedLyricsAnalysis}
+          />
+        ) : dbProject.formatId === "document" ? (
+          <DocumentEditor
+            project={project}
+            onEntryUpdate={handleEntryUpdate}
+            onTranslateLine={handleTranslateLine}
+            streamingEntryIds={streamingEntryIds}
+            terms={terms}
+          />
+        ) : dbProject.formatId === "po" ? (
+          <PoEditor
+            project={project}
+            onEntryUpdate={handleEntryUpdate}
+            onTranslateLine={handleTranslateLine}
+            streamingEntryIds={streamingEntryIds}
+            terms={terms}
+          />
+        ) : dbProject.formatId === "srt" ? (
+          <SrtEditor
+            project={project}
+            onEntryUpdate={handleEntryUpdate}
+            onTranslateLine={handleTranslateLine}
+            streamingEntryIds={streamingEntryIds}
+            terms={terms}
+          />
+        ) : dbProject.formatId === "html" ? (
+          <HtmlEditor
+            project={project}
+            client={client as HtmlClient}
+            onEntryUpdate={handleEntryUpdate}
+            onTranslateLine={handleTranslateLine}
+            streamingEntryIds={streamingEntryIds}
+            terms={terms}
+          />
+        ) : (
+          <XclocEditor
+            project={project}
+            onEntryUpdate={handleEntryUpdate}
+            onTranslateLine={handleTranslateLine}
+            streamingEntryIds={streamingEntryIds}
+            terms={terms}
+          />
+        )}
+      </TranslationEditor>
+      {dbProject.formatId === "po" && (
+        <PoUpdateDialog
+          open={updateDialogOpen}
+          onOpenChange={setUpdateDialogOpen}
+          hashBasedMsgids={
+            !!(dbProject.formatData as PoFormatData | null)?.hashBasedMsgids
+          }
+          currentDocument={(client as PoClient).getFormatData().document}
+          onConfirm={handleUpdatePo}
         />
       )}
-    </TranslationEditor>
+    </>
   );
 }

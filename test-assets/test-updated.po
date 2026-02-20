@@ -1,0 +1,52 @@
+# Updated test PO file for universal-translation (used by update.test.ts)
+# Based on test.po with modifications:
+#   KEPT:    "Hello, %s!", "Settings" (no ctx), "Settings" (ctx: menu), plural "%d file", "New label"
+#   REMOVED: "About Us", "Profile" (fuzzy), escape sequences entry, multiline welcome entry
+#   ADDED:   "Logout", "Dashboard"
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: zh-Hans\n"
+"MIME-Version: 1.0\n"
+
+# Translator comment for greeting
+#. Extracted comment: shown on home page
+#: src/components/Header.tsx:42
+#, c-format
+msgid "Hello, %s!"
+msgstr ""
+
+#. Button label
+#: src/components/Nav.tsx:10
+msgid "Settings"
+msgstr ""
+
+#. Entry with context
+#: src/pages/Dashboard.tsx:100
+msgctxt "menu"
+msgid "Settings"
+msgstr ""
+
+#. Plural form test
+#: src/components/Counter.tsx:15
+msgid "%d file"
+msgid_plural "%d files"
+msgstr[0] ""
+msgstr[1] ""
+
+#. Entry with previous msgid
+#| msgid "Old label"
+#: src/components/Label.tsx:12
+msgid "New label"
+msgstr ""
+
+#. New entry: Logout
+#: src/components/Nav.tsx:20
+msgid "Logout"
+msgstr ""
+
+#. New entry: Dashboard
+#: src/pages/Dashboard.tsx:5
+msgid "Dashboard"
+msgstr ""

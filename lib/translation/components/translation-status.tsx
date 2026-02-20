@@ -1,6 +1,7 @@
 "use client";
 
 import { AlertCircle } from "lucide-react";
+import { useExtracted } from "next-intl";
 
 import {
   Popover,
@@ -25,6 +26,8 @@ export function TranslationStatus({
   onClearErrors,
   className,
 }: TranslationStatusProps) {
+  const t = useExtracted();
+
   return (
     <div
       className={cn(
@@ -38,15 +41,17 @@ export function TranslationStatus({
           className="animate-in fade-in duration-300"
           data-testid="status-idle"
         >
-          Ready
+          {t("Ready")}
         </span>
       )}
       {status.state === "saving" && (
-        <span className="animate-in fade-in duration-300">Saving...</span>
+        <span className="animate-in fade-in duration-300">
+          {t("Saving...")}
+        </span>
       )}
       {status.state === "saved" && (
         <span className="animate-in fade-in duration-300">
-          Saved {status.at.toLocaleTimeString()}
+          {t("Saved")} {status.at.toLocaleTimeString()}
         </span>
       )}
       {status.state === "translating" && (
@@ -54,7 +59,7 @@ export function TranslationStatus({
           className="animate-in fade-in duration-300"
           data-testid="status-translating"
         >
-          Translating {status.current}/{status.total}
+          {t("Translating")} {status.current}/{status.total}
         </span>
       )}
       {status.state === "error" && (
@@ -62,7 +67,7 @@ export function TranslationStatus({
           className="text-destructive animate-in fade-in duration-300"
           data-testid="status-error"
         >
-          Error: {status.message}
+          {t("Error:")} {status.message}
         </span>
       )}
 
@@ -79,13 +84,15 @@ export function TranslationStatus({
             >
               <AlertCircle className="h-3.5 w-3.5" />
               <span>
-                {errors.length} {errors.length === 1 ? "error" : "errors"}
+                {errors.length === 1
+                  ? t("1 error")
+                  : t("{count} errors", { count: String(errors.length) })}
               </span>
             </button>
           </PopoverTrigger>
           <PopoverContent align="end" className="w-80 max-h-60 overflow-y-auto">
             <PopoverHeader>
-              <PopoverTitle>Translation Errors</PopoverTitle>
+              <PopoverTitle>{t("Translation Errors")}</PopoverTitle>
             </PopoverHeader>
             <ul className="flex flex-col gap-1.5">
               {errors.map((error) => (

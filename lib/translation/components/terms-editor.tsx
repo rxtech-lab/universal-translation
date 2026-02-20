@@ -2,6 +2,7 @@
 
 import { Plus, Trash2 } from "lucide-react";
 import { useCallback, useState } from "react";
+import { useExtracted } from "next-intl";
 import { createTerm, deleteTerm, updateTerm } from "@/app/actions/terms";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,13 +20,14 @@ export function TermsEditor({
   terms,
   onTermsChange,
 }: TermsEditorProps) {
+  const t = useExtracted();
   const [newOriginal, setNewOriginal] = useState("");
   const [newTranslation, setNewTranslation] = useState("");
 
   const handleUpdate = useCallback(
     async (termId: string, field: "translation" | "comment", value: string) => {
       onTermsChange(
-        terms.map((t) => (t.id === termId ? { ...t, [field]: value } : t)),
+        terms.map((tm) => (tm.id === termId ? { ...tm, [field]: value } : tm)),
       );
       await updateTerm(termId, { [field]: value });
     },
@@ -34,7 +36,7 @@ export function TermsEditor({
 
   const handleDelete = useCallback(
     async (termId: string) => {
-      onTermsChange(terms.filter((t) => t.id !== termId));
+      onTermsChange(terms.filter((tm) => tm.id !== termId));
       await deleteTerm(termId);
     },
     [terms, onTermsChange],
@@ -42,7 +44,7 @@ export function TermsEditor({
 
   const handleAdd = useCallback(async () => {
     if (!newOriginal.trim()) return;
-    const existingIds = new Set(terms.map((t) => t.id));
+    const existingIds = new Set(terms.map((tm) => tm.id));
     const id = uniqueTermId(slugifyTermId(newOriginal), existingIds);
     const newTerm: Term = {
       id,
@@ -63,9 +65,9 @@ export function TermsEditor({
     <div className="space-y-2">
       {/* Header */}
       <div className="grid grid-cols-[1fr_1fr_1fr_auto] gap-2 text-xs font-medium text-muted-foreground px-1">
-        <span>Original</span>
-        <span>Translation</span>
-        <span>Comment</span>
+        <span>{t("Original")}</span>
+        <span>{t("Translation")}</span>
+        <span>{t("Comment")}</span>
         <span className="w-8" />
       </div>
 
@@ -85,7 +87,7 @@ export function TermsEditor({
           <Input
             value={term.comment ?? ""}
             onChange={(e) => handleUpdate(term.id, "comment", e.target.value)}
-            placeholder="Optional comment"
+            placeholder={t("Optional comment")}
           />
           <Button
             variant="ghost"
@@ -103,13 +105,13 @@ export function TermsEditor({
         <Input
           value={newOriginal}
           onChange={(e) => setNewOriginal(e.target.value)}
-          placeholder="Original text"
+          placeholder={t("Original text")}
           onKeyDown={(e) => e.key === "Enter" && handleAdd()}
         />
         <Input
           value={newTranslation}
           onChange={(e) => setNewTranslation(e.target.value)}
-          placeholder="Translation"
+          placeholder={t("Translation")}
           onKeyDown={(e) => e.key === "Enter" && handleAdd()}
         />
         <span />
@@ -125,8 +127,9 @@ export function TermsEditor({
 
       {terms.length === 0 && (
         <p className="text-xs text-muted-foreground py-2 text-center">
-          No terms yet. Terms are automatically detected during translation, or
-          add them manually above.
+          {t(
+            "No terms yet. Terms are automatically detected during translation, or add them manually above.",
+          )}
         </p>
       )}
     </div>

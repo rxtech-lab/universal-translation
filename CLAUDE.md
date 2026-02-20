@@ -45,6 +45,33 @@ Next.js 16 app using the App Router with React 19 and TypeScript. Uses Bun as th
 
 `@/*` maps to project root (e.g., `@/components/ui/button`, `@/lib/utils`)
 
+### i18n
+
+- **next-intl** with PO file extraction (experimental `useExtracted` / `getExtracted`)
+- Locales: `en`, `zh` — configured in `i18n/routing.ts`, default `en`
+- PO files: `messages/en.po` (source of truth, auto-generated), `messages/zh.po` (manual translations)
+- Extraction scans directories listed in `next.config.ts` → `srcPath: ["./app", "./components", "./lib"]`
+- Running `bun run build` triggers extraction and updates `messages/en.po` with hashed msgids
+
+**Client components:**
+```tsx
+import { useExtracted } from "next-intl";
+const t = useExtracted();
+// Simple string:
+{t("Save")}
+// With interpolation (values must be strings):
+{t("{count} items", { count: String(items.length) })}
+```
+
+**Server components:**
+```tsx
+import { getExtracted } from "next-intl/server";
+const t = await getExtracted();
+{t("Dashboard")}
+```
+
+**Workflow:** wrap strings with `t()` → `bun run build` → new entries appear in `messages/en.po` → add Chinese `msgstr` in `messages/zh.po`
+
 ## Conventions
 
 - Prefer server actions over REST API routes for CRUD operations

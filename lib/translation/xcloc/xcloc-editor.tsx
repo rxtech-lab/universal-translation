@@ -3,6 +3,7 @@
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { PanelLeft } from "lucide-react";
 import { useCallback, useMemo, useRef, useState } from "react";
+import { useExtracted } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -41,6 +42,7 @@ export function XclocEditor({
   streamingEntryIds,
   terms,
 }: XclocEditorProps) {
+  const t = useExtracted();
   const [activeResourceId, setActiveResourceId] = useState<string>(
     project.resources[0]?.id ?? "",
   );
@@ -114,7 +116,7 @@ export function XclocEditor({
       {hasMultipleResources && !isMobile && (
         <Card className="w-64 shrink-0 overflow-y-auto sticky top-20 self-start max-h-screen">
           <CardHeader className="border-b">
-            <CardTitle>Resources</CardTitle>
+            <CardTitle>{t("Resources")}</CardTitle>
           </CardHeader>
           <CardContent className="p-0">{resourceList}</CardContent>
         </Card>
@@ -125,7 +127,7 @@ export function XclocEditor({
         <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
           <SheetContent side="left" className="w-72 p-0">
             <SheetHeader className="p-4 border-b">
-              <SheetTitle>Resources</SheetTitle>
+              <SheetTitle>{t("Resources")}</SheetTitle>
             </SheetHeader>
             <div className="overflow-y-auto flex-1">{resourceList}</div>
           </SheetContent>
@@ -147,11 +149,14 @@ export function XclocEditor({
                 </Button>
               )}
               <CardTitle>
-                {activeResource?.label ?? "No resource selected"}
+                {activeResource?.label ?? t("No resource selected")}
               </CardTitle>
             </div>
             <Badge variant="outline">
-              {stats.translated}/{stats.total} translated
+              {t("{translated}/{total} translated", {
+                translated: String(stats.translated),
+                total: String(stats.total),
+              })}
             </Badge>
           </div>
         </CardHeader>
@@ -192,7 +197,7 @@ export function XclocEditor({
             </div>
           ) : (
             <div className="flex items-center justify-center py-12 text-sm text-muted-foreground">
-              No entries in this resource
+              {t("No entries in this resource")}
             </div>
           )}
         </CardContent>

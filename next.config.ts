@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
 const withNextIntl = createNextIntlPlugin({
   requestConfig: "./i18n/request.ts",
   experimental: {
-    srcPath: ["./app", "./components"],
+    srcPath: ["./app", "./components", "./lib"],
     extract: {
       sourceLocale: "en",
     },

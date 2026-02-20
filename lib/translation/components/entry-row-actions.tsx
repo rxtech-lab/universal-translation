@@ -2,6 +2,7 @@
 
 import { Languages, LoaderCircle, RefreshCw, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { useExtracted } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -34,6 +35,7 @@ export function EntryRowActions({
   onTranslateLine,
   onClearTranslation,
 }: EntryRowActionsProps) {
+  const t = useExtracted();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [suggestion, setSuggestion] = useState("");
 
@@ -55,27 +57,27 @@ export function EntryRowActions({
             {isStreaming ? (
               <>
                 <LoaderCircle className="h-3 w-3 animate-spin" />
-                Translating...
+                {t("Translating...")}
               </>
             ) : isTranslated ? (
               <>
                 <RefreshCw className="h-3 w-3" />
-                Retranslate
+                {t("Retranslate")}
               </>
             ) : (
               <>
                 <Languages className="h-3 w-3" />
-                Translate
+                {t("Translate")}
               </>
             )}
           </Button>
         </TooltipTrigger>
         <TooltipContent>
           {isStreaming
-            ? "Translation in progress..."
+            ? t("Translation in progress...")
             : isTranslated
-              ? "Retranslate this entry with optional guidance"
-              : "Translate this entry with optional guidance"}
+              ? t("Retranslate this entry with optional guidance")
+              : t("Translate this entry with optional guidance")}
         </TooltipContent>
       </Tooltip>
       {isTranslated && !isStreaming && (
@@ -90,7 +92,7 @@ export function EntryRowActions({
               <Trash2 className="h-3 w-3" />
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Clear translation</TooltipContent>
+          <TooltipContent>{t("Clear translation")}</TooltipContent>
         </Tooltip>
       )}
 
@@ -98,11 +100,12 @@ export function EntryRowActions({
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              {isTranslated ? "Retranslate Entry" : "Translate Entry"}
+              {isTranslated ? t("Retranslate Entry") : t("Translate Entry")}
             </DialogTitle>
             <DialogDescription>
-              Provide optional guidance for the AI translation. Leave empty for
-              automatic translation.
+              {t(
+                "Provide optional guidance for the AI translation. Leave empty for automatic translation.",
+              )}
             </DialogDescription>
           </DialogHeader>
           <div className="py-2">
@@ -112,13 +115,13 @@ export function EntryRowActions({
             <Textarea
               value={suggestion}
               onChange={(e) => setSuggestion(e.target.value)}
-              placeholder='e.g., "Use formal tone" or "Keep it concise"'
+              placeholder={t('e.g., "Use formal tone" or "Keep it concise"')}
               className="min-h-20"
             />
           </div>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">{t("Cancel")}</Button>
             </DialogClose>
             <Button
               onClick={() => {
@@ -126,7 +129,7 @@ export function EntryRowActions({
                 onTranslateLine(suggestion.trim() || undefined);
               }}
             >
-              {isTranslated ? "Retranslate" : "Translate"}
+              {isTranslated ? t("Retranslate") : t("Translate")}
             </Button>
           </DialogFooter>
         </DialogContent>

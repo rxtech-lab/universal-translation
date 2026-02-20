@@ -4,7 +4,7 @@ import { ArrowRight, Globe, Loader2 } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useExtracted } from "next-intl";
 import { createProjectFromParsed } from "@/app/actions/upload";
-import { fetchUrlHtml } from "@/app/actions/html-fetch";
+import { deleteTempBlob, fetchUrlHtml } from "@/app/actions/html-fetch";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -52,6 +52,13 @@ export function UrlInputClient() {
     try {
       const result = await fetchUrlHtml(url.trim());
 
+      // Fetch HTML from Vercel Blob directly in the browser — avoids the
+      // 4.5 MB Vercel function response size limit.
+      const html = await fetch(result.blobUrl).then((r) => r.text());
+
+      // Clean up the temporary blob (fire-and-forget)
+      deleteTempBlob(result.blobUrl).catch(() => {});
+
       const client = new HtmlClient();
       // Derive a filename from the URL
       let fileName: string;
@@ -67,11 +74,7 @@ export function UrlInputClient() {
         fileName = "webpage.html";
       }
 
-      const loadResult = client.loadFromUrl(
-        result.html,
-        result.finalUrl,
-        fileName,
-      );
+      const loadResult = client.loadFromUrl(html, result.finalUrl, fileName);
       if (loadResult.hasError) {
         setState({ step: "error", message: loadResult.errorMessage });
         return;

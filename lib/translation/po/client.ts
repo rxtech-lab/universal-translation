@@ -22,6 +22,14 @@ export interface PoFormatData {
   hashBasedMsgids?: boolean;
 }
 
+/** Stats returned by updateFromPo(). */
+export interface PoUpdateStats {
+  added: number;
+  removed: number;
+  preserved: number;
+  total: number;
+}
+
 /** Map plural form index to CLDR category name based on nplurals. */
 function pluralIndexToForm(
   index: number,
@@ -192,6 +200,133 @@ export class PoClient implements TranslationClient<PoTranslationEvent> {
     }
 
     return { hasError: false, data: undefined };
+  }
+
+  /**
+   * Merge a new PO file into this project, preserving translations for
+   * entries that still exist in the new file.
+   *
+   * - New entries get empty targetText.
+   * - Entries no longer in the new file are removed.
+   * - If referencePoText is provided, applyReferenceDocument() is called
+   *   after the merge to resolve hash-based msgids.
+   */
+  updateFromPo(
+    newPoText: string,
+    referencePoText?: string,
+  ): OperationResult<PoUpdateStats> {
+    const newDoc = parsePo(newPoText);
+
+    if (newDoc.entries.length === 0) {
+      return {
+        hasError: true,
+        errorMessage: "No translatable entries found in the new PO file",
+      };
+    }
+
+    // Build map from composite key (msgctxt\x04msgid) -> { msgstr, msgstrPlural }
+    // based on current project entries + underlying document.
+    type TranslationSnapshot = {
+      msgstr: string;
+      msgstrPlural: Record<number, string> | undefined;
+    };
+    const oldTranslations = new Map<string, TranslationSnapshot>();
+
+    const resource = this.project.resources[0];
+    if (resource) {
+      // Group entries by PO document index so we can reconstruct plural maps
+      const byPoIdx = new Map<
+        number,
+        { singular?: string; plural?: Record<number, string> }
+      >();
+
+      for (const entry of resource.entries) {
+        const pluralMatch = entry.id.match(/^(\d+):plural:(\d+)$/);
+        if (pluralMatch) {
+          const poIdx = parseInt(pluralMatch[1], 10);
+          const formIdx = parseInt(pluralMatch[2], 10);
+          const group = byPoIdx.get(poIdx) ?? {};
+          group.plural = group.plural ?? {};
+          group.plural[formIdx] = entry.targetText;
+          byPoIdx.set(poIdx, group);
+        } else {
+          const poIdx = parseInt(entry.id, 10);
+          const group = byPoIdx.get(poIdx) ?? {};
+          group.singular = entry.targetText;
+          byPoIdx.set(poIdx, group);
+        }
+      }
+
+      for (const [poIdx, group] of byPoIdx) {
+        if (poIdx >= this.document.entries.length) continue;
+        const poEntry = this.document.entries[poIdx];
+        const key = poEntry.msgctxt
+          ? `${poEntry.msgctxt}\x04${poEntry.msgid}`
+          : poEntry.msgid;
+        oldTranslations.set(key, {
+          msgstr: group.singular ?? "",
+          msgstrPlural: group.plural,
+        });
+      }
+    }
+
+    // Apply old translations to new document entries
+    let preserved = 0;
+    for (const newEntry of newDoc.entries) {
+      const key = newEntry.msgctxt
+        ? `${newEntry.msgctxt}\x04${newEntry.msgid}`
+        : newEntry.msgid;
+      const old = oldTranslations.get(key);
+      if (!old) continue;
+
+      if (
+        newEntry.msgidPlural !== undefined &&
+        old.msgstrPlural !== undefined
+      ) {
+        // Plural entry — copy plural translations
+        newEntry.msgstrPlural = { ...old.msgstrPlural };
+        const hasTranslation = Object.values(old.msgstrPlural).some(
+          (v) => v.trim() !== "",
+        );
+        if (hasTranslation) preserved++;
+      } else if (
+        newEntry.msgidPlural === undefined &&
+        old.msgstr !== undefined
+      ) {
+        // Singular entry — copy singular translation
+        newEntry.msgstr = old.msgstr;
+        if (old.msgstr.trim() !== "") preserved++;
+      }
+      // Mismatched structure (singular↔plural): skip
+    }
+
+    const oldCount = oldTranslations.size;
+    const newCount = newDoc.entries.length;
+    // Count how many keys from the old doc are NOT in the new doc
+    const newKeys = new Set<string>();
+    for (const newEntry of newDoc.entries) {
+      const key = newEntry.msgctxt
+        ? `${newEntry.msgctxt}\x04${newEntry.msgid}`
+        : newEntry.msgid;
+      newKeys.add(key);
+    }
+    const removed = [...oldTranslations.keys()].filter(
+      (k) => !newKeys.has(k),
+    ).length;
+    const added = newCount - (oldCount - removed);
+
+    // Replace document and rebuild project
+    this.document = newDoc;
+    this.buildProject();
+
+    if (referencePoText) {
+      this.applyReferenceDocument(referencePoText);
+    }
+
+    return {
+      hasError: false,
+      data: { added, removed, preserved, total: newCount },
+    };
   }
 
   getProject(): TranslationProject {

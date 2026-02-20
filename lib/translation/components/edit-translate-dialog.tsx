@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback } from "react";
+import { useExtracted } from "next-intl";
 import { AgentChat } from "@/components/agent-chat";
 import {
   Dialog,
@@ -26,6 +27,7 @@ export function EditTranslateDialog({
   projectId,
   onTranslationUpdated,
 }: EditTranslateDialogProps) {
+  const t = useExtracted();
   const handleToolCall = useCallback(
     (toolCall: {
       toolCallId: string;
@@ -49,7 +51,7 @@ export function EditTranslateDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl! h-[70vh] flex flex-col p-0 gap-0">
         <DialogHeader className="px-4 pt-4 pb-3 border-b shrink-0">
-          <DialogTitle>Edit Translate</DialogTitle>
+          <DialogTitle>{t("Edit Translate")}</DialogTitle>
         </DialogHeader>
         <div className="flex-1 min-h-0">
           <AgentChat
