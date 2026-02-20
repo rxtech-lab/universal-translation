@@ -13,13 +13,6 @@ declare module "next-auth" {
   }
 }
 
-// Deduplication lock: ensures only one refresh request runs at a time
-let refreshPromise: Promise<{
-  accessToken: string;
-  refreshToken: string;
-  expiresAt: number;
-}> | null = null;
-
 async function refreshAccessToken(refreshToken: string) {
   console.log("Refreshing access token...");
   const response = await fetch(`${process.env.AUTH_ISSUER}/api/oauth/token`, {
@@ -78,7 +71,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
 
       // Token still valid - return as is
-      if (token.expiresAt && Date.now() < (token.expiresAt as number) * 1000) {
+      if (
+        token.expiresAt &&
+        Date.now() < (token.expiresAt as number) * 1000 - 60000
+      ) {
         return token;
       }
 
@@ -89,15 +85,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
 
       try {
-        // Deduplicate concurrent refresh requests — only one HTTP call at a time
-        if (!refreshPromise) {
-          refreshPromise = refreshAccessToken(
-            token.refreshToken as string,
-          ).finally(() => {
-            refreshPromise = null;
-          });
-        }
-        const freshTokens = await refreshPromise;
+        const freshTokens = await refreshAccessToken(
+          token.refreshToken as string,
+        );
+
+        console.log("Token refreshed successfully", freshTokens);
 
         return {
           ...token,

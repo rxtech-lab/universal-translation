@@ -15,28 +15,51 @@ import type { LyricsTranslationEvent } from "./events";
  */
 export async function* translateLyricsEntries(params: {
   entries: EntryWithResource[];
+  /** All entries in the project for full lyrics context (rhyme analysis). Falls back to `entries` if not provided. */
+  allEntries?: EntryWithResource[];
   sourceLanguage: string;
   targetLanguage: string;
   projectId: string;
   model?: string;
+  userSuggestion?: string;
 }): AsyncGenerator<LyricsTranslationEvent> {
   const { entries, sourceLanguage, targetLanguage } = params;
   const total = entries.length;
+  const contextEntries = params.allEntries ?? entries;
 
   // Build full lyrics text for context
-  const fullLyrics = entries.map((e) => e.sourceText).join("\n");
-  const allLines = entries.map((e) => ({ id: e.id, text: e.sourceText }));
+  const fullLyrics = contextEntries.map((e) => e.sourceText).join("\n");
+  const allLines = contextEntries.map((e) => ({
+    id: e.id,
+    text: e.sourceText,
+  }));
 
   yield { type: "translate-start", total };
 
+  // Seed with existing translations from context entries (for single-line retranslation).
+  // Exclude entries being translated — those will be filled in by the loop.
+  const translatingIds = new Set(entries.map((e) => e.id));
   const completedTranslations: Array<{
     original: string;
     translated: string;
-  }> = [];
+  }> = params.allEntries
+    ? contextEntries
+        .filter((e) => !translatingIds.has(e.id) && e.targetText?.trim())
+        .map((e) => ({
+          original: e.sourceText,
+          translated: e.targetText ?? "",
+        }))
+    : [];
 
   for (let i = 0; i < entries.length; i++) {
     const entry = entries[i];
     const current = i + 1;
+
+    yield {
+      type: "translate-line-start",
+      resourceId: entry.resourceId,
+      entryId: entry.id,
+    };
 
     // Step 1: Analyze rhythm & rhyme in parallel
     yield {
@@ -71,6 +94,7 @@ export async function* translateLyricsEntries(params: {
       entryId: entry.id,
       rhymeWords: rhyme.rhymeWords,
       relatedLineIds: rhyme.relatedLineIds,
+      relatedRhymeWords: rhyme.relatedRhymeWords,
     };
 
     // Step 3: Translate with retry loop
@@ -102,6 +126,7 @@ export async function* translateLyricsEntries(params: {
         rhyme,
         previousTranslations: completedTranslations,
         previousFeedback: lastFeedback,
+        userSuggestion: params.userSuggestion,
         model: params.model,
       });
 

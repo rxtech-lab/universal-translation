@@ -162,6 +162,14 @@ async function* translateBatch(params: {
   globalOffset: number;
   formatContext?: string;
 }): AsyncGenerator<XclocTranslationEvent> {
+  for (const entry of params.batch) {
+    yield {
+      type: "translate-line-start",
+      resourceId: entry.resourceId,
+      entryId: entry.id,
+    };
+  }
+
   const termListLines = params.terms.map(
     (t) =>
       "- ${{" +

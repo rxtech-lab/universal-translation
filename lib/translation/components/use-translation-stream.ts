@@ -9,6 +9,7 @@ export interface LyricsAnalysis {
   stressPattern?: string;
   rhymeWords?: string[];
   relatedLineIds?: string[];
+  relatedRhymeWords?: Record<string, string[]>;
   reviewPassed?: boolean;
   reviewFeedback?: string;
 }
@@ -25,6 +26,9 @@ export function useTranslationStream(initialTerms?: Term[]) {
   >(new Map());
   const abortRef = useRef<AbortController | null>(null);
   const userEditedIdsRef = useRef<Set<string>>(new Set());
+  const highlightTimersRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(
+    new Map(),
+  );
 
   /** Mark an entry as user-edited so stream updates won't overwrite it. */
   const markUserEdited = useCallback((resourceId: string, entryId: string) => {
@@ -48,6 +52,7 @@ export function useTranslationStream(initialTerms?: Term[]) {
       }>;
       sourceLanguage: string;
       targetLanguage: string;
+      suggestion?: string;
       onEntryTranslated: (
         resourceId: string,
         entryId: string,
@@ -74,8 +79,19 @@ export function useTranslationStream(initialTerms?: Term[]) {
       abortRef.current = controller;
 
       resetUserEdited();
+      for (const timer of highlightTimersRef.current.values()) {
+        clearTimeout(timer);
+      }
+      highlightTimersRef.current.clear();
       setStreamingEntryIds(new Set());
-      setLyricsAnalysis(new Map());
+      // Only clear analysis for entries being (re)translated, preserve others
+      setLyricsAnalysis((prev) => {
+        const next = new Map(prev);
+        for (const entry of params.entries) {
+          next.delete(entry.id);
+        }
+        return next;
+      });
       setErrors([]);
       setStatus({
         state: "translating",
@@ -91,6 +107,7 @@ export function useTranslationStream(initialTerms?: Term[]) {
             entries: params.entries,
             sourceLanguage: params.sourceLanguage,
             targetLanguage: params.targetLanguage,
+            suggestion: params.suggestion,
           }),
           signal: controller.signal,
         });
@@ -123,7 +140,14 @@ export function useTranslationStream(initialTerms?: Term[]) {
             try {
               const event = JSON.parse(json);
 
-              if (event.type === "translate-start") {
+              if (event.type === "translate-line-start") {
+                const key = `${event.resourceId}:${event.entryId}`;
+                setStreamingEntryIds((prev) => {
+                  const next = new Set(prev);
+                  next.add(key);
+                  return next;
+                });
+              } else if (event.type === "translate-start") {
                 setStatus({
                   state: "translating",
                   current: 0,
@@ -138,11 +162,20 @@ export function useTranslationStream(initialTerms?: Term[]) {
                     event.entryId,
                     event.targetText,
                   );
-                  setStreamingEntryIds((prev) => {
-                    const next = new Set(prev);
-                    next.add(key);
-                    return next;
-                  });
+                  // Remove highlight after 5 seconds
+                  const existing = highlightTimersRef.current.get(key);
+                  if (existing) clearTimeout(existing);
+                  highlightTimersRef.current.set(
+                    key,
+                    setTimeout(() => {
+                      highlightTimersRef.current.delete(key);
+                      setStreamingEntryIds((prev) => {
+                        const next = new Set(prev);
+                        next.delete(key);
+                        return next;
+                      });
+                    }, 5000),
+                  );
                 }
                 setStatus((prev) =>
                   prev.state === "translating"
@@ -154,6 +187,10 @@ export function useTranslationStream(initialTerms?: Term[]) {
                 params.onTermsFound?.(event.terms);
               } else if (event.type === "complete") {
                 setStatus({ state: "idle" });
+                for (const timer of highlightTimersRef.current.values()) {
+                  clearTimeout(timer);
+                }
+                highlightTimersRef.current.clear();
                 setStreamingEntryIds(new Set());
                 params.onComplete?.();
               } else if (event.type === "save-error") {
@@ -197,6 +234,7 @@ export function useTranslationStream(initialTerms?: Term[]) {
                     ...existing,
                     rhymeWords: event.rhymeWords,
                     relatedLineIds: event.relatedLineIds,
+                    relatedRhymeWords: event.relatedRhymeWords,
                   });
                   return next;
                 });
@@ -234,11 +272,29 @@ export function useTranslationStream(initialTerms?: Term[]) {
 
   const cancelStream = useCallback(() => {
     abortRef.current?.abort();
+    for (const timer of highlightTimersRef.current.values()) {
+      clearTimeout(timer);
+    }
+    highlightTimersRef.current.clear();
     setStatus({ state: "idle" });
     setStreamingEntryIds(new Set());
   }, []);
 
   const clearErrors = useCallback(() => setErrors([]), []);
+
+  const clearLyricsAnalysis = useCallback(
+    () => setLyricsAnalysis(new Map()),
+    [],
+  );
+
+  const clearEntryAnalysis = useCallback((entryId: string) => {
+    setLyricsAnalysis((prev) => {
+      if (!prev.has(entryId)) return prev;
+      const next = new Map(prev);
+      next.delete(entryId);
+      return next;
+    });
+  }, []);
 
   return {
     status,
@@ -249,6 +305,8 @@ export function useTranslationStream(initialTerms?: Term[]) {
     setTerms,
     streamingEntryIds,
     lyricsAnalysis,
+    clearLyricsAnalysis,
+    clearEntryAnalysis,
     startStream,
     cancelStream,
     markUserEdited,

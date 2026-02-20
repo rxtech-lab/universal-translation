@@ -34,14 +34,43 @@ export async function translateLyricsLine(params: {
     translated: string;
   }>;
   previousFeedback?: string;
+  userSuggestion?: string;
   model?: string;
 }): Promise<LyricsTranslationResult> {
   const model = createModel(params.model);
 
+  // Build rhyme target context — show which specific translations this line must rhyme with
+  const rhymeTargets: string[] = [];
+  if (params.rhyme.relatedLineIds.length > 0) {
+    for (const relId of params.rhyme.relatedLineIds) {
+      // relatedLineIds are entry IDs like "line-3"; previousTranslations is indexed by order
+      const lineNum = Number.parseInt(relId.replace(/\D/g, ""), 10);
+      if (
+        !Number.isNaN(lineNum) &&
+        lineNum > 0 &&
+        lineNum <= params.previousTranslations.length
+      ) {
+        const prev = params.previousTranslations[lineNum - 1];
+        rhymeTargets.push(
+          `Line ${lineNum}: "${prev.original}" → "${prev.translated}"`,
+        );
+      }
+    }
+  }
+
+  const rhymeTargetContext =
+    rhymeTargets.length > 0
+      ? `
+## CRITICAL: Rhyme Targets
+Your translation MUST end-rhyme with these already-translated lines:
+${rhymeTargets.join("\n")}
+Find the ending sound of these translations and make your line rhyme with them.`
+      : "";
+
   const prevContext =
     params.previousTranslations.length > 0
       ? `
-===Previously translated lines (your translation MUST rhyme with these where the originals rhyme)===
+===Previously translated lines===
 ${params.previousTranslations.map((t, i) => `Line ${i + 1}: "${t.original}" → "${t.translated}"`).join("\n")}
 ===End of previous translations===`
       : "";
@@ -51,6 +80,13 @@ ${params.previousTranslations.map((t, i) => `Line ${i + 1}: "${t.original}" → 
 ## Previous Attempt Feedback
 Your previous translation was rejected. Fix these issues:
 ${params.previousFeedback}`
+    : "";
+
+  const userSuggestionContext = params.userSuggestion
+    ? `
+## User Direction
+The user has provided the following guidance for this specific line. Prioritize this instruction:
+${params.userSuggestion}`
     : "";
 
   const result = await generateText({
@@ -77,7 +113,9 @@ Related rhyming lines: ${params.rhyme.relatedLineIds.join(", ") || "none"}
 Full original lyrics:
 ${params.fullLyrics}
 ${prevContext}
+${rhymeTargetContext}
 ${retryContext}
+${userSuggestionContext}
 
 Produce a translation that sounds like it was originally written in ${params.targetLanguage}.`,
   });

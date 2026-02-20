@@ -143,6 +143,8 @@ export function EditorClient({
     setTerms,
     streamingEntryIds,
     lyricsAnalysis,
+    clearLyricsAnalysis,
+    clearEntryAnalysis,
     startStream,
     cancelStream,
     markUserEdited,
@@ -165,6 +167,9 @@ export function EditorClient({
             stressPattern: m.stressPattern as string | undefined,
             rhymeWords: m.rhymeWords as string[] | undefined,
             relatedLineIds: m.relatedLineIds as string[] | undefined,
+            relatedRhymeWords: m.relatedRhymeWords as
+              | Record<string, string[]>
+              | undefined,
             reviewPassed: m.reviewPassed as boolean | undefined,
             reviewFeedback: m.reviewFeedback as string | undefined,
           });
@@ -226,9 +231,15 @@ export function EditorClient({
 
   const { markDirty } = useAutoSave({
     onSave: async () => {
-      setStatus({ state: "saving" });
+      setStatus((prev) =>
+        prev.state === "translating" ? prev : { state: "saving" },
+      );
       await updateProjectContent(dbProject.id, client.getProject());
-      setStatus({ state: "saved", at: new Date() });
+      setStatus((prev) =>
+        prev.state === "translating"
+          ? prev
+          : { state: "saved", at: new Date() },
+      );
     },
     debounceMs: 5000,
   });
@@ -241,9 +252,26 @@ export function EditorClient({
     ) => {
       updateEntry(resourceId, entryId, update);
       markUserEdited(resourceId, entryId);
+      // When clearing translation, also clear analysis metadata
+      if (update.targetText === "") {
+        clearEntryAnalysis(entryId);
+        const resource = client
+          .getProject()
+          .resources.find((r) => r.id === resourceId);
+        const entry = resource?.entries.find((e) => e.id === entryId);
+        if (entry?.metadata) {
+          const m = entry.metadata as Record<string, unknown>;
+          delete m.syllableCount;
+          delete m.stressPattern;
+          delete m.rhymeWords;
+          delete m.relatedLineIds;
+          delete m.reviewPassed;
+          delete m.reviewFeedback;
+        }
+      }
       markDirty();
     },
-    [updateEntry, markUserEdited, markDirty],
+    [updateEntry, markUserEdited, clearEntryAnalysis, client, markDirty],
   );
 
   const handleTranslationUpdated = useCallback(
@@ -313,6 +341,61 @@ export function EditorClient({
     handleAgentToolResult,
   ]);
 
+  const handleTranslateLine = useCallback(
+    async (resourceId: string, entryId: string, suggestion?: string) => {
+      const resource = project.resources.find((r) => r.id === resourceId);
+      if (!resource) return;
+      const entry = resource.entries.find((e) => e.id === entryId);
+      if (!entry) return;
+
+      toast.loading("Translating line...", {
+        id: TOAST_ID,
+        description: `Translating line #${entry.id}...`,
+        duration: Infinity,
+        classNames: { description: "!text-foreground" },
+      });
+
+      try {
+        await startStream({
+          projectId: dbProject.id,
+          entries: [{ ...entry, resourceId }],
+          sourceLanguage:
+            project.sourceLanguage ?? dbProject.sourceLanguage ?? "en",
+          targetLanguage:
+            project.targetLanguages?.[0] ??
+            dbProject.targetLanguage ??
+            "zh-Hans",
+          suggestion,
+          onEntryTranslated: (resId, eId, targetText) => {
+            applyStreamUpdate(resId, eId, { targetText });
+            client.updateEntry(resId, eId, { targetText });
+          },
+          onComplete: () => {
+            refreshFromClient();
+            dismissTranslationToast();
+          },
+          onAgentTextDelta: handleAgentTextDelta,
+          onAgentToolCall: handleAgentToolCall,
+          onAgentToolResult: handleAgentToolResult,
+        });
+      } finally {
+        dismissTranslationToast();
+      }
+    },
+    [
+      project,
+      dbProject,
+      startStream,
+      applyStreamUpdate,
+      client,
+      refreshFromClient,
+      dismissTranslationToast,
+      handleAgentTextDelta,
+      handleAgentToolCall,
+      handleAgentToolResult,
+    ],
+  );
+
   const handleStopTranslation = useCallback(() => {
     cancelStream();
     toast.info("Translation stopped", { id: TOAST_ID, duration: 2000 });
@@ -326,8 +409,18 @@ export function EditorClient({
           if (entry.targetText.trim()) {
             client.updateEntry(resource.id, entry.id, { targetText: "" });
           }
+          if (entry.metadata) {
+            const m = entry.metadata as Record<string, unknown>;
+            delete m.syllableCount;
+            delete m.stressPattern;
+            delete m.rhymeWords;
+            delete m.relatedLineIds;
+            delete m.reviewPassed;
+            delete m.reviewFeedback;
+          }
         }
       }
+      clearLyricsAnalysis();
       refreshFromClient();
       markDirty();
       resolve();
@@ -337,7 +430,7 @@ export function EditorClient({
       success: "All translations cleared",
       error: "Failed to clear translations",
     });
-  }, [client, refreshFromClient, markDirty]);
+  }, [client, clearLyricsAnalysis, refreshFromClient, markDirty]);
 
   const handleRename = useCallback(
     async (newName: string) => {
@@ -365,12 +458,22 @@ export function EditorClient({
   }, [client, terms]);
 
   const handleSave = useCallback(async () => {
-    setStatus({ state: "saving" });
+    setStatus((prev) =>
+      prev.state === "translating" ? prev : { state: "saving" },
+    );
     const result = await client.save();
     if (result.hasError) {
-      setStatus({ state: "error", message: result.errorMessage });
+      setStatus((prev) =>
+        prev.state === "translating"
+          ? prev
+          : { state: "error", message: result.errorMessage },
+      );
     } else {
-      setStatus({ state: "saved", at: new Date() });
+      setStatus((prev) =>
+        prev.state === "translating"
+          ? prev
+          : { state: "saved", at: new Date() },
+      );
     }
   }, [client, setStatus]);
 
@@ -412,6 +515,7 @@ export function EditorClient({
         <LyricsEditor
           project={project}
           onEntryUpdate={handleEntryUpdate}
+          onTranslateLine={handleTranslateLine}
           streamingEntryIds={streamingEntryIds}
           terms={terms}
           lyricsAnalysis={mergedLyricsAnalysis}

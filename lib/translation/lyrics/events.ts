@@ -35,6 +35,7 @@ export type LyricsTranslationEvent =
   // Save events
   | { type: "entries-saved"; batchIndex: number }
   | { type: "save-error"; message: string; batchIndex: number }
+  | { type: "translate-line-start"; resourceId: string; entryId: string }
   // Lyrics-specific events
   | {
       type: "line-rhythm-analyzed";
@@ -47,6 +48,7 @@ export type LyricsTranslationEvent =
       entryId: string;
       rhymeWords: string[];
       relatedLineIds: string[];
+      relatedRhymeWords: Record<string, string[]>;
     }
   | {
       type: "line-translation-attempt";

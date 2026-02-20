@@ -1,9 +1,25 @@
 "use client";
 
+import { Languages, LoaderCircle, RefreshCw, Trash2 } from "lucide-react";
 import type React from "react";
 import { memo, useCallback, useRef, useState } from "react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import type { LyricsAnalysis } from "../components/use-translation-stream";
 import { TermText } from "../components/term-text";
@@ -14,6 +30,7 @@ interface LyricsEntryRowProps {
   entry: TranslationEntry;
   resourceId: string;
   onUpdate: (update: { targetText?: string; comment?: string }) => void;
+  onTranslateLine: (suggestion?: string) => void;
   isStreaming: boolean;
   terms: Term[];
   analysis?: LyricsAnalysis;
@@ -81,12 +98,15 @@ function StressPattern({ pattern }: { pattern: string }) {
 export const LyricsEntryRow = memo(function LyricsEntryRow({
   entry,
   onUpdate,
+  onTranslateLine,
   isStreaming,
   terms,
   analysis,
 }: LyricsEntryRowProps) {
   const isTranslated = entry.targetText.trim() !== "";
   const [editing, setEditing] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [suggestion, setSuggestion] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleTargetChange = useCallback(
@@ -108,8 +128,10 @@ export const LyricsEntryRow = memo(function LyricsEntryRow({
   const lineIndex = (entry.metadata as { paragraphIndex?: number } | undefined)
     ?.paragraphIndex;
 
-  const hasAnalysis =
-    analysis && (analysis.syllableCount != null || analysis.rhymeWords);
+  const hasRhyme =
+    analysis?.relatedLineIds && analysis.relatedLineIds.length > 0;
+
+  const hasAnalysis = analysis && (analysis.syllableCount != null || hasRhyme);
 
   return (
     <div
@@ -151,6 +173,60 @@ export const LyricsEntryRow = memo(function LyricsEntryRow({
             {analysis.reviewPassed ? "Review passed" : "Review failed"}
           </Badge>
         )}
+        <div className="flex-1" />
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-5 text-[10px] gap-1 px-1.5"
+              disabled={isStreaming}
+              onClick={() => {
+                setSuggestion("");
+                setDialogOpen(true);
+              }}
+            >
+              {isStreaming ? (
+                <>
+                  <LoaderCircle className="h-3 w-3 animate-spin" />
+                  Translating...
+                </>
+              ) : isTranslated ? (
+                <>
+                  <RefreshCw className="h-3 w-3" />
+                  Retranslate
+                </>
+              ) : (
+                <>
+                  <Languages className="h-3 w-3" />
+                  Translate
+                </>
+              )}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            {isStreaming
+              ? "Translation in progress..."
+              : isTranslated
+                ? "Retranslate this line with optional guidance"
+                : "Translate this line with optional guidance"}
+          </TooltipContent>
+        </Tooltip>
+        {isTranslated && !isStreaming && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                className="h-4 w-4 text-muted-foreground hover:text-destructive"
+                onClick={() => onUpdate({ targetText: "" })}
+              >
+                <Trash2 className="h-3 w-3" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Clear translation</TooltipContent>
+          </Tooltip>
+        )}
       </div>
 
       {/* Source text with highlighted rhyme words */}
@@ -161,7 +237,7 @@ export const LyricsEntryRow = memo(function LyricsEntryRow({
         <div className="mt-1 text-xs bg-muted/50 px-2.5 py-1.5 border whitespace-pre-wrap">
           <HighlightedSource
             text={entry.sourceText}
-            rhymeWords={analysis?.rhymeWords}
+            rhymeWords={hasRhyme ? analysis?.rhymeWords : undefined}
           />
         </div>
       </div>
@@ -179,25 +255,43 @@ export const LyricsEntryRow = memo(function LyricsEntryRow({
               )}
             </span>
           )}
-          {analysis.rhymeWords && analysis.rhymeWords.length > 0 && (
-            <span className="inline-flex items-center gap-1 text-violet-700 dark:text-violet-300">
-              <span className="font-medium">Rhyme:</span>
-              {analysis.rhymeWords.map((word) => (
-                <span
-                  key={word}
-                  className="bg-violet-500/15 px-1 border-b border-violet-400/60"
-                >
-                  {word}
+          {hasRhyme &&
+            analysis.rhymeWords &&
+            analysis.rhymeWords.length > 0 && (
+              <span className="inline-flex items-center gap-1 text-violet-700 dark:text-violet-300">
+                <span className="font-medium">Rhyme:</span>
+                {analysis.rhymeWords.map((word) => (
+                  <span
+                    key={word}
+                    className="bg-violet-500/15 px-1 border-b border-violet-400/60"
+                  >
+                    {word}
+                  </span>
+                ))}
+                <span className="text-muted-foreground font-normal">
+                  with{" "}
+                  {analysis.relatedLineIds?.map((id, i) => {
+                    const relatedWords = analysis.relatedRhymeWords?.[id];
+                    return (
+                      <span
+                        key={id}
+                        className="inline-flex items-center gap-0.5"
+                      >
+                        {i > 0 && ", "}#{id}
+                        {relatedWords?.map((word) => (
+                          <span
+                            key={word}
+                            className="bg-violet-500/15 text-violet-700 dark:text-violet-300 px-0.5 border-b border-violet-400/60"
+                          >
+                            [{word}]
+                          </span>
+                        ))}
+                      </span>
+                    );
+                  })}
                 </span>
-              ))}
-            </span>
-          )}
-          {analysis.relatedLineIds && analysis.relatedLineIds.length > 0 && (
-            <span className="text-muted-foreground">
-              rhymes with{" "}
-              {analysis.relatedLineIds.map((id) => `#${id}`).join(", ")}
-            </span>
-          )}
+              </span>
+            )}
         </div>
       )}
 
@@ -240,6 +334,44 @@ export const LyricsEntryRow = memo(function LyricsEntryRow({
           </button>
         )}
       </div>
+
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {isTranslated ? "Retranslate Line" : "Translate Line"}
+            </DialogTitle>
+            <DialogDescription>
+              Provide optional guidance for the AI translation. Leave empty for
+              automatic translation.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-2">
+            <div className="mb-3 text-xs bg-muted/50 px-2.5 py-1.5 border whitespace-pre-wrap">
+              {entry.sourceText}
+            </div>
+            <Textarea
+              value={suggestion}
+              onChange={(e) => setSuggestion(e.target.value)}
+              placeholder='e.g., "Make it more poetic" or "Use the word 夢 (dream)"'
+              className="min-h-20"
+            />
+          </div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogClose>
+            <Button
+              onClick={() => {
+                setDialogOpen(false);
+                onTranslateLine(suggestion.trim() || undefined);
+              }}
+            >
+              {isTranslated ? "Retranslate" : "Translate"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 });

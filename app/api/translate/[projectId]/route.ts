@@ -40,6 +40,7 @@ export async function POST(
     entries: EntryWithResource[];
     sourceLanguage: string;
     targetLanguage: string;
+    suggestion?: string;
   };
 
   const encoder = new TextEncoder();
@@ -52,12 +53,21 @@ export async function POST(
       try {
         const isLyrics = dbProject.formatId === "lyrics";
 
+        // Build full entries list from project content for lyrics context
+        const allLyricsEntries = isLyrics
+          ? projectContent.resources.flatMap((r) =>
+              r.entries.map((e) => ({ ...e, resourceId: r.id })),
+            )
+          : undefined;
+
         const events = isLyrics
           ? translateLyricsEntries({
               entries: body.entries,
+              allEntries: allLyricsEntries,
               sourceLanguage: body.sourceLanguage,
               targetLanguage: body.targetLanguage,
               projectId,
+              userSuggestion: body.suggestion,
             })
           : translateEntries({
               entries: body.entries,
@@ -110,6 +120,7 @@ export async function POST(
                 } else if (event.type === "line-rhyme-analyzed") {
                   entry.metadata.rhymeWords = event.rhymeWords;
                   entry.metadata.relatedLineIds = event.relatedLineIds;
+                  entry.metadata.relatedRhymeWords = event.relatedRhymeWords;
                 } else if (event.type === "line-review-result") {
                   entry.metadata.reviewPassed = event.passed;
                   entry.metadata.reviewFeedback = event.feedback;
