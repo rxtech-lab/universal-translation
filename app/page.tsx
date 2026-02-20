@@ -1,40 +1,28 @@
-import { redirect } from "next/navigation";
 import { auth, signIn } from "@/auth";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { FeatureGrid } from "@/components/landing/feature-grid";
+import { FooterCta } from "@/components/landing/footer-cta";
+import { FormatShowcase } from "@/components/landing/format-showcase";
+import { HeroSection } from "@/components/landing/hero-section";
+import { HowItWorks } from "@/components/landing/how-it-works";
+import { NavBar } from "@/components/landing/nav-bar";
 
 export default async function Page() {
   const session = await auth();
-  if (session) redirect("/dashboard");
+  const isSignedIn = !!session;
+
+  async function handleSignIn() {
+    "use server";
+    await signIn("rxlab");
+  }
 
   return (
-    <div className="flex min-h-svh items-center justify-center bg-muted/40 px-4">
-      <Card className="w-full max-w-sm">
-        <CardHeader>
-          <CardTitle className="text-base">Universal Translation</CardTitle>
-          <CardDescription>
-            Sign in to your RxLab account to continue.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form
-            action={async () => {
-              "use server";
-              await signIn("rxlab");
-            }}
-          >
-            <Button className="w-full" size="lg">
-              Sign in with RxLab
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+    <div className="min-h-svh">
+      <NavBar isSignedIn={isSignedIn} signInAction={handleSignIn} />
+      <HeroSection isSignedIn={isSignedIn} signInAction={handleSignIn} />
+      <HowItWorks />
+      <FeatureGrid />
+      <FormatShowcase />
+      <FooterCta isSignedIn={isSignedIn} signInAction={handleSignIn} />
     </div>
   );
 }
