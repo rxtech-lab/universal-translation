@@ -3,6 +3,7 @@
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { PanelLeft } from "lucide-react";
 import { useCallback, useMemo, useRef, useState } from "react";
+import { useExtracted } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -44,6 +45,7 @@ export function HtmlEditor({
   streamingEntryIds,
   terms,
 }: HtmlEditorProps) {
+  const t = useExtracted();
   const [activeResourceId, setActiveResourceId] = useState<string>(
     project.resources[0]?.id ?? "",
   );
@@ -122,7 +124,7 @@ export function HtmlEditor({
       {hasMultipleResources && !isMobile && (
         <Card className="w-64 shrink-0 overflow-y-auto sticky top-20 self-start max-h-screen">
           <CardHeader className="border-b">
-            <CardTitle>Files</CardTitle>
+            <CardTitle>{t("Files")}</CardTitle>
           </CardHeader>
           <CardContent className="p-0">{resourceList}</CardContent>
         </Card>
@@ -133,7 +135,7 @@ export function HtmlEditor({
         <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
           <SheetContent side="left" className="w-72 p-0">
             <SheetHeader className="p-4 border-b">
-              <SheetTitle>Files</SheetTitle>
+              <SheetTitle>{t("Files")}</SheetTitle>
             </SheetHeader>
             <div className="overflow-y-auto flex-1">{resourceList}</div>
           </SheetContent>
@@ -155,11 +157,14 @@ export function HtmlEditor({
                 </Button>
               )}
               <CardTitle>
-                {activeResource?.label ?? "No resource selected"}
+                {activeResource?.label ?? t("No resource selected")}
               </CardTitle>
             </div>
             <Badge variant="outline">
-              {stats.translated}/{stats.total} translated
+              {t("{translated}/{total} translated", {
+                translated: String(stats.translated),
+                total: String(stats.total),
+              })}
             </Badge>
           </div>
         </CardHeader>
@@ -200,7 +205,7 @@ export function HtmlEditor({
             </div>
           ) : (
             <div className="flex items-center justify-center py-12 text-sm text-muted-foreground">
-              No translatable content found
+              {t("No translatable content found")}
             </div>
           )}
         </CardContent>
@@ -210,13 +215,13 @@ export function HtmlEditor({
       {!isMobile && (
         <Card className="flex-1 flex flex-col min-h-0">
           <CardHeader className="border-b shrink-0">
-            <CardTitle>Preview</CardTitle>
+            <CardTitle>{t("Preview")}</CardTitle>
           </CardHeader>
           <CardContent className="flex-1 p-0 overflow-hidden">
             <iframe
               srcDoc={previewHtml}
               sandbox=""
-              title="HTML Preview"
+              title={t("HTML Preview")}
               className="w-full h-full border-0"
             />
           </CardContent>

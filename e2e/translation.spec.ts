@@ -79,3 +79,61 @@ test.describe("Basic Translation Flow", () => {
     await expect(page.getByTestId("document-stats")).not.toContainText("0/");
   });
 });
+test.describe("PO Update Flow", () => {
+  test("should update PO file and preserve translations", async ({ page }) => {
+    // 1. Navigate to new project page
+    await page.goto("/dashboard/projects/new");
+
+    // 2. Upload test.po
+    const fileInput = page.getByTestId("upload-file-input");
+    await fileInput.setInputFiles(
+      path.resolve(__dirname, "../test-assets/test.po"),
+    );
+
+    // 3. Select source=English, target=Chinese (Simplified) and create
+    await expect(page.getByTestId("target-language-trigger")).toBeVisible({
+      timeout: 10_000,
+    });
+    await page.getByTestId("target-language-trigger").click();
+    await page.getByRole("option", { name: "Chinese (Simplified)" }).click();
+    await page.getByTestId("create-project-button").click();
+
+    // 4. Wait for editor to load
+    await expect(page).toHaveURL(/\/dashboard\/projects\/[a-f0-9-]+/, {
+      timeout: 15_000,
+    });
+    await expect(page.getByTestId("translation-editor")).toBeVisible({
+      timeout: 10_000,
+    });
+
+    // 5. Click the "Update" button in the toolbar (desktop)
+    const updateButton = page.getByRole("button", { name: /update/i }).first();
+    await expect(updateButton).toBeVisible({ timeout: 5_000 });
+    await updateButton.click();
+
+    // 6. Dialog opens — upload test-updated.po
+    const dialogFileInput = page
+      .locator("input[type='file'][accept='.po']")
+      .first();
+    await dialogFileInput.setInputFiles(
+      path.resolve(__dirname, "../test-assets/test-updated.po"),
+    );
+
+    // 7. Verify diff preview appears
+    await expect(page.getByTestId("po-update-diff-preview")).toBeVisible({
+      timeout: 5_000,
+    });
+    // Stats should show some preserved + added + removed entries
+    await expect(page.getByTestId("po-update-stat-preserved")).toBeVisible();
+    await expect(page.getByTestId("po-update-stat-added")).toBeVisible();
+
+    // 8. Click Confirm
+    await page.getByTestId("po-update-confirm").click();
+
+    // 9. Dialog closes and editor refreshes
+    await expect(page.getByTestId("po-update-diff-preview")).not.toBeVisible();
+
+    // 10. New entries should be visible, stale entries gone
+    await expect(page.getByTestId("translation-editor")).toBeVisible();
+  });
+});

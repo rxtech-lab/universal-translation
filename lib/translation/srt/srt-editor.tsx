@@ -2,6 +2,7 @@
 
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useCallback, useMemo, useRef } from "react";
+import { useExtracted } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Term } from "../tools/term-tools";
@@ -31,6 +32,7 @@ export function SrtEditor({
   streamingEntryIds,
   terms,
 }: SrtEditorProps) {
+  const t = useExtracted();
   const resource = project.resources[0];
   const entries = useMemo(() => resource?.entries ?? [], [resource?.entries]);
   const resourceId = resource?.id ?? "srt-main";
@@ -61,9 +63,12 @@ export function SrtEditor({
     <Card className="flex-1 flex flex-col min-h-0">
       <CardHeader className="border-b shrink-0">
         <div className="flex items-center justify-between">
-          <CardTitle>{resource?.label ?? "Subtitles"}</CardTitle>
+          <CardTitle>{resource?.label ?? t("Subtitles")}</CardTitle>
           <Badge variant="outline">
-            {stats.translated}/{stats.total} translated
+            {t("{translated}/{total} translated", {
+              translated: String(stats.translated),
+              total: String(stats.total),
+            })}
           </Badge>
         </div>
       </CardHeader>
@@ -104,7 +109,7 @@ export function SrtEditor({
           </div>
         ) : (
           <div className="flex items-center justify-center py-12 text-sm text-muted-foreground">
-            No subtitle cues found
+            {t("No subtitle cues found")}
           </div>
         )}
       </CardContent>

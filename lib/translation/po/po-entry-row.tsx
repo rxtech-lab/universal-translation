@@ -2,6 +2,7 @@
 
 import type React from "react";
 import { memo, useCallback, useRef, useState } from "react";
+import { useExtracted } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
@@ -27,6 +28,7 @@ export const PoEntryRow = memo(function PoEntryRow({
   isStreaming,
   terms,
 }: PoEntryRowProps) {
+  const t = useExtracted();
   const isTranslated = entry.targetText.trim() !== "";
   const [editing, setEditing] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -94,14 +96,14 @@ export const PoEntryRow = memo(function PoEntryRow({
             variant="outline"
             className="text-[10px] h-4 text-green-600 dark:text-green-400 border-green-200 dark:border-green-800"
           >
-            Translated
+            {t("Translated")}
           </Badge>
         ) : (
           <Badge
             variant="outline"
             className="text-[10px] h-4 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-800"
           >
-            Untranslated
+            {t("Untranslated")}
           </Badge>
         )}
         <EntryRowActions
@@ -116,7 +118,7 @@ export const PoEntryRow = memo(function PoEntryRow({
       {/* Source text */}
       <div className="mb-2">
         <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">
-          Source
+          {t("Source")}
         </span>
         <div className="mt-1 text-xs bg-muted/50 px-2.5 py-1.5 border whitespace-pre-wrap">
           <PlaceholderText text={entry.sourceText} />
@@ -126,7 +128,7 @@ export const PoEntryRow = memo(function PoEntryRow({
       {/* Target text — click-to-edit with term resolution */}
       <div className="mb-2">
         <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">
-          Translation
+          {t("Translation")}
         </span>
         {editing || !isTranslated ? (
           <Textarea
@@ -138,7 +140,7 @@ export const PoEntryRow = memo(function PoEntryRow({
               "mt-1 min-h-10",
               isStreaming && "border-primary/30 bg-primary/5",
             )}
-            placeholder="Enter translation..."
+            placeholder={t("Enter translation...")}
           />
         ) : (
           <button
@@ -159,14 +161,14 @@ export const PoEntryRow = memo(function PoEntryRow({
       {/* Comment */}
       {entry.comment && (
         <div className="text-xs text-muted-foreground italic">
-          Note: {entry.comment}
+          {t("Note:")} {entry.comment}
         </div>
       )}
 
       {/* Context (references) */}
       {entry.context && (
         <div className="text-xs text-muted-foreground mt-1 font-mono">
-          Ref: {entry.context}
+          {t("Ref:")} {entry.context}
         </div>
       )}
     </div>

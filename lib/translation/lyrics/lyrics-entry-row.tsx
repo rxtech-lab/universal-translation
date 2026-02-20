@@ -3,6 +3,7 @@
 import { Languages, LoaderCircle, RefreshCw, Trash2 } from "lucide-react";
 import type React from "react";
 import { memo, useCallback, useRef, useState } from "react";
+import { useExtracted } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -103,6 +104,7 @@ export const LyricsEntryRow = memo(function LyricsEntryRow({
   terms,
   analysis,
 }: LyricsEntryRowProps) {
+  const t = useExtracted();
   const isTranslated = entry.targetText.trim() !== "";
   const [editing, setEditing] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -150,14 +152,14 @@ export const LyricsEntryRow = memo(function LyricsEntryRow({
             variant="outline"
             className="text-[10px] h-4 text-green-600 dark:text-green-400 border-green-200 dark:border-green-800"
           >
-            Translated
+            {t("Translated")}
           </Badge>
         ) : (
           <Badge
             variant="outline"
             className="text-[10px] h-4 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-800"
           >
-            Untranslated
+            {t("Untranslated")}
           </Badge>
         )}
         {analysis?.reviewPassed != null && (
@@ -170,7 +172,7 @@ export const LyricsEntryRow = memo(function LyricsEntryRow({
                 : "text-red-600 dark:text-red-400 border-red-200 dark:border-red-800",
             )}
           >
-            {analysis.reviewPassed ? "Review passed" : "Review failed"}
+            {analysis.reviewPassed ? t("Review passed") : t("Review failed")}
           </Badge>
         )}
         <div className="flex-1" />
@@ -189,27 +191,27 @@ export const LyricsEntryRow = memo(function LyricsEntryRow({
               {isStreaming ? (
                 <>
                   <LoaderCircle className="h-3 w-3 animate-spin" />
-                  Translating...
+                  {t("Translating...")}
                 </>
               ) : isTranslated ? (
                 <>
                   <RefreshCw className="h-3 w-3" />
-                  Retranslate
+                  {t("Retranslate")}
                 </>
               ) : (
                 <>
                   <Languages className="h-3 w-3" />
-                  Translate
+                  {t("Translate")}
                 </>
               )}
             </Button>
           </TooltipTrigger>
           <TooltipContent>
             {isStreaming
-              ? "Translation in progress..."
+              ? t("Translation in progress...")
               : isTranslated
-                ? "Retranslate this line with optional guidance"
-                : "Translate this line with optional guidance"}
+                ? t("Retranslate this line with optional guidance")
+                : t("Translate this line with optional guidance")}
           </TooltipContent>
         </Tooltip>
         {isTranslated && !isStreaming && (
@@ -224,7 +226,7 @@ export const LyricsEntryRow = memo(function LyricsEntryRow({
                 <Trash2 className="h-3 w-3" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Clear translation</TooltipContent>
+            <TooltipContent>{t("Clear translation")}</TooltipContent>
           </Tooltip>
         )}
       </div>
@@ -232,7 +234,7 @@ export const LyricsEntryRow = memo(function LyricsEntryRow({
       {/* Source text with highlighted rhyme words */}
       <div className="mb-2">
         <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">
-          Source
+          {t("Source")}
         </span>
         <div className="mt-1 text-xs bg-muted/50 px-2.5 py-1.5 border whitespace-pre-wrap">
           <HighlightedSource
@@ -248,7 +250,9 @@ export const LyricsEntryRow = memo(function LyricsEntryRow({
           {analysis.syllableCount != null && (
             <span className="inline-flex items-center gap-1.5 text-blue-700 dark:text-blue-300">
               <span className="font-medium">
-                {analysis.syllableCount} syllables
+                {t("{count} syllables", {
+                  count: String(analysis.syllableCount),
+                })}
               </span>
               {analysis.stressPattern && (
                 <StressPattern pattern={analysis.stressPattern} />
@@ -259,7 +263,7 @@ export const LyricsEntryRow = memo(function LyricsEntryRow({
             analysis.rhymeWords &&
             analysis.rhymeWords.length > 0 && (
               <span className="inline-flex items-center gap-1 text-violet-700 dark:text-violet-300">
-                <span className="font-medium">Rhyme:</span>
+                <span className="font-medium">{t("Rhyme:")}</span>
                 {analysis.rhymeWords.map((word) => (
                   <span
                     key={word}
@@ -305,7 +309,7 @@ export const LyricsEntryRow = memo(function LyricsEntryRow({
       {/* Target text — click-to-edit */}
       <div>
         <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">
-          Translation
+          {t("Translation")}
         </span>
         {editing || !isTranslated ? (
           <Textarea
@@ -317,7 +321,7 @@ export const LyricsEntryRow = memo(function LyricsEntryRow({
               "mt-1 min-h-10",
               isStreaming && "border-primary/30 bg-primary/5",
             )}
-            placeholder="Enter translation..."
+            placeholder={t("Enter translation...")}
           />
         ) : (
           <button
@@ -339,11 +343,12 @@ export const LyricsEntryRow = memo(function LyricsEntryRow({
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              {isTranslated ? "Retranslate Line" : "Translate Line"}
+              {isTranslated ? t("Retranslate Line") : t("Translate Line")}
             </DialogTitle>
             <DialogDescription>
-              Provide optional guidance for the AI translation. Leave empty for
-              automatic translation.
+              {t(
+                "Provide optional guidance for the AI translation. Leave empty for automatic translation.",
+              )}
             </DialogDescription>
           </DialogHeader>
           <div className="py-2">
@@ -359,7 +364,7 @@ export const LyricsEntryRow = memo(function LyricsEntryRow({
           </div>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">{t("Cancel")}</Button>
             </DialogClose>
             <Button
               onClick={() => {
@@ -367,7 +372,7 @@ export const LyricsEntryRow = memo(function LyricsEntryRow({
                 onTranslateLine(suggestion.trim() || undefined);
               }}
             >
-              {isTranslated ? "Retranslate" : "Translate"}
+              {isTranslated ? t("Retranslate") : t("Translate")}
             </Button>
           </DialogFooter>
         </DialogContent>

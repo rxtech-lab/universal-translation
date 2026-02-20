@@ -74,6 +74,56 @@ msgstr "Recent Projects"
 msgid "pFK6bJ"
 msgstr "View all"
 
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:215
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:234
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:314
+#: lib/translation/components/entry-row-actions.tsx:60
+#: lib/translation/lyrics/lyrics-entry-row.tsx:194
+msgid "2C42E7"
+msgstr "Translating..."
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:316
+msgid "by2lJ5"
+msgstr "Starting translation..."
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:371
+msgid "qvr1Bb"
+msgstr "Translating line..."
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:373
+msgid "G+DatO"
+msgstr "Translating line #{id}..."
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:422
+msgid "Rx9EpS"
+msgstr "Translation stopped"
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:450
+msgid "S/NHSE"
+msgstr "Clearing translations..."
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:451
+msgid "wYNhGP"
+msgstr "All translations cleared"
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:452
+msgid "R38RUr"
+msgstr "Failed to clear translations"
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:470
+msgid "fq475d"
+msgstr "Updated: {preserved} preserved, {added} new, {removed} removed"
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:485
+#: app/[locale]/dashboard/projects/project-card.tsx:67
+msgid "fouJn6"
+msgstr "Project renamed"
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:487
+#: app/[locale]/dashboard/projects/project-card.tsx:70
+msgid "m3LbFk"
+msgstr "Failed to rename project"
+
 #: app/[locale]/dashboard/projects/new/mode-selector.tsx:34
 #: app/[locale]/dashboard/projects/new/text-input-client.tsx:143
 msgid "1mIq6K"
@@ -94,6 +144,7 @@ msgstr "Standard document translation"
 
 #: app/[locale]/dashboard/projects/new/mode-selector.tsx:68
 #: app/[locale]/dashboard/projects/new/text-input-client.tsx:171
+#: lib/translation/lyrics/lyrics-editor.tsx:69
 msgid "D/JyFP"
 msgstr "Lyrics"
 
@@ -105,6 +156,11 @@ msgstr "Rhythm & rhyme preserving"
 #: app/[locale]/dashboard/projects/project-card.tsx:167
 #: app/[locale]/dashboard/projects/project-card.tsx:194
 #: components/landing/waiting-list-button.tsx:139
+#: lib/translation/components/entry-row-actions.tsx:128
+#: lib/translation/components/translation-editor.tsx:250
+#: lib/translation/components/translation-editor.tsx:289
+#: lib/translation/lyrics/lyrics-entry-row.tsx:363
+#: lib/translation/po/po-update-dialog.tsx:353
 msgid "47FYwb"
 msgstr "Cancel"
 
@@ -126,7 +182,7 @@ msgstr "URL"
 
 #: app/[locale]/dashboard/projects/new/text-input-client.tsx:109
 #: app/[locale]/dashboard/projects/new/upload-client.tsx:426
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:213
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:216
 msgid "9aWdwz"
 msgstr "New Translation Project"
 
@@ -159,24 +215,24 @@ msgid "DLuKou"
 msgstr "Rhythm & rhyme aware"
 
 #: app/[locale]/dashboard/projects/new/text-input-client.tsx:183
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:150
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:153
 msgid "BEQpGU"
 msgstr "Source Language"
 
 #: app/[locale]/dashboard/projects/new/text-input-client.tsx:187
 #: app/[locale]/dashboard/projects/new/text-input-client.tsx:207
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:154
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:174
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:157
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:177
 msgid "eVlu1R"
 msgstr "Select language"
 
 #: app/[locale]/dashboard/projects/new/text-input-client.tsx:203
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:170
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:173
 msgid "NU4hHH"
 msgstr "Target Language"
 
 #: app/[locale]/dashboard/projects/new/text-input-client.tsx:235
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:202
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:205
 msgid "9cabk2"
 msgstr "Create Project"
 
@@ -201,41 +257,41 @@ msgid "jOJOQG"
 msgstr "Parsing translation file..."
 
 #: app/[locale]/dashboard/projects/new/upload-client.tsx:529
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:262
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:265
 msgid "XKrAeH"
 msgstr "Creating project..."
 
 #: app/[locale]/dashboard/projects/new/upload-client.tsx:549
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:274
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:277
 msgid "FazwRl"
 msgstr "Try again"
 
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:138
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:141
 msgid "HNPgYl"
 msgstr "Configure Languages"
 
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:140
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:143
 msgid "mEnkEL"
 msgstr "Found {count} translatable segments in {fileName}"
 
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:195
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:198
 #: components/site-header.tsx:27
 msgid "cyR7Kh"
 msgstr "Back"
 
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:215
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:218
 msgid "g+Ihon"
 msgstr "Enter a URL to fetch and translate a webpage"
 
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:221
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:224
 msgid "dYPPeg"
 msgstr "Webpage URL"
 
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:247
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:250
 msgid "SucWt8"
 msgstr "Fetch"
 
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:255
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:258
 msgid "7GJT8g"
 msgstr "Fetching webpage..."
 
@@ -252,14 +308,6 @@ msgstr "Manage your translation projects"
 msgid "B78XPL"
 msgstr "No projects yet. Upload a translation file to get started."
 
-#: app/[locale]/dashboard/projects/project-card.tsx:67
-msgid "fouJn6"
-msgstr "Project renamed"
-
-#: app/[locale]/dashboard/projects/project-card.tsx:70
-msgid "m3LbFk"
-msgstr "Failed to rename project"
-
 #: app/[locale]/dashboard/projects/project-card.tsx:80
 msgid "34J8Gr"
 msgstr "Project deleted"
@@ -270,6 +318,7 @@ msgstr "Failed to delete project"
 
 #: app/[locale]/dashboard/projects/project-card.tsx:130
 #: app/[locale]/dashboard/projects/project-card.tsx:175
+#: lib/translation/components/translation-editor.tsx:302
 msgid "iXNbPf"
 msgstr "Rename"
 
@@ -279,10 +328,12 @@ msgid "K3r6DQ"
 msgstr "Delete"
 
 #: app/[locale]/dashboard/projects/project-card.tsx:150
+#: lib/translation/components/translation-editor.tsx:267
 msgid "Eer8li"
 msgstr "Rename Project"
 
 #: app/[locale]/dashboard/projects/project-card.tsx:153
+#: lib/translation/components/translation-editor.tsx:271
 msgid "D5RCKi"
 msgstr "Project name"
 
@@ -461,6 +512,11 @@ msgid "6NYcnj"
 msgstr "Drop your translation files in any supported format — Xcode catalogs, subtitles, PO files, or documents."
 
 #: components/landing/how-it-works.tsx:17
+#: lib/translation/components/entry-row-actions.tsx:70
+#: lib/translation/components/entry-row-actions.tsx:136
+#: lib/translation/components/translate-dropdown.tsx:57
+#: lib/translation/lyrics/lyrics-entry-row.tsx:204
+#: lib/translation/lyrics/lyrics-entry-row.tsx:371
 msgid "wCy/Tc"
 msgstr "Translate"
 
@@ -535,3 +591,369 @@ msgstr "Joining…"
 #: components/landing/waiting-list-button.tsx:142
 msgid "P6PLpi"
 msgstr "Join"
+
+#: lib/translation/components/edit-translate-dialog.tsx:54
+#: lib/translation/components/translate-dropdown.tsx:71
+msgid "hoSwu+"
+msgstr "Edit Translate"
+
+#: lib/translation/components/entry-row-actions.tsx:65
+#: lib/translation/components/entry-row-actions.tsx:136
+#: lib/translation/lyrics/lyrics-entry-row.tsx:199
+#: lib/translation/lyrics/lyrics-entry-row.tsx:371
+msgid "dFElDN"
+msgstr "Retranslate"
+
+#: lib/translation/components/entry-row-actions.tsx:77
+#: lib/translation/lyrics/lyrics-entry-row.tsx:211
+msgid "KQYOy0"
+msgstr "Translation in progress..."
+
+#: lib/translation/components/entry-row-actions.tsx:79
+msgid "yQEIYo"
+msgstr "Retranslate this entry with optional guidance"
+
+#: lib/translation/components/entry-row-actions.tsx:80
+msgid "4XGTby"
+msgstr "Translate this entry with optional guidance"
+
+#: lib/translation/components/entry-row-actions.tsx:95
+#: lib/translation/lyrics/lyrics-entry-row.tsx:229
+msgid "Hl39aQ"
+msgstr "Clear translation"
+
+#: lib/translation/components/entry-row-actions.tsx:104
+msgid "UdNqGk"
+msgstr "Retranslate Entry"
+
+#: lib/translation/components/entry-row-actions.tsx:105
+msgid "XiLco2"
+msgstr "Translate Entry"
+
+#: lib/translation/components/entry-row-actions.tsx:108
+#: lib/translation/lyrics/lyrics-entry-row.tsx:347
+msgid "ogqnL7"
+msgstr "Provide optional guidance for the AI translation. Leave empty for automatic translation."
+
+#: lib/translation/components/entry-row-actions.tsx:120
+msgid "Y4Ppnl"
+msgstr "e.g., \"Use formal tone\" or \"Keep it concise\""
+
+#: lib/translation/components/terms-editor.tsx:68
+msgid "he9IcT"
+msgstr "Original"
+
+#: lib/translation/components/terms-editor.tsx:69
+#: lib/translation/components/terms-editor.tsx:114
+#: lib/translation/document/document-entry-row.tsx:117
+#: lib/translation/html/html-entry-row.tsx:119
+#: lib/translation/lyrics/lyrics-entry-row.tsx:310
+#: lib/translation/po/po-entry-row.tsx:131
+#: lib/translation/srt/srt-entry-row.tsx:119
+#: lib/translation/xcloc/xcloc-entry-row.tsx:111
+msgid "/vCXIP"
+msgstr "Translation"
+
+#: lib/translation/components/terms-editor.tsx:70
+msgid "LgbKvU"
+msgstr "Comment"
+
+#: lib/translation/components/terms-editor.tsx:90
+msgid "a3fWIu"
+msgstr "Optional comment"
+
+#: lib/translation/components/terms-editor.tsx:108
+msgid "MlOKta"
+msgstr "Original text"
+
+#: lib/translation/components/terms-editor.tsx:130
+msgid "F1xJu8"
+msgstr "No terms yet. Terms are automatically detected during translation, or add them manually above."
+
+#: lib/translation/components/translate-dropdown.tsx:46
+msgid "q/uwLT"
+msgstr "Stop"
+
+#: lib/translation/components/translate-dropdown.tsx:64
+msgid "qAeAY3"
+msgstr "Translate All"
+
+#: lib/translation/components/translation-editor.tsx:126
+#: lib/translation/components/translation-editor.tsx:185
+msgid "xkr+zo"
+msgstr "Terms"
+
+#: lib/translation/components/translation-editor.tsx:138
+#: lib/translation/components/translation-editor.tsx:190
+#: lib/translation/po/po-update-dialog.tsx:362
+msgid "BWpuKl"
+msgstr "Update"
+
+#: lib/translation/components/translation-editor.tsx:147
+#: lib/translation/components/translation-editor.tsx:202
+#: lib/translation/components/translation-editor.tsx:256
+msgid "cqlObT"
+msgstr "Clear All"
+
+#: lib/translation/components/translation-editor.tsx:151
+#: lib/translation/components/translation-editor.tsx:195
+msgid "SVwJTM"
+msgstr "Export"
+
+#: lib/translation/components/translation-editor.tsx:155
+#: lib/translation/components/translation-editor.tsx:229
+msgid "jvo0vs"
+msgstr "Save"
+
+#: lib/translation/components/translation-editor.tsx:218
+msgid "JyIWks"
+msgstr "Terminology"
+
+#: lib/translation/components/translation-editor.tsx:241
+msgid "4aWEkl"
+msgstr "Clear all translations?"
+
+#: lib/translation/components/translation-editor.tsx:244
+msgid "ap2ut+"
+msgstr "This will remove all translated text. This action cannot be undone."
+
+#: lib/translation/components/translation-status.tsx:44
+msgid "IZFEUg"
+msgstr "Ready"
+
+#: lib/translation/components/translation-status.tsx:49
+msgid "TiR/Hq"
+msgstr "Saving..."
+
+#: lib/translation/components/translation-status.tsx:54
+msgid "fsB/4p"
+msgstr "Saved"
+
+#: lib/translation/components/translation-status.tsx:62
+msgid "tUlsq+"
+msgstr "Translating"
+
+#: lib/translation/components/translation-status.tsx:70
+msgid "5elgIe"
+msgstr "Error:"
+
+#: lib/translation/components/translation-status.tsx:88
+msgid "eRn0dn"
+msgstr "1 error"
+
+#: lib/translation/components/translation-status.tsx:89
+msgid "VN18Wb"
+msgstr "{count} errors"
+
+#: lib/translation/components/translation-status.tsx:95
+msgid "ASykzc"
+msgstr "Translation Errors"
+
+#: lib/translation/document/document-editor.tsx:69
+msgid "wmirkP"
+msgstr "Document"
+
+#: lib/translation/document/document-editor.tsx:71
+#: lib/translation/html/html-editor.tsx:164
+#: lib/translation/lyrics/lyrics-editor.tsx:71
+#: lib/translation/po/po-editor.tsx:75
+#: lib/translation/srt/srt-editor.tsx:68
+#: lib/translation/xcloc/xcloc-editor.tsx:156
+msgid "YSY/0j"
+msgstr "{translated}/{total} translated"
+
+#: lib/translation/document/document-editor.tsx:112
+#: lib/translation/html/html-editor.tsx:205
+#: lib/translation/lyrics/lyrics-editor.tsx:113
+msgid "Ae6AVb"
+msgstr "No translatable content found"
+
+#: lib/translation/document/document-entry-row.tsx:82
+#: lib/translation/html/html-entry-row.tsx:87
+#: lib/translation/lyrics/lyrics-entry-row.tsx:155
+#: lib/translation/po/po-entry-row.tsx:99
+#: lib/translation/srt/srt-entry-row.tsx:87
+#: lib/translation/xcloc/xcloc-entry-row.tsx:74
+msgid "SJzK8D"
+msgstr "Translated"
+
+#: lib/translation/document/document-entry-row.tsx:89
+#: lib/translation/html/html-entry-row.tsx:94
+#: lib/translation/lyrics/lyrics-entry-row.tsx:162
+#: lib/translation/po/po-entry-row.tsx:106
+#: lib/translation/srt/srt-entry-row.tsx:94
+#: lib/translation/xcloc/xcloc-entry-row.tsx:81
+msgid "Kl+/5u"
+msgstr "Untranslated"
+
+#: lib/translation/document/document-entry-row.tsx:104
+#: lib/translation/html/html-entry-row.tsx:109
+#: lib/translation/lyrics/lyrics-entry-row.tsx:237
+#: lib/translation/po/po-entry-row.tsx:121
+#: lib/translation/srt/srt-entry-row.tsx:109
+#: lib/translation/xcloc/xcloc-entry-row.tsx:101
+msgid "aH4De2"
+msgstr "Source"
+
+#: lib/translation/document/document-entry-row.tsx:130
+#: lib/translation/html/html-entry-row.tsx:131
+#: lib/translation/lyrics/lyrics-entry-row.tsx:322
+#: lib/translation/po/po-entry-row.tsx:143
+#: lib/translation/srt/srt-entry-row.tsx:131
+#: lib/translation/xcloc/xcloc-entry-row.tsx:123
+msgid "0b7YDD"
+msgstr "Enter translation..."
+
+#: lib/translation/html/html-editor.tsx:127
+#: lib/translation/html/html-editor.tsx:138
+msgid "m4vqJl"
+msgstr "Files"
+
+#: lib/translation/html/html-editor.tsx:160
+#: lib/translation/xcloc/xcloc-editor.tsx:152
+msgid "a6T0Np"
+msgstr "No resource selected"
+
+#: lib/translation/html/html-editor.tsx:215
+#: lib/translation/po/po-update-dialog.tsx:261
+msgid "TJo5E6"
+msgstr "Preview"
+
+#: lib/translation/html/html-editor.tsx:221
+msgid "E/iHax"
+msgstr "HTML Preview"
+
+#: lib/translation/lyrics/lyrics-entry-row.tsx:175
+msgid "aqZxEO"
+msgstr "Review passed"
+
+#: lib/translation/lyrics/lyrics-entry-row.tsx:175
+msgid "UBnPjD"
+msgstr "Review failed"
+
+#: lib/translation/lyrics/lyrics-entry-row.tsx:213
+msgid "DiLU8s"
+msgstr "Retranslate this line with optional guidance"
+
+#: lib/translation/lyrics/lyrics-entry-row.tsx:214
+msgid "5Xudt+"
+msgstr "Translate this line with optional guidance"
+
+#: lib/translation/lyrics/lyrics-entry-row.tsx:253
+msgid "WPMn4T"
+msgstr "{count} syllables"
+
+#: lib/translation/lyrics/lyrics-entry-row.tsx:264
+msgid "Lmi6hE"
+msgstr "Rhyme:"
+
+#: lib/translation/lyrics/lyrics-entry-row.tsx:344
+msgid "Um0Nm+"
+msgstr "Retranslate Line"
+
+#: lib/translation/lyrics/lyrics-entry-row.tsx:344
+msgid "cLDCC2"
+msgstr "Translate Line"
+
+#: lib/translation/po/po-editor.tsx:67
+msgid "Y1OlpD"
+msgstr "PO Translations"
+
+#: lib/translation/po/po-editor.tsx:116
+msgid "2lwZNz"
+msgstr "No entries in this PO file"
+
+#: lib/translation/po/po-entry-row.tsx:164
+#: lib/translation/xcloc/xcloc-entry-row.tsx:144
+msgid "FqztZR"
+msgstr "Note:"
+
+#: lib/translation/po/po-entry-row.tsx:171
+msgid "Gq5sk+"
+msgstr "Ref:"
+
+#: lib/translation/po/po-update-dialog.tsx:106
+msgid "EbWGMC"
+msgstr "No translatable entries found in the selected file."
+
+#: lib/translation/po/po-update-dialog.tsx:115
+msgid "X3CQNO"
+msgstr "Failed to read the file."
+
+#: lib/translation/po/po-update-dialog.tsx:182
+msgid "Qy2ibd"
+msgstr "Update PO File"
+
+#: lib/translation/po/po-update-dialog.tsx:187
+msgid "IJtHGc"
+msgstr "Upload a new version of your PO file. Existing translations will be preserved for matching entries. New entries will be added with empty translations, and stale entries will be removed."
+
+#: lib/translation/po/po-update-dialog.tsx:195
+msgid "W2t7xc"
+msgstr "New PO file"
+
+#: lib/translation/po/po-update-dialog.tsx:228
+msgid "IvE1kf"
+msgstr "Reading..."
+
+#: lib/translation/po/po-update-dialog.tsx:238
+#: lib/translation/po/po-update-dialog.tsx:326
+msgid "JoZ3lc"
+msgstr "Click to change file"
+
+#: lib/translation/po/po-update-dialog.tsx:245
+msgid "Ezb82t"
+msgstr "Drop updated .po file here or click to browse"
+
+#: lib/translation/po/po-update-dialog.tsx:264
+msgid "okWaMT"
+msgstr "{count} preserved"
+
+#: lib/translation/po/po-update-dialog.tsx:269
+msgid "bS10Bv"
+msgstr "{count} new"
+
+#: lib/translation/po/po-update-dialog.tsx:272
+msgid "yae7QN"
+msgstr "{count} removed"
+
+#: lib/translation/po/po-update-dialog.tsx:277
+msgid "hQLBM5"
+msgstr "{count} total"
+
+#: lib/translation/po/po-update-dialog.tsx:282
+msgid "ayEdX9"
+msgstr "Warning: no existing translations will be preserved."
+
+#: lib/translation/po/po-update-dialog.tsx:294
+msgid "uvyL3w"
+msgstr "Reference PO file (required for hash-based IDs)"
+
+#: lib/translation/po/po-update-dialog.tsx:333
+msgid "cHGvvL"
+msgstr "Drop reference .po file here or click to browse"
+
+#: lib/translation/po/po-update-dialog.tsx:338
+msgid "lzZjZe"
+msgstr "Usually en.po or the source language file"
+
+#: lib/translation/srt/srt-editor.tsx:66
+msgid "QQz6fV"
+msgstr "Subtitles"
+
+#: lib/translation/srt/srt-editor.tsx:109
+msgid "v337Np"
+msgstr "No subtitle cues found"
+
+#: lib/translation/xcloc/xcloc-editor.tsx:119
+#: lib/translation/xcloc/xcloc-editor.tsx:130
+msgid "c/KktL"
+msgstr "Resources"
+
+#: lib/translation/xcloc/xcloc-editor.tsx:197
+msgid "iEWDL4"
+msgstr "No entries in this resource"
+
+#: lib/translation/xcloc/xcloc-entry-row.tsx:151
+msgid "LPpMyQ"
+msgstr "Context:"

@@ -2,6 +2,7 @@
 
 import { ChevronDown, Languages, MessageSquare, Square } from "lucide-react";
 import { useState } from "react";
+import { useExtracted } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -30,6 +31,7 @@ export function TranslateDropdown({
   onStopTranslation,
   onTranslationUpdated,
 }: TranslateDropdownProps) {
+  const t = useExtracted();
   const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   if (isTranslating) {
@@ -41,7 +43,7 @@ export function TranslateDropdown({
         data-testid="translate-stop-button"
       >
         <Square className="h-3 w-3 mr-1" />
-        Stop
+        {t("Stop")}
       </Button>
     );
   }
@@ -52,21 +54,21 @@ export function TranslateDropdown({
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="sm" data-testid="translate-button">
             <Languages className="h-3.5 w-3.5 mr-1" />
-            Translate
+            {t("Translate")}
             <ChevronDown className="h-3 w-3 ml-1" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem onClick={onTranslate} data-testid="translate-all">
             <Languages className="h-3.5 w-3.5" />
-            Translate All
+            {t("Translate All")}
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => setEditDialogOpen(true)}
             data-testid="translate-edit"
           >
             <MessageSquare className="h-3.5 w-3.5" />
-            Edit Translate
+            {t("Edit Translate")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

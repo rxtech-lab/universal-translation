@@ -2,6 +2,7 @@
 
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useCallback, useMemo, useRef } from "react";
+import { useExtracted } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Term } from "../tools/term-tools";
@@ -31,6 +32,7 @@ export function DocumentEditor({
   streamingEntryIds,
   terms,
 }: DocumentEditorProps) {
+  const t = useExtracted();
   const resource = project.resources[0];
   const entries = useMemo(() => resource?.entries ?? [], [resource?.entries]);
   const resourceId = resource?.id ?? "doc-main";
@@ -64,9 +66,12 @@ export function DocumentEditor({
     >
       <CardHeader className="border-b shrink-0">
         <div className="flex items-center justify-between">
-          <CardTitle>{resource?.label ?? "Document"}</CardTitle>
+          <CardTitle>{resource?.label ?? t("Document")}</CardTitle>
           <Badge variant="outline" data-testid="document-stats">
-            {stats.translated}/{stats.total} translated
+            {t("{translated}/{total} translated", {
+              translated: String(stats.translated),
+              total: String(stats.total),
+            })}
           </Badge>
         </div>
       </CardHeader>
@@ -107,7 +112,7 @@ export function DocumentEditor({
           </div>
         ) : (
           <div className="flex items-center justify-center py-12 text-sm text-muted-foreground">
-            No translatable content found
+            {t("No translatable content found")}
           </div>
         )}
       </CardContent>

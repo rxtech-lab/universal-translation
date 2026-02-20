@@ -5,10 +5,12 @@ import {
   Download,
   MoreHorizontal,
   Pencil,
+  RefreshCw,
   Save,
   Trash2,
 } from "lucide-react";
 import { useState } from "react";
+import { useExtracted } from "next-intl";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -63,7 +65,9 @@ export function TranslationEditor({
   onTranslationUpdated,
   onClearAllTranslations,
   onRename,
+  onUpdatePo,
 }: TranslationEditorProps) {
+  const t = useExtracted();
   const isTranslating = status.state === "translating";
   const [termsDialogOpen, setTermsDialogOpen] = useState(false);
   const [clearAlertOpen, setClearAlertOpen] = useState(false);
@@ -119,7 +123,7 @@ export function TranslationEditor({
                 onClick={() => setTermsDialogOpen(true)}
               >
                 <BookOpen className="h-3.5 w-3.5 mr-1" />
-                Terms ({terms.length})
+                {t("Terms")} ({terms.length})
               </Button>
               <TranslateDropdown
                 projectId={projectId}
@@ -128,21 +132,27 @@ export function TranslationEditor({
                 onStopTranslation={onStopTranslation ?? (() => {})}
                 onTranslationUpdated={onTranslationUpdated}
               />
+              {onUpdatePo && (
+                <Button variant="outline" size="sm" onClick={onUpdatePo}>
+                  <RefreshCw className="h-3.5 w-3.5 mr-1" />
+                  {t("Update")}
+                </Button>
+              )}
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setClearAlertOpen(true)}
               >
                 <Trash2 className="h-3.5 w-3.5 mr-1" />
-                Clear All
+                {t("Clear All")}
               </Button>
               <Button variant="outline" size="sm" onClick={onExport}>
                 <Download className="h-3.5 w-3.5 mr-1" />
-                Export
+                {t("Export")}
               </Button>
               <Button size="sm" onClick={onSave}>
                 <Save className="h-3.5 w-3.5 mr-1" />
-                Save
+                {t("Save")}
               </Button>
             </div>
 
@@ -172,18 +182,24 @@ export function TranslationEditor({
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem onClick={() => setTermsDialogOpen(true)}>
                     <BookOpen className="h-3.5 w-3.5" />
-                    Terms ({terms.length})
+                    {t("Terms")} ({terms.length})
                   </DropdownMenuItem>
+                  {onUpdatePo && (
+                    <DropdownMenuItem onClick={onUpdatePo}>
+                      <RefreshCw className="h-3.5 w-3.5" />
+                      {t("Update")}
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem onClick={onExport}>
                     <Download className="h-3.5 w-3.5" />
-                    Export
+                    {t("Export")}
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     variant="destructive"
                     onClick={() => setClearAlertOpen(true)}
                   >
                     <Trash2 className="h-3.5 w-3.5" />
-                    Clear All
+                    {t("Clear All")}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -199,7 +215,7 @@ export function TranslationEditor({
       <Dialog open={termsDialogOpen} onOpenChange={setTermsDialogOpen}>
         <DialogContent className="max-w-5xl! max-h-[80vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Terminology</DialogTitle>
+            <DialogTitle>{t("Terminology")}</DialogTitle>
           </DialogHeader>
           <TermsEditor
             projectId={projectId}
@@ -210,7 +226,7 @@ export function TranslationEditor({
             <DialogClose asChild>
               <Button size="sm" onClick={onSave}>
                 <Save className="h-3.5 w-3.5 mr-1" />
-                Save
+                {t("Save")}
               </Button>
             </DialogClose>
           </DialogFooter>
@@ -221,20 +237,21 @@ export function TranslationEditor({
       <AlertDialog open={clearAlertOpen} onOpenChange={setClearAlertOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Clear all translations?</AlertDialogTitle>
+            <AlertDialogTitle>{t("Clear all translations?")}</AlertDialogTitle>
             <AlertDialogDescription>
-              This will remove all translated text. This action cannot be
-              undone.
+              {t(
+                "This will remove all translated text. This action cannot be undone.",
+              )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel size="sm">Cancel</AlertDialogCancel>
+            <AlertDialogCancel size="sm">{t("Cancel")}</AlertDialogCancel>
             <AlertDialogAction
               size="sm"
               variant="destructive"
               onClick={onClearAllTranslations}
             >
-              Clear All
+              {t("Clear All")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -245,10 +262,10 @@ export function TranslationEditor({
         <Dialog open={renameDialogOpen} onOpenChange={setRenameDialogOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Rename Project</DialogTitle>
+              <DialogTitle>{t("Rename Project")}</DialogTitle>
             </DialogHeader>
             <div className="grid gap-2">
-              <Label htmlFor="editor-project-name">Project name</Label>
+              <Label htmlFor="editor-project-name">{t("Project name")}</Label>
               <Input
                 id="editor-project-name"
                 value={editName}
@@ -265,7 +282,7 @@ export function TranslationEditor({
             <DialogFooter>
               <DialogClose asChild>
                 <Button variant="outline" size="sm">
-                  Cancel
+                  {t("Cancel")}
                 </Button>
               </DialogClose>
               <Button
@@ -278,7 +295,7 @@ export function TranslationEditor({
                 }}
                 disabled={!editName.trim()}
               >
-                Rename
+                {t("Rename")}
               </Button>
             </DialogFooter>
           </DialogContent>
