@@ -1,7 +1,8 @@
+import { getExtracted } from "next-intl/server";
 import { WaitingListButton } from "./waiting-list-button";
 import { AnimateOnScroll } from "./animate-on-scroll";
 
-export function FooterCta({
+export async function FooterCta({
   isSignedIn,
   signInAction,
   waitingListEnabled,
@@ -14,6 +15,8 @@ export function FooterCta({
   isOnWaitingList: boolean;
   isApproved: boolean;
 }) {
+  const t = await getExtracted();
+
   return (
     <section className="relative overflow-hidden px-6 py-28 md:py-40">
       {/* Ambient gradient background */}
@@ -39,11 +42,12 @@ export function FooterCta({
       <div className="relative mx-auto max-w-6xl">
         <AnimateOnScroll className="flex flex-col items-center text-center">
           <h2 className="text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
-            Ready to translate?
+            {t("Ready to translate?")}
           </h2>
           <p className="mt-5 max-w-md text-base text-muted-foreground">
-            Upload your first file and see AI-powered translation in action. No
-            setup required.
+            {t(
+              "Upload your first file and see AI-powered translation in action. No setup required.",
+            )}
           </p>
           <div className="mt-10">
             <WaitingListButton
@@ -57,7 +61,7 @@ export function FooterCta({
         </AnimateOnScroll>
 
         <div className="mt-28 text-center text-xs text-muted-foreground/60">
-          Built by RxLab
+          {t("Built by RxLab")}
         </div>
       </div>
     </section>

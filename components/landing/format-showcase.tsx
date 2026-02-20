@@ -1,38 +1,45 @@
 import { AppWindow, FileText, Globe, Subtitles } from "lucide-react";
+import { getExtracted } from "next-intl/server";
 import { AnimateOnScroll } from "./animate-on-scroll";
 
-const formats = [
-  {
-    icon: AppWindow,
-    name: "Xcode Localization",
-    extensions: [".xcloc"],
-    description:
-      "Ship your iOS, macOS, and visionOS apps in every language with Apple's native localization format.",
-  },
-  {
-    icon: Subtitles,
-    name: "SubRip Subtitles",
-    extensions: [".srt"],
-    description:
-      "Timestamp-aware subtitle translation that preserves tone, rhyme, and readability.",
-  },
-  {
-    icon: Globe,
-    name: "GNU gettext",
-    extensions: [".po"],
-    description:
-      "Industry-standard localization used by thousands of open-source projects.",
-  },
-  {
-    icon: FileText,
-    name: "Documents",
-    extensions: [".txt", ".md", ".docx"],
-    description:
-      "From READMEs to manuscripts — translate any written content while preserving formatting.",
-  },
-];
+export async function FormatShowcase() {
+  const t = await getExtracted();
 
-export function FormatShowcase() {
+  const formats = [
+    {
+      icon: AppWindow,
+      name: t("Xcode Localization"),
+      extensions: [".xcloc"],
+      description: t(
+        "Ship your iOS, macOS, and visionOS apps in every language with Apple's native localization format.",
+      ),
+    },
+    {
+      icon: Subtitles,
+      name: t("SubRip Subtitles"),
+      extensions: [".srt"],
+      description: t(
+        "Timestamp-aware subtitle translation that preserves tone, rhyme, and readability.",
+      ),
+    },
+    {
+      icon: Globe,
+      name: t("GNU gettext"),
+      extensions: [".po"],
+      description: t(
+        "Industry-standard localization used by thousands of open-source projects.",
+      ),
+    },
+    {
+      icon: FileText,
+      name: t("Documents"),
+      extensions: [".txt", ".md", ".docx"],
+      description: t(
+        "From READMEs to manuscripts — translate any written content while preserving formatting.",
+      ),
+    },
+  ];
+
   return (
     <section className="relative px-6 py-28 md:py-40">
       <div
@@ -47,13 +54,13 @@ export function FormatShowcase() {
       <div className="mx-auto max-w-6xl">
         <AnimateOnScroll className="text-center">
           <p className="text-xs font-medium tracking-widest text-muted-foreground uppercase">
-            File formats
+            {t("File formats")}
           </p>
           <h2 className="mt-4 text-4xl font-bold tracking-tight md:text-5xl">
-            Supports what you use
+            {t("Supports what you use")}
           </h2>
           <p className="mx-auto mt-4 max-w-lg text-base text-muted-foreground">
-            From app developer to content creator, we have you covered
+            {t("From app developer to content creator, we have you covered")}
           </p>
         </AnimateOnScroll>
 

@@ -1,8 +1,8 @@
 "use client";
 
 import { ArrowRight, FileText, Loader2, Music } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
+import { useExtracted } from "next-intl";
 import { createProjectFromParsed } from "@/app/actions/upload";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { useRouter } from "@/i18n/navigation";
 import { DocumentClient } from "@/lib/translation/document/client";
 import { LANGUAGES } from "@/lib/translation/languages";
 import { LyricsClient } from "@/lib/translation/lyrics/client";
@@ -28,6 +29,7 @@ import type { TranslationProject } from "@/lib/translation/types";
 import type { TranslationMode } from "./mode-selector";
 
 export function TextInputClient() {
+  const t = useExtracted();
   const router = useRouter();
   const [text, setText] = useState("");
   const [projectName, setProjectName] = useState("");
@@ -104,19 +106,19 @@ export function TextInputClient() {
   return (
     <Card className="w-full max-w-lg animate-in fade-in slide-in-from-bottom-4 duration-500">
       <CardHeader>
-        <CardTitle>New Translation Project</CardTitle>
+        <CardTitle>{t("New Translation Project")}</CardTitle>
         <CardDescription>
-          Paste text directly to create a translation project
+          {t("Paste text directly to create a translation project")}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Project name */}
         <div>
           <label className="text-xs font-medium text-muted-foreground mb-1.5 block">
-            Project Name
+            {t("Project Name")}
           </label>
           <Input
-            placeholder="Untitled"
+            placeholder={t("Untitled")}
             value={projectName}
             onChange={(e) => setProjectName(e.target.value)}
           />
@@ -125,10 +127,10 @@ export function TextInputClient() {
         {/* Text input */}
         <div>
           <label className="text-xs font-medium text-muted-foreground mb-1.5 block">
-            Text Content
+            {t("Text Content")}
           </label>
           <Textarea
-            placeholder="Paste your text or lyrics here..."
+            placeholder={t("Paste your text or lyrics here...")}
             value={text}
             onChange={(e) => setText(e.target.value)}
             className="min-h-40 resize-y"
@@ -138,7 +140,7 @@ export function TextInputClient() {
         {/* Mode selector */}
         <div>
           <label className="text-xs font-medium text-muted-foreground mb-1.5 block">
-            Translation Mode
+            {t("Translation Mode")}
           </label>
           <div className="grid grid-cols-2 gap-2">
             <button
@@ -151,9 +153,9 @@ export function TextInputClient() {
               }`}
             >
               <FileText className="h-4 w-4 mb-1 text-muted-foreground" />
-              <div className="font-medium text-sm">Universal</div>
+              <div className="font-medium text-sm">{t("Universal")}</div>
               <div className="text-xs text-muted-foreground">
-                Standard translation
+                {t("Standard translation")}
               </div>
             </button>
             <button
@@ -166,9 +168,9 @@ export function TextInputClient() {
               }`}
             >
               <Music className="h-4 w-4 mb-1 text-muted-foreground" />
-              <div className="font-medium text-sm">Lyrics</div>
+              <div className="font-medium text-sm">{t("Lyrics")}</div>
               <div className="text-xs text-muted-foreground">
-                Rhythm & rhyme aware
+                {t("Rhythm & rhyme aware")}
               </div>
             </button>
           </div>
@@ -178,11 +180,11 @@ export function TextInputClient() {
         <div className="flex items-center gap-3">
           <div className="flex-1">
             <label className="text-xs font-medium text-muted-foreground mb-1.5 block">
-              Source Language
+              {t("Source Language")}
             </label>
             <Select value={sourceLanguage} onValueChange={setSourceLanguage}>
               <SelectTrigger>
-                <SelectValue placeholder="Select language" />
+                <SelectValue placeholder={t("Select language")} />
               </SelectTrigger>
               <SelectContent>
                 {LANGUAGES.map((lang) => (
@@ -198,11 +200,11 @@ export function TextInputClient() {
 
           <div className="flex-1">
             <label className="text-xs font-medium text-muted-foreground mb-1.5 block">
-              Target Language
+              {t("Target Language")}
             </label>
             <Select value={targetLanguage} onValueChange={setTargetLanguage}>
               <SelectTrigger>
-                <SelectValue placeholder="Select language" />
+                <SelectValue placeholder={t("Select language")} />
               </SelectTrigger>
               <SelectContent>
                 {LANGUAGES.filter((lang) => lang.code !== sourceLanguage).map(
@@ -230,7 +232,7 @@ export function TextInputClient() {
             {isCreating && (
               <Loader2 className="h-3.5 w-3.5 mr-1 animate-spin" />
             )}
-            Create Project
+            {t("Create Project")}
           </Button>
         </div>
       </CardContent>

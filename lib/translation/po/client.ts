@@ -9,6 +9,7 @@ import type {
 } from "../types";
 import { resolveTermTemplates } from "./agent";
 import type { PoTranslationEvent } from "./events";
+import { hasHashBasedMsgids, hasHashBasedMsgstrs } from "./hash-detection";
 import { parsePo, serializePo, type PoDocument } from "./parser";
 
 /** Shape of the format-specific data stored in the DB. */
@@ -17,6 +18,8 @@ export interface PoFormatData {
   originalFileName: string;
   sourceLanguage: string;
   targetLanguage: string;
+  /** True if msgids were detected as hashes and a reference file was used. */
+  hashBasedMsgids?: boolean;
 }
 
 /** Map plural form index to CLDR category name based on nplurals. */
@@ -49,6 +52,7 @@ export class PoClient implements TranslationClient<PoTranslationEvent> {
   private sourceLanguage = "";
   private targetLanguage = "";
   private originalFileName = "";
+  private originalPoText = "";
   private blobUrl: string | null = null;
   private projectId: string | null = null;
 
@@ -62,6 +66,7 @@ export class PoClient implements TranslationClient<PoTranslationEvent> {
 
     this.originalFileName = payload.file.name;
     const text = await payload.file.text();
+    this.originalPoText = text;
     this.document = parsePo(text);
 
     if (this.document.entries.length === 0) {
@@ -85,6 +90,108 @@ export class PoClient implements TranslationClient<PoTranslationEvent> {
       resource.sourceLanguage = sourceLanguage;
       resource.targetLanguage = targetLanguage;
     }
+  }
+
+  /**
+   * Check whether the loaded PO document has hash-based msgids.
+   * Must be called after load() has populated the document.
+   */
+  hasHashMsgids(): boolean {
+    return hasHashBasedMsgids(this.document);
+  }
+
+  /**
+   * Apply a reference PO file to resolve hash-based msgids.
+   * Builds a lookup map from the reference (msgid -> msgstr), then
+   * remaps sourceText for all project entries whose msgid exists in the reference.
+   *
+   * The reference file's msgstr becomes the sourceText (human-readable text).
+   * The original hash msgid is preserved in the underlying PoDocument for export.
+   */
+  applyReferenceDocument(referencePoText: string): OperationResult {
+    // Reject if the reference file is the same as the uploaded file
+    if (
+      this.originalPoText &&
+      referencePoText.trim() === this.originalPoText.trim()
+    ) {
+      return {
+        hasError: true,
+        errorMessage:
+          "The reference file is the same as the uploaded file. " +
+          "Please upload the source language PO file (e.g. en.po) instead.",
+      };
+    }
+
+    const refDoc = parsePo(referencePoText);
+
+    if (refDoc.entries.length === 0) {
+      return {
+        hasError: true,
+        errorMessage: "Reference PO file contains no entries",
+      };
+    }
+
+    // Reject if the reference file's msgstr values are also hash-like
+    // (a valid reference like en.po has hash msgids but human-readable msgstr)
+    if (hasHashBasedMsgstrs(refDoc)) {
+      return {
+        hasError: true,
+        errorMessage:
+          "The reference file's translations also appear to be hash-based. " +
+          "Please upload the source language PO file that contains the actual English text as msgstr (e.g. en.po).",
+      };
+    }
+
+    // Build lookup: msgid -> msgstr (scoped by msgctxt using EOT separator)
+    const refMap = new Map<string, string>();
+    for (const entry of refDoc.entries) {
+      const key = entry.msgctxt
+        ? `${entry.msgctxt}\x04${entry.msgid}`
+        : entry.msgid;
+      if (entry.msgstr && entry.msgstr.trim() !== "") {
+        refMap.set(key, entry.msgstr);
+      }
+    }
+
+    if (refMap.size === 0) {
+      return {
+        hasError: true,
+        errorMessage:
+          "Reference PO file has no translated entries (all msgstr are empty)",
+      };
+    }
+
+    // Remap sourceText in the project entries
+    let matchedCount = 0;
+    for (const resource of this.project.resources) {
+      for (const entry of resource.entries) {
+        const poIdxMatch = entry.id.match(/^(\d+)/);
+        const poIdx = poIdxMatch ? parseInt(poIdxMatch[1], 10) : -1;
+        if (poIdx < 0 || poIdx >= this.document.entries.length) continue;
+
+        const poEntry = this.document.entries[poIdx];
+        const key = poEntry.msgctxt
+          ? `${poEntry.msgctxt}\x04${poEntry.msgid}`
+          : poEntry.msgid;
+
+        const refText = refMap.get(key);
+        if (refText) {
+          entry.sourceText = refText;
+          matchedCount++;
+        }
+      }
+    }
+
+    if (matchedCount === 0) {
+      return {
+        hasError: true,
+        errorMessage:
+          "No matching entries found between the uploaded file and reference file. " +
+          "Make sure both files use the same msgid keys.",
+      };
+    }
+
+    return { hasError: false, data: undefined };
   }
 
   getProject(): TranslationProject {
@@ -194,6 +301,7 @@ export class PoClient implements TranslationClient<PoTranslationEvent> {
       originalFileName: this.originalFileName,
       sourceLanguage: this.sourceLanguage,
       targetLanguage: this.targetLanguage,
+      hashBasedMsgids: hasHashBasedMsgids(this.document),
     };
   }
 
@@ -202,8 +310,9 @@ export class PoClient implements TranslationClient<PoTranslationEvent> {
   ): Promise<
     OperationResult<{ downloadUrl?: string; blob?: Blob; fileName: string }>
   > {
-    // Clone the document and resolve term templates before serializing
+    // Clone the document, sync project entries, then resolve term templates
     const docToSerialize = structuredClone(this.document);
+    this.syncAllToDocument(docToSerialize);
 
     if (terms && terms.length > 0) {
       const termsMap = new Map(terms.map((t) => [t.id, t]));
@@ -221,9 +330,6 @@ export class PoClient implements TranslationClient<PoTranslationEvent> {
         }
       }
     }
-
-    // Sync project entries back to the document before export
-    this.syncAllToDocument(docToSerialize);
 
     const poContent = serializePo(docToSerialize);
     const blob = new Blob([poContent], {

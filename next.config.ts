@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
   env: {
@@ -6,4 +7,19 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+const withNextIntl = createNextIntlPlugin({
+  requestConfig: "./i18n/request.ts",
+  experimental: {
+    srcPath: ["./app", "./components"],
+    extract: {
+      sourceLocale: "en",
+    },
+    messages: {
+      format: "po",
+      locales: ["en", "zh"],
+      path: "./messages",
+    },
+  },
+});
+
+export default withNextIntl(nextConfig);

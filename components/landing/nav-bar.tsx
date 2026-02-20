@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import { useExtracted } from "next-intl";
 import { Button } from "@/components/ui/button";
+import { LanguageSwitcher } from "@/components/language-switcher";
+import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
 export function NavBar({
@@ -12,6 +14,7 @@ export function NavBar({
   isSignedIn: boolean;
   signInAction: () => Promise<void>;
 }) {
+  const t = useExtracted();
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -34,7 +37,7 @@ export function NavBar({
           UT
         </div>
         <span className="text-sm font-medium tracking-tight">
-          Universal Translation
+          {t("Universal Translation")}
         </span>
       </Link>
 
@@ -43,17 +46,19 @@ export function NavBar({
           href="#features"
           className="hidden text-xs text-muted-foreground transition-colors hover:text-foreground sm:block"
         >
-          Features
+          {t("Features")}
         </Link>
+
+        <LanguageSwitcher />
 
         {isSignedIn ? (
           <Button asChild size="sm" className="h-8 text-xs">
-            <Link href="/dashboard">Dashboard</Link>
+            <Link href="/dashboard">{t("Dashboard")}</Link>
           </Button>
         ) : (
           <form action={signInAction}>
             <Button size="sm" type="submit" className="h-8 text-xs">
-              Sign in
+              {t("Sign in")}
             </Button>
           </form>
         )}

@@ -7,9 +7,7 @@ import {
   LoaderIcon,
   Plus,
 } from "lucide-react";
-import Link from "next/link";
-import { redirect } from "next/navigation";
-
+import { getExtracted } from "next-intl/server";
 import { auth } from "@/auth";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -20,11 +18,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { redirect } from "next/navigation";
+import { Link } from "@/i18n/navigation";
 import { db } from "@/lib/db";
 import { projects } from "@/lib/db/schema";
 import type { TranslationProject } from "@/lib/translation/types";
 
 export default async function DashboardPage() {
+  const t = await getExtracted();
   const session = await auth();
   if (!session?.user?.id) redirect("/");
 
@@ -79,15 +80,15 @@ export default async function DashboardPage() {
     <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
       <div className="flex items-center justify-between px-4 lg:px-6">
         <div>
-          <h1 className="text-lg font-semibold">Dashboard</h1>
+          <h1 className="text-lg font-semibold">{t("Dashboard")}</h1>
           <p className="text-muted-foreground text-sm">
-            Overview of your translation projects
+            {t("Overview of your translation projects")}
           </p>
         </div>
         <Button asChild size="sm">
           <Link href="/dashboard/projects/new">
             <Plus className="h-3.5 w-3.5 mr-1" />
-            New Project
+            {t("New Project")}
           </Link>
         </Button>
       </div>
@@ -97,14 +98,14 @@ export default async function DashboardPage() {
           <Card>
             <CardContent className="flex flex-col items-center justify-center py-16">
               <GlobeIcon className="h-10 w-10 text-muted-foreground/50 mb-4" />
-              <p className="text-sm font-medium mb-1">No projects yet</p>
+              <p className="text-sm font-medium mb-1">{t("No projects yet")}</p>
               <p className="text-sm text-muted-foreground mb-6">
-                Upload a translation file to get started.
+                {t("Upload a translation file to get started.")}
               </p>
               <Button asChild size="sm">
                 <Link href="/dashboard/projects/new">
                   <Plus className="h-3.5 w-3.5 mr-1" />
-                  Create your first project
+                  {t("Create your first project")}
                 </Link>
               </Button>
             </CardContent>
@@ -115,43 +116,45 @@ export default async function DashboardPage() {
           <div className="grid grid-cols-2 gap-3 px-4 md:grid-cols-4 lg:px-6">
             <Card size="sm">
               <CardHeader>
-                <CardTitle>Total Projects</CardTitle>
+                <CardTitle>{t("Total Projects")}</CardTitle>
                 <CardAction>
                   <FolderIcon className="h-3.5 w-3.5 text-muted-foreground" />
                 </CardAction>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{totalProjects}</div>
-                <p className="text-muted-foreground text-xs">projects</p>
+                <p className="text-muted-foreground text-xs">{t("projects")}</p>
               </CardContent>
             </Card>
             <Card size="sm">
               <CardHeader>
-                <CardTitle>In Progress</CardTitle>
+                <CardTitle>{t("In Progress")}</CardTitle>
                 <CardAction>
                   <LoaderIcon className="h-3.5 w-3.5 text-muted-foreground" />
                 </CardAction>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{inProgressCount}</div>
-                <p className="text-muted-foreground text-xs">translating</p>
+                <p className="text-muted-foreground text-xs">
+                  {t("translating")}
+                </p>
               </CardContent>
             </Card>
             <Card size="sm">
               <CardHeader>
-                <CardTitle>Completed</CardTitle>
+                <CardTitle>{t("Completed")}</CardTitle>
                 <CardAction>
                   <CheckCircleIcon className="h-3.5 w-3.5 text-muted-foreground" />
                 </CardAction>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{completedCount}</div>
-                <p className="text-muted-foreground text-xs">finished</p>
+                <p className="text-muted-foreground text-xs">{t("finished")}</p>
               </CardContent>
             </Card>
             <Card size="sm">
               <CardHeader>
-                <CardTitle>Progress</CardTitle>
+                <CardTitle>{t("Progress")}</CardTitle>
                 <CardAction>
                   <BarChartIcon className="h-3.5 w-3.5 text-muted-foreground" />
                 </CardAction>
@@ -159,7 +162,10 @@ export default async function DashboardPage() {
               <CardContent>
                 <div className="text-2xl font-bold">{progressPercent}%</div>
                 <p className="text-muted-foreground text-xs">
-                  {translatedEntries} of {totalEntries} strings
+                  {t("{translated} of {total} strings", {
+                    translated: String(translatedEntries),
+                    total: String(totalEntries),
+                  })}
                 </p>
               </CardContent>
             </Card>
@@ -167,10 +173,10 @@ export default async function DashboardPage() {
 
           <div className="px-4 lg:px-6">
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-sm font-medium">Recent Projects</h2>
+              <h2 className="text-sm font-medium">{t("Recent Projects")}</h2>
               {totalProjects > 5 && (
                 <Button asChild variant="link" size="sm">
-                  <Link href="/dashboard/projects">View all</Link>
+                  <Link href="/dashboard/projects">{t("View all")}</Link>
                 </Button>
               )}
             </div>

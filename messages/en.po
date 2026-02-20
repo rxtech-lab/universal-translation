@@ -1,0 +1,537 @@
+msgid ""
+msgstr ""
+"Language: en\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: next-intl\n"
+"X-Crowdin-SourceKey: msgstr\n"
+
+#: app/[locale]/dashboard/page.tsx:83
+#: components/app-sidebar.tsx:28
+#: components/landing/nav-bar.tsx:56
+msgid "hzSNj4"
+msgstr "Dashboard"
+
+#: app/[locale]/dashboard/page.tsx:85
+msgid "tWcRaD"
+msgstr "Overview of your translation projects"
+
+#: app/[locale]/dashboard/page.tsx:91
+#: app/[locale]/dashboard/projects/page.tsx:65
+msgid "YBY/lc"
+msgstr "New Project"
+
+#: app/[locale]/dashboard/page.tsx:101
+msgid "gkvdf7"
+msgstr "No projects yet"
+
+#: app/[locale]/dashboard/page.tsx:103
+msgid "3oqXCa"
+msgstr "Upload a translation file to get started."
+
+#: app/[locale]/dashboard/page.tsx:108
+#: app/[locale]/dashboard/projects/page.tsx:82
+msgid "iRkI8S"
+msgstr "Create your first project"
+
+#: app/[locale]/dashboard/page.tsx:119
+msgid "RP6NBP"
+msgstr "Total Projects"
+
+#: app/[locale]/dashboard/page.tsx:126
+msgid "m3wERc"
+msgstr "projects"
+
+#: app/[locale]/dashboard/page.tsx:131
+msgid "B487HA"
+msgstr "In Progress"
+
+#: app/[locale]/dashboard/page.tsx:139
+msgid "XKDi2S"
+msgstr "translating"
+
+#: app/[locale]/dashboard/page.tsx:145
+msgid "95stPq"
+msgstr "Completed"
+
+#: app/[locale]/dashboard/page.tsx:152
+msgid "T2DELw"
+msgstr "finished"
+
+#: app/[locale]/dashboard/page.tsx:157
+msgid "sIMS7i"
+msgstr "Progress"
+
+#: app/[locale]/dashboard/page.tsx:165
+msgid "Cz+sg6"
+msgstr "{translated} of {total} strings"
+
+#: app/[locale]/dashboard/page.tsx:176
+msgid "E+UaDm"
+msgstr "Recent Projects"
+
+#: app/[locale]/dashboard/page.tsx:179
+msgid "pFK6bJ"
+msgstr "View all"
+
+#: app/[locale]/dashboard/projects/new/mode-selector.tsx:34
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:143
+msgid "1mIq6K"
+msgstr "Translation Mode"
+
+#: app/[locale]/dashboard/projects/new/mode-selector.tsx:36
+msgid "8S5sLs"
+msgstr "Choose how to translate {fileName}"
+
+#: app/[locale]/dashboard/projects/new/mode-selector.tsx:52
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:156
+msgid "f5WAKa"
+msgstr "Universal"
+
+#: app/[locale]/dashboard/projects/new/mode-selector.tsx:54
+msgid "e2y0O9"
+msgstr "Standard document translation"
+
+#: app/[locale]/dashboard/projects/new/mode-selector.tsx:68
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:171
+msgid "D/JyFP"
+msgstr "Lyrics"
+
+#: app/[locale]/dashboard/projects/new/mode-selector.tsx:70
+msgid "OJ73Ny"
+msgstr "Rhythm & rhyme preserving"
+
+#: app/[locale]/dashboard/projects/new/mode-selector.tsx:76
+#: app/[locale]/dashboard/projects/project-card.tsx:167
+#: app/[locale]/dashboard/projects/project-card.tsx:194
+#: components/landing/waiting-list-button.tsx:139
+msgid "47FYwb"
+msgstr "Cancel"
+
+#: app/[locale]/dashboard/projects/new/mode-selector.tsx:83
+msgid "acrOoz"
+msgstr "Continue"
+
+#: app/[locale]/dashboard/projects/new/new-project-tabs.tsx:26
+msgid "ryDJAn"
+msgstr "Upload File"
+
+#: app/[locale]/dashboard/projects/new/new-project-tabs.tsx:36
+msgid "lJvc4g"
+msgstr "Text Input"
+
+#: app/[locale]/dashboard/projects/new/new-project-tabs.tsx:46
+msgid "bWjdfa"
+msgstr "URL"
+
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:109
+#: app/[locale]/dashboard/projects/new/upload-client.tsx:426
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:213
+msgid "9aWdwz"
+msgstr "New Translation Project"
+
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:111
+msgid "ql6Lx3"
+msgstr "Paste text directly to create a translation project"
+
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:118
+msgid "Az9uwz"
+msgstr "Project Name"
+
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:121
+msgid "3kbIhS"
+msgstr "Untitled"
+
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:130
+msgid "4s8bsp"
+msgstr "Text Content"
+
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:133
+msgid "kwXGMa"
+msgstr "Paste your text or lyrics here..."
+
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:158
+msgid "IduO+O"
+msgstr "Standard translation"
+
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:173
+msgid "DLuKou"
+msgstr "Rhythm & rhyme aware"
+
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:183
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:150
+msgid "BEQpGU"
+msgstr "Source Language"
+
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:187
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:207
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:154
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:174
+msgid "eVlu1R"
+msgstr "Select language"
+
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:203
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:170
+msgid "NU4hHH"
+msgstr "Target Language"
+
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:235
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:202
+msgid "9cabk2"
+msgstr "Create Project"
+
+#: app/[locale]/dashboard/projects/new/upload-client.tsx:428
+msgid "ARrrzI"
+msgstr "Upload a translation file to get started"
+
+#: app/[locale]/dashboard/projects/new/upload-client.tsx:469
+msgid "NkM/L5"
+msgstr "Drop your file here or click to browse"
+
+#: app/[locale]/dashboard/projects/new/upload-client.tsx:472
+msgid "cuThZz"
+msgstr "Supports .xcloc (as .zip), .srt, .po, .txt, .md, .docx, and .html"
+
+#: app/[locale]/dashboard/projects/new/upload-client.tsx:513
+msgid "JEsxDw"
+msgstr "Uploading..."
+
+#: app/[locale]/dashboard/projects/new/upload-client.tsx:521
+msgid "jOJOQG"
+msgstr "Parsing translation file..."
+
+#: app/[locale]/dashboard/projects/new/upload-client.tsx:529
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:262
+msgid "XKrAeH"
+msgstr "Creating project..."
+
+#: app/[locale]/dashboard/projects/new/upload-client.tsx:549
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:274
+msgid "FazwRl"
+msgstr "Try again"
+
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:138
+msgid "HNPgYl"
+msgstr "Configure Languages"
+
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:140
+msgid "mEnkEL"
+msgstr "Found {count} translatable segments in {fileName}"
+
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:195
+#: components/site-header.tsx:27
+msgid "cyR7Kh"
+msgstr "Back"
+
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:215
+msgid "g+Ihon"
+msgstr "Enter a URL to fetch and translate a webpage"
+
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:221
+msgid "dYPPeg"
+msgstr "Webpage URL"
+
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:247
+msgid "SucWt8"
+msgstr "Fetch"
+
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:255
+msgid "7GJT8g"
+msgstr "Fetching webpage..."
+
+#: app/[locale]/dashboard/projects/page.tsx:57
+#: components/app-sidebar.tsx:34
+msgid "aFyu8N"
+msgstr "Translations"
+
+#: app/[locale]/dashboard/projects/page.tsx:59
+msgid "djFCzM"
+msgstr "Manage your translation projects"
+
+#: app/[locale]/dashboard/projects/page.tsx:75
+msgid "B78XPL"
+msgstr "No projects yet. Upload a translation file to get started."
+
+#: app/[locale]/dashboard/projects/project-card.tsx:67
+msgid "fouJn6"
+msgstr "Project renamed"
+
+#: app/[locale]/dashboard/projects/project-card.tsx:70
+msgid "m3LbFk"
+msgstr "Failed to rename project"
+
+#: app/[locale]/dashboard/projects/project-card.tsx:80
+msgid "34J8Gr"
+msgstr "Project deleted"
+
+#: app/[locale]/dashboard/projects/project-card.tsx:82
+msgid "Hknxdz"
+msgstr "Failed to delete project"
+
+#: app/[locale]/dashboard/projects/project-card.tsx:130
+#: app/[locale]/dashboard/projects/project-card.tsx:175
+msgid "iXNbPf"
+msgstr "Rename"
+
+#: app/[locale]/dashboard/projects/project-card.tsx:138
+#: app/[locale]/dashboard/projects/project-card.tsx:202
+msgid "K3r6DQ"
+msgstr "Delete"
+
+#: app/[locale]/dashboard/projects/project-card.tsx:150
+msgid "Eer8li"
+msgstr "Rename Project"
+
+#: app/[locale]/dashboard/projects/project-card.tsx:153
+msgid "D5RCKi"
+msgstr "Project name"
+
+#: app/[locale]/dashboard/projects/project-card.tsx:175
+msgid "dxAlJ5"
+msgstr "Renaming..."
+
+#: app/[locale]/dashboard/projects/project-card.tsx:184
+msgid "GsO+rH"
+msgstr "Delete project?"
+
+#: app/[locale]/dashboard/projects/project-card.tsx:186
+msgid "kBMkkS"
+msgstr "This will permanently delete \"{name}\" and all its translations. This action cannot be undone."
+
+#: app/[locale]/dashboard/projects/project-card.tsx:202
+msgid "noZdV2"
+msgstr "Deleting..."
+
+#: app/[locale]/page.tsx:22
+msgid "ju+J0L"
+msgstr "Universal Translation — AI-Powered Software Localization"
+
+#: app/[locale]/page.tsx:23
+msgid "fffnKc"
+msgstr "Upload .xcloc, .srt, .po, .md, .txt, and .docx files. Get context-aware, terminology-consistent AI translations in seconds. Built for developers and translators."
+
+#: app/[locale]/page.tsx:73
+msgid "+hb4i3"
+msgstr "AI-powered translation platform for software localization. Supports Xcode .xcloc catalogs, .srt subtitles, .po gettext files, Markdown, plain text, and Word documents."
+
+#: components/app-sidebar.tsx:52
+#: components/landing/hero-section.tsx:32
+#: components/landing/nav-bar.tsx:40
+msgid "vqcy/i"
+msgstr "Universal Translation"
+
+#: components/app-sidebar.tsx:61
+msgid "fBg+7V"
+msgstr "Navigation"
+
+#: components/app-sidebar.tsx:95
+msgid "xXbJso"
+msgstr "Sign out"
+
+#: components/landing/feature-grid.tsx:18
+msgid "ZHrXd4"
+msgstr "Multi-Format Support"
+
+#: components/landing/feature-grid.tsx:19
+msgid "4f2+Vy"
+msgstr "From Xcode .xcloc catalogs to .srt subtitles, .po gettext files, and .docx documents. One platform handles them all."
+
+#: components/landing/feature-grid.tsx:26
+msgid "/SZZmq"
+msgstr "LLM-Powered Translation"
+
+#: components/landing/feature-grid.tsx:27
+msgid "XwxEw4"
+msgstr "Advanced language models produce natural, contextually accurate translations that read like they were written by a native speaker."
+
+#: components/landing/feature-grid.tsx:34
+msgid "jGsVW7"
+msgstr "Context Awareness"
+
+#: components/landing/feature-grid.tsx:35
+msgid "KZjjDh"
+msgstr "The AI reads surrounding entries for context, producing translations that fit naturally within the full document."
+
+#: components/landing/feature-grid.tsx:42
+msgid "vzJJ8L"
+msgstr "Terminology Consistency"
+
+#: components/landing/feature-grid.tsx:43
+msgid "CZr/wQ"
+msgstr "Define your glossary once. Brand names, technical terms, and proper nouns stay consistent across every translation."
+
+#: components/landing/feature-grid.tsx:50
+msgid "4VVKWs"
+msgstr "Cloud Save"
+
+#: components/landing/feature-grid.tsx:51
+msgid "DPwoiE"
+msgstr "Projects are saved automatically. Pick up where you left off, from any device, at any time."
+
+#: components/landing/feature-grid.tsx:58
+msgid "QUiYRh"
+msgstr "Subtitle Intelligence"
+
+#: components/landing/feature-grid.tsx:59
+msgid "gYvUA+"
+msgstr "Specialized handling for subtitles and lyrics — preserves timing, tone, rhyme, and readability for spoken dialogue."
+
+#: components/landing/feature-grid.tsx:81
+msgid "XFievo"
+msgstr "Capabilities"
+
+#: components/landing/feature-grid.tsx:84
+msgid "zvwLaK"
+msgstr "Everything you need"
+
+#: components/landing/feature-grid.tsx:87
+msgid "SA+PbI"
+msgstr "Built for developers, translators, and content creators"
+
+#: components/landing/footer-cta.tsx:45
+msgid "ziQZMb"
+msgstr "Ready to translate?"
+
+#: components/landing/footer-cta.tsx:48
+msgid "HXGsdi"
+msgstr "Upload your first file and see AI-powered translation in action. No setup required."
+
+#: components/landing/footer-cta.tsx:64
+msgid "sFk7V0"
+msgstr "Built by RxLab"
+
+#: components/landing/format-showcase.tsx:11
+msgid "0biIE1"
+msgstr "Xcode Localization"
+
+#: components/landing/format-showcase.tsx:13
+msgid "aRXMRq"
+msgstr "Ship your iOS, macOS, and visionOS apps in every language with Apple's native localization format."
+
+#: components/landing/format-showcase.tsx:19
+msgid "+H1DS1"
+msgstr "SubRip Subtitles"
+
+#: components/landing/format-showcase.tsx:21
+msgid "GZ+2zx"
+msgstr "Timestamp-aware subtitle translation that preserves tone, rhyme, and readability."
+
+#: components/landing/format-showcase.tsx:27
+msgid "rqMOT7"
+msgstr "GNU gettext"
+
+#: components/landing/format-showcase.tsx:29
+msgid "jHuNUS"
+msgstr "Industry-standard localization used by thousands of open-source projects."
+
+#: components/landing/format-showcase.tsx:35
+msgid "vBlT6y"
+msgstr "Documents"
+
+#: components/landing/format-showcase.tsx:37
+msgid "AW30fu"
+msgstr "From READMEs to manuscripts — translate any written content while preserving formatting."
+
+#: components/landing/format-showcase.tsx:57
+msgid "mi0bxS"
+msgstr "File formats"
+
+#: components/landing/format-showcase.tsx:60
+msgid "wG1fgT"
+msgstr "Supports what you use"
+
+#: components/landing/format-showcase.tsx:63
+msgid "Ljzf7k"
+msgstr "From app developer to content creator, we have you covered"
+
+#: components/landing/hero-section.tsx:36
+msgid "DaqJa0"
+msgstr "Every language. One click."
+
+#: components/landing/hero-section.tsx:44
+msgid "QVwKJz"
+msgstr "Upload. Translate. Done."
+
+#: components/landing/how-it-works.tsx:10
+msgid "p4N05H"
+msgstr "Upload"
+
+#: components/landing/how-it-works.tsx:11
+msgid "6NYcnj"
+msgstr "Drop your translation files in any supported format — Xcode catalogs, subtitles, PO files, or documents."
+
+#: components/landing/how-it-works.tsx:17
+msgid "wCy/Tc"
+msgstr "Translate"
+
+#: components/landing/how-it-works.tsx:18
+msgid "N4XcYr"
+msgstr "AI translates with full context awareness, respecting your terminology glossary and maintaining consistency."
+
+#: components/landing/how-it-works.tsx:24
+msgid "5q3qC0"
+msgstr "Download"
+
+#: components/landing/how-it-works.tsx:25
+msgid "NTMrbs"
+msgstr "Export your translated files in their original format, ready to use in your project."
+
+#: components/landing/how-it-works.tsx:36
+msgid "d1Wvzs"
+msgstr "Simple workflow"
+
+#: components/landing/how-it-works.tsx:39
+msgid "HK3ph8"
+msgstr "How it works"
+
+#: components/landing/nav-bar.tsx:49
+msgid "ZXp0z1"
+msgstr "Features"
+
+#: components/landing/nav-bar.tsx:61
+msgid "SQJto2"
+msgstr "Sign in"
+
+#: components/landing/waiting-list-button.tsx:48
+msgid "LxSJOb"
+msgstr "Go to Dashboard"
+
+#: components/landing/waiting-list-button.tsx:58
+msgid "9QXm1E"
+msgstr "Get Started"
+
+#: components/landing/waiting-list-button.tsx:68
+msgid "85SC0+"
+msgstr "You're on the waiting list"
+
+#: components/landing/waiting-list-button.tsx:88
+msgid "iuY8kx"
+msgstr "Something went wrong."
+
+#: components/landing/waiting-list-button.tsx:96
+msgid "Mi3Uq0"
+msgstr "Join Waiting List"
+
+#: components/landing/waiting-list-button.tsx:102
+msgid "bV6va1"
+msgstr "Join the waiting list"
+
+#: components/landing/waiting-list-button.tsx:104
+msgid "xQ07+I"
+msgstr "Enter your email address and we'll let you know when you get access."
+
+#: components/landing/waiting-list-button.tsx:112
+msgid "Q7tRib"
+msgstr "You're on the list! We'll be in touch soon."
+
+#: components/landing/waiting-list-button.tsx:118
+msgid "hJZwTS"
+msgstr "Email address"
+
+#: components/landing/waiting-list-button.tsx:142
+msgid "UCyyxT"
+msgstr "Joining…"
+
+#: components/landing/waiting-list-button.tsx:142
+msgid "P6PLpi"
+msgstr "Join"

@@ -6,54 +6,63 @@ import {
   ScanSearch,
   Sparkles,
 } from "lucide-react";
+import { getExtracted } from "next-intl/server";
 import { AnimateOnScroll } from "./animate-on-scroll";
 
-const features = [
-  {
-    icon: Files,
-    title: "Multi-Format Support",
-    description:
-      "From Xcode .xcloc catalogs to .srt subtitles, .po gettext files, and .docx documents. One platform handles them all.",
-    span: "md:col-span-2",
-  },
-  {
-    icon: Sparkles,
-    title: "LLM-Powered Translation",
-    description:
-      "Advanced language models produce natural, contextually accurate translations that read like they were written by a native speaker.",
-    span: "",
-  },
-  {
-    icon: ScanSearch,
-    title: "Context Awareness",
-    description:
-      "The AI reads surrounding entries for context, producing translations that fit naturally within the full document.",
-    span: "",
-  },
-  {
-    icon: BookOpen,
-    title: "Terminology Consistency",
-    description:
-      "Define your glossary once. Brand names, technical terms, and proper nouns stay consistent across every translation.",
-    span: "md:col-span-2",
-  },
-  {
-    icon: Cloud,
-    title: "Cloud Save",
-    description:
-      "Projects are saved automatically. Pick up where you left off, from any device, at any time.",
-    span: "",
-  },
-  {
-    icon: Captions,
-    title: "Subtitle Intelligence",
-    description:
-      "Specialized handling for subtitles and lyrics — preserves timing, tone, rhyme, and readability for spoken dialogue.",
-    span: "md:col-span-2",
-  },
-];
+export async function FeatureGrid() {
+  const t = await getExtracted();
 
-export function FeatureGrid() {
+  const features = [
+    {
+      icon: Files,
+      title: t("Multi-Format Support"),
+      description: t(
+        "From Xcode .xcloc catalogs to .srt subtitles, .po gettext files, and .docx documents. One platform handles them all.",
+      ),
+      span: "md:col-span-2",
+    },
+    {
+      icon: Sparkles,
+      title: t("LLM-Powered Translation"),
+      description: t(
+        "Advanced language models produce natural, contextually accurate translations that read like they were written by a native speaker.",
+      ),
+      span: "",
+    },
+    {
+      icon: ScanSearch,
+      title: t("Context Awareness"),
+      description: t(
+        "The AI reads surrounding entries for context, producing translations that fit naturally within the full document.",
+      ),
+      span: "",
+    },
+    {
+      icon: BookOpen,
+      title: t("Terminology Consistency"),
+      description: t(
+        "Define your glossary once. Brand names, technical terms, and proper nouns stay consistent across every translation.",
+      ),
+      span: "md:col-span-2",
+    },
+    {
+      icon: Cloud,
+      title: t("Cloud Save"),
+      description: t(
+        "Projects are saved automatically. Pick up where you left off, from any device, at any time.",
+      ),
+      span: "",
+    },
+    {
+      icon: Captions,
+      title: t("Subtitle Intelligence"),
+      description: t(
+        "Specialized handling for subtitles and lyrics — preserves timing, tone, rhyme, and readability for spoken dialogue.",
+      ),
+      span: "md:col-span-2",
+    },
+  ];
+
   return (
     <section id="features" className="relative px-6 py-28 md:py-40">
       {/* Subtle top/bottom gradient dividers instead of hard borders */}
@@ -69,13 +78,13 @@ export function FeatureGrid() {
       <div className="mx-auto max-w-6xl">
         <AnimateOnScroll className="text-center">
           <p className="text-xs font-medium tracking-widest text-muted-foreground uppercase">
-            Capabilities
+            {t("Capabilities")}
           </p>
           <h2 className="mt-4 text-4xl font-bold tracking-tight md:text-5xl">
-            Everything you need
+            {t("Everything you need")}
           </h2>
           <p className="mx-auto mt-4 max-w-lg text-base text-muted-foreground">
-            Built for developers, translators, and content creators
+            {t("Built for developers, translators, and content creators")}
           </p>
         </AnimateOnScroll>
 

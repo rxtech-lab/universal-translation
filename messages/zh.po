@@ -1,0 +1,537 @@
+msgid ""
+msgstr ""
+"Language: zh\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: next-intl\n"
+"X-Crowdin-SourceKey: msgstr\n"
+
+#: app/[locale]/dashboard/page.tsx:83
+#: components/app-sidebar.tsx:28
+#: components/landing/nav-bar.tsx:56
+msgid "hzSNj4"
+msgstr "管理后台"
+
+#: app/[locale]/dashboard/page.tsx:85
+msgid "tWcRaD"
+msgstr "您的翻译项目概览"
+
+#: app/[locale]/dashboard/page.tsx:91
+#: app/[locale]/dashboard/projects/page.tsx:65
+msgid "YBY/lc"
+msgstr "新建项目"
+
+#: app/[locale]/dashboard/page.tsx:101
+msgid "gkvdf7"
+msgstr "暂无项目"
+
+#: app/[locale]/dashboard/page.tsx:103
+msgid "3oqXCa"
+msgstr "上传翻译文件以开始。"
+
+#: app/[locale]/dashboard/page.tsx:108
+#: app/[locale]/dashboard/projects/page.tsx:82
+msgid "iRkI8S"
+msgstr "创建您的第一个项目"
+
+#: app/[locale]/dashboard/page.tsx:119
+msgid "RP6NBP"
+msgstr "项目总数"
+
+#: app/[locale]/dashboard/page.tsx:126
+msgid "m3wERc"
+msgstr "项目"
+
+#: app/[locale]/dashboard/page.tsx:131
+msgid "B487HA"
+msgstr "进行中"
+
+#: app/[locale]/dashboard/page.tsx:139
+msgid "XKDi2S"
+msgstr "正在翻译"
+
+#: app/[locale]/dashboard/page.tsx:145
+msgid "95stPq"
+msgstr "已完成"
+
+#: app/[locale]/dashboard/page.tsx:152
+msgid "T2DELw"
+msgstr "已结束"
+
+#: app/[locale]/dashboard/page.tsx:157
+msgid "sIMS7i"
+msgstr "进度"
+
+#: app/[locale]/dashboard/page.tsx:165
+msgid "Cz+sg6"
+msgstr "{translated} / {total} 条字符串"
+
+#: app/[locale]/dashboard/page.tsx:176
+msgid "E+UaDm"
+msgstr "最近的项目"
+
+#: app/[locale]/dashboard/page.tsx:179
+msgid "pFK6bJ"
+msgstr "查看全部"
+
+#: app/[locale]/dashboard/projects/new/mode-selector.tsx:34
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:143
+msgid "1mIq6K"
+msgstr "翻译风格"
+
+#: app/[locale]/dashboard/projects/new/mode-selector.tsx:36
+msgid "8S5sLs"
+msgstr "选择如何翻译 {fileName}"
+
+#: app/[locale]/dashboard/projects/new/mode-selector.tsx:52
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:156
+msgid "f5WAKa"
+msgstr "通用"
+
+#: app/[locale]/dashboard/projects/new/mode-selector.tsx:54
+msgid "e2y0O9"
+msgstr "标准文档翻译"
+
+#: app/[locale]/dashboard/projects/new/mode-selector.tsx:68
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:171
+msgid "D/JyFP"
+msgstr "歌词"
+
+#: app/[locale]/dashboard/projects/new/mode-selector.tsx:70
+msgid "OJ73Ny"
+msgstr "保留韵律与押韵"
+
+#: app/[locale]/dashboard/projects/new/mode-selector.tsx:76
+#: app/[locale]/dashboard/projects/project-card.tsx:167
+#: app/[locale]/dashboard/projects/project-card.tsx:194
+#: components/landing/waiting-list-button.tsx:139
+msgid "47FYwb"
+msgstr "取消"
+
+#: app/[locale]/dashboard/projects/new/mode-selector.tsx:83
+msgid "acrOoz"
+msgstr "继续"
+
+#: app/[locale]/dashboard/projects/new/new-project-tabs.tsx:26
+msgid "ryDJAn"
+msgstr "上传文件"
+
+#: app/[locale]/dashboard/projects/new/new-project-tabs.tsx:36
+msgid "lJvc4g"
+msgstr "文本输入"
+
+#: app/[locale]/dashboard/projects/new/new-project-tabs.tsx:46
+msgid "bWjdfa"
+msgstr "URL"
+
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:109
+#: app/[locale]/dashboard/projects/new/upload-client.tsx:426
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:213
+msgid "9aWdwz"
+msgstr "新建翻译项目"
+
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:111
+msgid "ql6Lx3"
+msgstr "直接粘贴文本以创建翻译项目"
+
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:118
+msgid "Az9uwz"
+msgstr "项目名称"
+
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:121
+msgid "3kbIhS"
+msgstr "未命名"
+
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:130
+msgid "4s8bsp"
+msgstr "文本内容"
+
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:133
+msgid "kwXGMa"
+msgstr "在此处粘贴您的文本或歌词..."
+
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:158
+msgid "IduO+O"
+msgstr "标准翻译"
+
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:173
+msgid "DLuKou"
+msgstr "韵律与押韵感知"
+
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:183
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:150
+msgid "BEQpGU"
+msgstr "源语言"
+
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:187
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:207
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:154
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:174
+msgid "eVlu1R"
+msgstr "选择语言"
+
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:203
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:170
+msgid "NU4hHH"
+msgstr "目标语言"
+
+#: app/[locale]/dashboard/projects/new/text-input-client.tsx:235
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:202
+msgid "9cabk2"
+msgstr "创建项目"
+
+#: app/[locale]/dashboard/projects/new/upload-client.tsx:428
+msgid "ARrrzI"
+msgstr "上传翻译文件以开始"
+
+#: app/[locale]/dashboard/projects/new/upload-client.tsx:469
+msgid "NkM/L5"
+msgstr "将文件拖放到此处或点击浏览"
+
+#: app/[locale]/dashboard/projects/new/upload-client.tsx:472
+msgid "cuThZz"
+msgstr "支持 .xcloc（作为 .zip）、.srt、.po、.txt、.md、.docx 和 .html"
+
+#: app/[locale]/dashboard/projects/new/upload-client.tsx:513
+msgid "JEsxDw"
+msgstr "正在上传..."
+
+#: app/[locale]/dashboard/projects/new/upload-client.tsx:521
+msgid "jOJOQG"
+msgstr "正在解析翻译文件..."
+
+#: app/[locale]/dashboard/projects/new/upload-client.tsx:529
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:262
+msgid "XKrAeH"
+msgstr "正在创建项目..."
+
+#: app/[locale]/dashboard/projects/new/upload-client.tsx:549
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:274
+msgid "FazwRl"
+msgstr "重试"
+
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:138
+msgid "HNPgYl"
+msgstr "配置语言"
+
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:140
+msgid "mEnkEL"
+msgstr "在 {fileName} 中找到 {count} 个可翻译的句段"
+
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:195
+#: components/site-header.tsx:27
+msgid "cyR7Kh"
+msgstr "返回"
+
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:215
+msgid "g+Ihon"
+msgstr "输入 URL 以抓取并翻译网页"
+
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:221
+msgid "dYPPeg"
+msgstr "网页 URL"
+
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:247
+msgid "SucWt8"
+msgstr "抓取"
+
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:255
+msgid "7GJT8g"
+msgstr "正在抓取网页..."
+
+#: app/[locale]/dashboard/projects/page.tsx:57
+#: components/app-sidebar.tsx:34
+msgid "aFyu8N"
+msgstr "翻译"
+
+#: app/[locale]/dashboard/projects/page.tsx:59
+msgid "djFCzM"
+msgstr "管理您的翻译项目"
+
+#: app/[locale]/dashboard/projects/page.tsx:75
+msgid "B78XPL"
+msgstr "尚无项目。上传翻译文件以开始。"
+
+#: app/[locale]/dashboard/projects/project-card.tsx:67
+msgid "fouJn6"
+msgstr "项目已重命名"
+
+#: app/[locale]/dashboard/projects/project-card.tsx:70
+msgid "m3LbFk"
+msgstr "重命名项目失败"
+
+#: app/[locale]/dashboard/projects/project-card.tsx:80
+msgid "34J8Gr"
+msgstr "项目已删除"
+
+#: app/[locale]/dashboard/projects/project-card.tsx:82
+msgid "Hknxdz"
+msgstr "删除项目失败"
+
+#: app/[locale]/dashboard/projects/project-card.tsx:130
+#: app/[locale]/dashboard/projects/project-card.tsx:175
+msgid "iXNbPf"
+msgstr "重命名"
+
+#: app/[locale]/dashboard/projects/project-card.tsx:138
+#: app/[locale]/dashboard/projects/project-card.tsx:202
+msgid "K3r6DQ"
+msgstr "删除"
+
+#: app/[locale]/dashboard/projects/project-card.tsx:150
+msgid "Eer8li"
+msgstr "重命名项目"
+
+#: app/[locale]/dashboard/projects/project-card.tsx:153
+msgid "D5RCKi"
+msgstr "项目名称"
+
+#: app/[locale]/dashboard/projects/project-card.tsx:175
+msgid "dxAlJ5"
+msgstr "正在重命名..."
+
+#: app/[locale]/dashboard/projects/project-card.tsx:184
+msgid "GsO+rH"
+msgstr "删除项目？"
+
+#: app/[locale]/dashboard/projects/project-card.tsx:186
+msgid "kBMkkS"
+msgstr "这将永久删除“{name}”及其所有翻译。此操作无法撤销。"
+
+#: app/[locale]/dashboard/projects/project-card.tsx:202
+msgid "noZdV2"
+msgstr "正在删除..."
+
+#: app/[locale]/page.tsx:22
+msgid "ju+J0L"
+msgstr "全能翻译王 — AI 赋能的软件本地化"
+
+#: app/[locale]/page.tsx:23
+msgid "fffnKc"
+msgstr "上传 .xcloc、.srt、.po、.md、.txt 和 .docx 文件。在数秒内获得具有上下文感知和术语一致性的 AI 翻译。专为开发者和翻译人员打造。"
+
+#: app/[locale]/page.tsx:73
+msgid "+hb4i3"
+msgstr "AI 赋能的软件本地化翻译平台。支持 Xcode .xcloc 目录、.srt 字幕、.po gettext 文件、Markdown、纯文本和 Word 文档。"
+
+#: components/app-sidebar.tsx:52
+#: components/landing/hero-section.tsx:32
+#: components/landing/nav-bar.tsx:40
+msgid "vqcy/i"
+msgstr "全能翻译王"
+
+#: components/app-sidebar.tsx:61
+msgid "fBg+7V"
+msgstr "导航"
+
+#: components/app-sidebar.tsx:95
+msgid "xXbJso"
+msgstr "退出登录"
+
+#: components/landing/feature-grid.tsx:18
+msgid "ZHrXd4"
+msgstr "多格式支持"
+
+#: components/landing/feature-grid.tsx:19
+msgid "4f2+Vy"
+msgstr "从 Xcode .xcloc 目录到 .srt 字幕、.po gettext 文件和 .docx 文档。一个平台即可处理所有格式。"
+
+#: components/landing/feature-grid.tsx:26
+msgid "/SZZmq"
+msgstr "大语言模型赋能的翻译"
+
+#: components/landing/feature-grid.tsx:27
+msgid "XwxEw4"
+msgstr "先进的语言模型可生成自然、上下文准确的翻译，读起来就像是由母语人士编写的一样。"
+
+#: components/landing/feature-grid.tsx:34
+msgid "jGsVW7"
+msgstr "上下文感知"
+
+#: components/landing/feature-grid.tsx:35
+msgid "KZjjDh"
+msgstr "AI 会读取周围的条目以获取上下文，从而生成自然融入整个文档的翻译。"
+
+#: components/landing/feature-grid.tsx:42
+msgid "vzJJ8L"
+msgstr "术语一致性"
+
+#: components/landing/feature-grid.tsx:43
+msgid "CZr/wQ"
+msgstr "只需定义一次您的术语表。品牌名称、技术术语和专有名词在每一次翻译中都将保持一致。"
+
+#: components/landing/feature-grid.tsx:50
+msgid "4VVKWs"
+msgstr "云端保存"
+
+#: components/landing/feature-grid.tsx:51
+msgid "DPwoiE"
+msgstr "项目会自动保存。随时随地在任何设备上从上次中断的地方继续。"
+
+#: components/landing/feature-grid.tsx:58
+msgid "QUiYRh"
+msgstr "智能字幕"
+
+#: components/landing/feature-grid.tsx:59
+msgid "gYvUA+"
+msgstr "针对字幕和歌词的专业化处理——保留口语对话的时间轴、语调、押韵和可读性。"
+
+#: components/landing/feature-grid.tsx:81
+msgid "XFievo"
+msgstr "核心能力"
+
+#: components/landing/feature-grid.tsx:84
+msgid "zvwLaK"
+msgstr "您所需的一切"
+
+#: components/landing/feature-grid.tsx:87
+msgid "SA+PbI"
+msgstr "为开发者、翻译人员和内容创作者打造"
+
+#: components/landing/footer-cta.tsx:45
+msgid "ziQZMb"
+msgstr "准备好开始翻译了吗？"
+
+#: components/landing/footer-cta.tsx:48
+msgid "HXGsdi"
+msgstr "上传您的第一个文件，亲身体验 AI 翻译。无需任何配置。"
+
+#: components/landing/footer-cta.tsx:64
+msgid "sFk7V0"
+msgstr "由 RxLab 打造"
+
+#: components/landing/format-showcase.tsx:11
+msgid "0biIE1"
+msgstr "Xcode 本地化"
+
+#: components/landing/format-showcase.tsx:13
+msgid "aRXMRq"
+msgstr "使用 Apple 的原生本地化格式，让您的 iOS、macOS 和 visionOS 应用支持全球语言。"
+
+#: components/landing/format-showcase.tsx:19
+msgid "+H1DS1"
+msgstr "SubRip 字幕"
+
+#: components/landing/format-showcase.tsx:21
+msgid "GZ+2zx"
+msgstr "感知时间轴的字幕翻译，并保留语调、押韵和可读性。"
+
+#: components/landing/format-showcase.tsx:27
+msgid "rqMOT7"
+msgstr "GNU gettext"
+
+#: components/landing/format-showcase.tsx:29
+msgid "jHuNUS"
+msgstr "数以千计的开源项目都在使用的行业标准本地化格式。"
+
+#: components/landing/format-showcase.tsx:35
+msgid "vBlT6y"
+msgstr "文档"
+
+#: components/landing/format-showcase.tsx:37
+msgid "AW30fu"
+msgstr "从 README 到手稿——翻译任何书面内容，同时保留原始格式。"
+
+#: components/landing/format-showcase.tsx:57
+msgid "mi0bxS"
+msgstr "文件格式"
+
+#: components/landing/format-showcase.tsx:60
+msgid "wG1fgT"
+msgstr "支持您常用的各种格式"
+
+#: components/landing/format-showcase.tsx:63
+msgid "Ljzf7k"
+msgstr "从应用开发者到内容创作者，我们都能满足您的需求"
+
+#: components/landing/hero-section.tsx:36
+msgid "DaqJa0"
+msgstr "支持每种语言。只需一键。"
+
+#: components/landing/hero-section.tsx:44
+msgid "QVwKJz"
+msgstr "上传。翻译。完成。"
+
+#: components/landing/how-it-works.tsx:10
+msgid "p4N05H"
+msgstr "上传"
+
+#: components/landing/how-it-works.tsx:11
+msgid "6NYcnj"
+msgstr "拖入任何支持格式的翻译文件 —— Xcode 目录、字幕、.po 文件或文档。"
+
+#: components/landing/how-it-works.tsx:17
+msgid "wCy/Tc"
+msgstr "翻译"
+
+#: components/landing/how-it-works.tsx:18
+msgid "N4XcYr"
+msgstr "AI 在翻译时具备全方位的 `上下文感知`，尊重您的术语表并保持一致性。"
+
+#: components/landing/how-it-works.tsx:24
+msgid "5q3qC0"
+msgstr "下载"
+
+#: components/landing/how-it-works.tsx:25
+msgid "NTMrbs"
+msgstr "以原格式导出翻译后的文件，即可在您的 `项目` 中使用。"
+
+#: components/landing/how-it-works.tsx:36
+msgid "d1Wvzs"
+msgstr "简单的工作流"
+
+#: components/landing/how-it-works.tsx:39
+msgid "HK3ph8"
+msgstr "工作原理"
+
+#: components/landing/nav-bar.tsx:49
+msgid "ZXp0z1"
+msgstr "功能"
+
+#: components/landing/nav-bar.tsx:61
+msgid "SQJto2"
+msgstr "登录"
+
+#: components/landing/waiting-list-button.tsx:48
+msgid "LxSJOb"
+msgstr "前往 `管理后台`"
+
+#: components/landing/waiting-list-button.tsx:58
+msgid "9QXm1E"
+msgstr "开始使用"
+
+#: components/landing/waiting-list-button.tsx:68
+msgid "85SC0+"
+msgstr "您已在候补名单中"
+
+#: components/landing/waiting-list-button.tsx:88
+msgid "iuY8kx"
+msgstr "出错了。"
+
+#: components/landing/waiting-list-button.tsx:96
+msgid "Mi3Uq0"
+msgstr "加入候补名单"
+
+#: components/landing/waiting-list-button.tsx:102
+msgid "bV6va1"
+msgstr "加入候补名单"
+
+#: components/landing/waiting-list-button.tsx:104
+msgid "xQ07+I"
+msgstr "输入您的电子邮件地址，我们将在您获得访问权限时通知您。"
+
+#: components/landing/waiting-list-button.tsx:112
+msgid "Q7tRib"
+msgstr "您已在名单中！我们将很快与您联系。"
+
+#: components/landing/waiting-list-button.tsx:118
+msgid "hJZwTS"
+msgstr "电子邮件地址"
+
+#: components/landing/waiting-list-button.tsx:142
+msgid "UCyyxT"
+msgstr "正在加入..."
+
+#: components/landing/waiting-list-button.tsx:142
+msgid "P6PLpi"
+msgstr "加入"

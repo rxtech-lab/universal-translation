@@ -15,6 +15,11 @@ interface DocumentEditorProps {
     entryId: string,
     update: { targetText?: string; comment?: string },
   ) => void;
+  onTranslateLine: (
+    resourceId: string,
+    entryId: string,
+    suggestion?: string,
+  ) => void;
   streamingEntryIds: Set<string>;
   terms: Term[];
 }
@@ -22,6 +27,7 @@ interface DocumentEditorProps {
 export function DocumentEditor({
   project,
   onEntryUpdate,
+  onTranslateLine,
   streamingEntryIds,
   terms,
 }: DocumentEditorProps) {
@@ -87,6 +93,9 @@ export function DocumentEditor({
                     entry={entry}
                     resourceId={resourceId}
                     onUpdate={(update) => handleEntryUpdate(entry.id, update)}
+                    onTranslateLine={(suggestion) =>
+                      onTranslateLine(resourceId, entry.id, suggestion)
+                    }
                     isStreaming={streamingEntryIds.has(
                       `${resourceId}:${entry.id}`,
                     )}

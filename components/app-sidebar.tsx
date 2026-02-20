@@ -1,8 +1,9 @@
 "use client";
 
 import { GlobeIcon, LayoutDashboardIcon, LogOutIcon } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { useExtracted } from "next-intl";
 import { signOutAction } from "@/app/actions/auth";
+import { LanguageSwitcher } from "@/components/language-switcher";
 import {
   Sidebar,
   SidebarContent,
@@ -16,19 +17,26 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-
-const navItems = [
-  {
-    title: "Dashboard",
-    url: "/dashboard",
-    icon: LayoutDashboardIcon,
-    exact: true,
-  },
-  { title: "Translations", url: "/dashboard/projects", icon: GlobeIcon },
-];
+import { Link, usePathname } from "@/i18n/navigation";
 
 export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
+  const t = useExtracted();
   const pathname = usePathname();
+
+  const navItems = [
+    {
+      title: t("Dashboard"),
+      url: "/dashboard" as const,
+      icon: LayoutDashboardIcon,
+      exact: true,
+    },
+    {
+      title: t("Translations"),
+      url: "/dashboard/projects" as const,
+      icon: GlobeIcon,
+      exact: false,
+    },
+  ];
 
   return (
     <Sidebar {...props}>
@@ -36,23 +44,25 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="/">
+              <Link href="/">
                 <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center text-xs font-bold">
                   UT
                 </div>
-                <span className="font-semibold">Universal Translation</span>
-              </a>
+                <span className="font-semibold">
+                  {t("Universal Translation")}
+                </span>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+          <SidebarGroupLabel>{t("Navigation")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {navItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
+                <SidebarMenuItem key={item.url}>
                   <SidebarMenuButton
                     asChild
                     isActive={
@@ -62,10 +72,10 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
                           pathname.startsWith(`${item.url}/`)
                     }
                   >
-                    <a href={item.url}>
+                    <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -75,11 +85,14 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
+          <SidebarMenuItem className="mb-2 ml-2">
+            <LanguageSwitcher />
+          </SidebarMenuItem>
           <SidebarMenuItem>
             <form action={signOutAction}>
               <SidebarMenuButton type="submit">
                 <LogOutIcon />
-                <span>Sign out</span>
+                <span>{t("Sign out")}</span>
               </SidebarMenuButton>
             </form>
           </SidebarMenuItem>

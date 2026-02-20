@@ -2,12 +2,14 @@
 
 import { Globe, Type, Upload } from "lucide-react";
 import { useState } from "react";
+import { useExtracted } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { TextInputClient } from "./text-input-client";
 import { UploadClient } from "./upload-client";
 import { UrlInputClient } from "./url-input-client";
 
 export function NewProjectTabs() {
+  const t = useExtracted();
   const [tab, setTab] = useState<"upload" | "text" | "url">("upload");
 
   return (
@@ -21,7 +23,7 @@ export function NewProjectTabs() {
           data-testid="tab-upload"
         >
           <Upload className="h-3.5 w-3.5 mr-1" />
-          Upload File
+          {t("Upload File")}
         </Button>
         <Button
           variant={tab === "text" ? "default" : "ghost"}
@@ -31,7 +33,7 @@ export function NewProjectTabs() {
           data-testid="tab-text"
         >
           <Type className="h-3.5 w-3.5 mr-1" />
-          Text Input
+          {t("Text Input")}
         </Button>
         <Button
           variant={tab === "url" ? "default" : "ghost"}
@@ -41,7 +43,7 @@ export function NewProjectTabs() {
           data-testid="tab-url"
         >
           <Globe className="h-3.5 w-3.5 mr-1" />
-          URL
+          {t("URL")}
         </Button>
       </div>
       {tab === "upload" ? (

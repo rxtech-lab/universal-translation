@@ -30,8 +30,8 @@ function getPageNumbers(page: number, totalPages: number): (number | "...")[] {
 }
 
 function pageHref(page: number) {
-  if (page === 1) return "/dashboard/projects";
-  return `/dashboard/projects?page=${page}`;
+  if (page === 1) return "?";
+  return `?page=${page}`;
 }
 
 export function ProjectsPagination({

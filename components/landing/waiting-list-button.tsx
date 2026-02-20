@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useExtracted } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,6 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Link, useRouter } from "@/i18n/navigation";
 import { joinWaitingList } from "@/app/actions/waiting-list";
 
 interface WaitingListButtonProps {
@@ -33,6 +33,7 @@ export function WaitingListButton({
   isApproved,
   size = "lg",
 }: WaitingListButtonProps) {
+  const t = useExtracted();
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
@@ -44,7 +45,7 @@ export function WaitingListButton({
   if (isSignedIn) {
     return (
       <Button asChild size={size}>
-        <Link href="/dashboard">Go to Dashboard</Link>
+        <Link href="/dashboard">{t("Go to Dashboard")}</Link>
       </Button>
     );
   }
@@ -54,7 +55,7 @@ export function WaitingListButton({
     return (
       <form action={signInAction}>
         <Button size={size} type="submit">
-          Get Started
+          {t("Get Started")}
         </Button>
       </form>
     );
@@ -64,7 +65,7 @@ export function WaitingListButton({
   if (isOnWaitingList && !isApproved) {
     return (
       <Button size={size} variant="secondary" disabled>
-        You&apos;re on the waiting list
+        {t("You're on the waiting list")}
       </Button>
     );
   }
@@ -84,7 +85,7 @@ export function WaitingListButton({
         router.refresh();
       }, 1500);
     } else {
-      setError(result.error ?? "Something went wrong.");
+      setError(result.error ?? t("Something went wrong."));
       setLoading(false);
     }
   }
@@ -92,28 +93,29 @@ export function WaitingListButton({
   return (
     <>
       <Button size={size} onClick={() => setOpen(true)}>
-        Join Waiting List
+        {t("Join Waiting List")}
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Join the waiting list</DialogTitle>
+            <DialogTitle>{t("Join the waiting list")}</DialogTitle>
             <DialogDescription>
-              Enter your email address and we&apos;ll let you know when you get
-              access.
+              {t(
+                "Enter your email address and we'll let you know when you get access.",
+              )}
             </DialogDescription>
           </DialogHeader>
 
           {success ? (
             <p className="py-4 text-center text-sm text-muted-foreground">
-              You&apos;re on the list! We&apos;ll be in touch soon.
+              {t("You're on the list! We'll be in touch soon.")}
             </p>
           ) : (
             <form onSubmit={handleSubmit}>
               <div className="space-y-3 pb-4">
                 <div className="space-y-1">
-                  <Label htmlFor="wl-email">Email address</Label>
+                  <Label htmlFor="wl-email">{t("Email address")}</Label>
                   <Input
                     id="wl-email"
                     type="email"
@@ -134,10 +136,10 @@ export function WaitingListButton({
                   onClick={() => setOpen(false)}
                   disabled={loading}
                 >
-                  Cancel
+                  {t("Cancel")}
                 </Button>
                 <Button type="submit" disabled={loading}>
-                  {loading ? "Joining…" : "Join"}
+                  {loading ? t("Joining…") : t("Join")}
                 </Button>
               </DialogFooter>
             </form>

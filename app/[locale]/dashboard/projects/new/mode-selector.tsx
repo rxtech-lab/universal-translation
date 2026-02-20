@@ -2,6 +2,7 @@
 
 import { FileText, Music } from "lucide-react";
 import { useState } from "react";
+import { useExtracted } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -24,15 +25,15 @@ export function ModeSelector({
   onConfirm,
   onCancel,
 }: ModeSelectorProps) {
+  const t = useExtracted();
   const [mode, setMode] = useState<TranslationMode>("universal");
 
   return (
     <Card className="w-full max-w-lg animate-in fade-in slide-in-from-bottom-4 duration-500">
       <CardHeader>
-        <CardTitle>Translation Mode</CardTitle>
+        <CardTitle>{t("Translation Mode")}</CardTitle>
         <CardDescription>
-          Choose how to translate{" "}
-          <span className="font-medium text-foreground">{fileName}</span>
+          {t("Choose how to translate {fileName}", { fileName })}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -48,9 +49,9 @@ export function ModeSelector({
             data-testid="mode-universal"
           >
             <FileText className="h-5 w-5 mb-2 text-muted-foreground" />
-            <div className="font-medium text-sm">Universal</div>
+            <div className="font-medium text-sm">{t("Universal")}</div>
             <div className="text-xs text-muted-foreground mt-1">
-              Standard document translation
+              {t("Standard document translation")}
             </div>
           </button>
           <button
@@ -64,22 +65,22 @@ export function ModeSelector({
             data-testid="mode-lyrics"
           >
             <Music className="h-5 w-5 mb-2 text-muted-foreground" />
-            <div className="font-medium text-sm">Lyrics</div>
+            <div className="font-medium text-sm">{t("Lyrics")}</div>
             <div className="text-xs text-muted-foreground mt-1">
-              Rhythm & rhyme preserving
+              {t("Rhythm & rhyme preserving")}
             </div>
           </button>
         </div>
         <div className="flex justify-end gap-2">
           <Button variant="outline" size="sm" onClick={onCancel}>
-            Cancel
+            {t("Cancel")}
           </Button>
           <Button
             size="sm"
             onClick={() => onConfirm(mode)}
             data-testid="mode-continue"
           >
-            Continue
+            {t("Continue")}
           </Button>
         </div>
       </CardContent>

@@ -1,13 +1,14 @@
 "use client";
 
 import { ArrowLeftIcon } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useExtracted } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Link, usePathname } from "@/i18n/navigation";
 
 export function SiteHeader() {
+  const t = useExtracted();
   const pathname = usePathname();
   const isProjectDetail = /^\/dashboard\/projects\/(?!new\b)[^/]+$/.test(
     pathname,
@@ -23,7 +24,7 @@ export function SiteHeader() {
           <Button variant="ghost" size="sm" asChild>
             <Link href="/dashboard/projects">
               <ArrowLeftIcon className="size-4" />
-              Back
+              {t("Back")}
             </Link>
           </Button>
         </>

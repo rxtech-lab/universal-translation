@@ -15,6 +15,11 @@ interface PoEditorProps {
     entryId: string,
     update: { targetText?: string; comment?: string },
   ) => void;
+  onTranslateLine: (
+    resourceId: string,
+    entryId: string,
+    suggestion?: string,
+  ) => void;
   streamingEntryIds: Set<string>;
   terms: Term[];
 }
@@ -22,6 +27,7 @@ interface PoEditorProps {
 export function PoEditor({
   project,
   onEntryUpdate,
+  onTranslateLine,
   streamingEntryIds,
   terms,
 }: PoEditorProps) {
@@ -91,6 +97,9 @@ export function PoEditor({
                     entry={entry}
                     resourceId={resourceId}
                     onUpdate={(update) => handleEntryUpdate(entry.id, update)}
+                    onTranslateLine={(suggestion) =>
+                      onTranslateLine(resourceId, entry.id, suggestion)
+                    }
                     isStreaming={streamingEntryIds.has(
                       `${resourceId}:${entry.id}`,
                     )}

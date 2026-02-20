@@ -1,36 +1,42 @@
+import { getExtracted } from "next-intl/server";
 import { AnimateOnScroll } from "./animate-on-scroll";
 
-const steps = [
-  {
-    number: "01",
-    title: "Upload",
-    description:
-      "Drop your translation files in any supported format — Xcode catalogs, subtitles, PO files, or documents.",
-  },
-  {
-    number: "02",
-    title: "Translate",
-    description:
-      "AI translates with full context awareness, respecting your terminology glossary and maintaining consistency.",
-  },
-  {
-    number: "03",
-    title: "Download",
-    description:
-      "Export your translated files in their original format, ready to use in your project.",
-  },
-];
+export async function HowItWorks() {
+  const t = await getExtracted();
 
-export function HowItWorks() {
+  const steps = [
+    {
+      number: "01",
+      title: t("Upload"),
+      description: t(
+        "Drop your translation files in any supported format — Xcode catalogs, subtitles, PO files, or documents.",
+      ),
+    },
+    {
+      number: "02",
+      title: t("Translate"),
+      description: t(
+        "AI translates with full context awareness, respecting your terminology glossary and maintaining consistency.",
+      ),
+    },
+    {
+      number: "03",
+      title: t("Download"),
+      description: t(
+        "Export your translated files in their original format, ready to use in your project.",
+      ),
+    },
+  ];
+
   return (
     <section className="px-6 py-28 md:py-40">
       <div className="mx-auto max-w-6xl">
         <AnimateOnScroll className="text-center">
           <p className="text-xs font-medium tracking-widest text-muted-foreground uppercase">
-            Simple workflow
+            {t("Simple workflow")}
           </p>
           <h2 className="mt-4 text-4xl font-bold tracking-tight md:text-5xl">
-            How it works
+            {t("How it works")}
           </h2>
         </AnimateOnScroll>
 
