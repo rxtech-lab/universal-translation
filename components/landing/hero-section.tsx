@@ -1,48 +1,50 @@
-import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { WaitingListButton } from "@/components/landing/waiting-list-button";
 
 const formats = [".xcloc", ".srt", ".po", ".txt", ".md", ".docx"];
 
 export function HeroSection({
   isSignedIn,
   signInAction,
+  waitingListEnabled,
+  isOnWaitingList,
+  isApproved,
 }: {
   isSignedIn: boolean;
   signInAction: () => Promise<void>;
+  waitingListEnabled: boolean;
+  isOnWaitingList: boolean;
+  isApproved: boolean;
 }) {
   return (
-    <section className="flex flex-col items-center px-6 py-24 md:py-40">
+    <section className="flex min-h-screen flex-col items-center justify-center px-6">
       <div className="mx-auto max-w-4xl text-center">
-        <h1 className="animate-in fade-in slide-in-from-bottom-6 duration-700 fill-mode-both text-5xl font-bold tracking-tight md:text-7xl">
+        <h1 className="hero-reveal hero-delay-0 text-5xl font-bold tracking-tight md:text-7xl">
           Translate anything,{" "}
           <span className="text-primary">powered by AI</span>
         </h1>
 
-        <p className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150 fill-mode-both mx-auto mt-6 max-w-2xl text-lg text-muted-foreground md:text-xl">
+        <p className="hero-reveal hero-delay-1 mx-auto mt-6 max-w-2xl text-lg text-muted-foreground md:text-xl">
           From Xcode localization catalogs to subtitles and documents. Upload
           your files, get context-aware translations with terminology
           consistency.
         </p>
 
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 delay-300 fill-mode-both mt-8 flex items-center justify-center gap-3">
-          {isSignedIn ? (
-            <Button asChild size="lg">
-              <Link href="/dashboard">Go to Dashboard</Link>
-            </Button>
-          ) : (
-            <form action={signInAction}>
-              <Button size="lg" type="submit">
-                Get Started
-              </Button>
-            </form>
-          )}
+        <div className="hero-reveal hero-delay-2 mt-8 flex items-center justify-center gap-3">
+          <WaitingListButton
+            isSignedIn={isSignedIn}
+            signInAction={signInAction}
+            waitingListEnabled={waitingListEnabled}
+            isOnWaitingList={isOnWaitingList}
+            isApproved={isApproved}
+          />
           <Button variant="outline" size="lg" asChild>
             <a href="#features">Learn More</a>
           </Button>
         </div>
 
-        <div className="animate-in fade-in duration-500 delay-500 fill-mode-both mt-10 flex flex-wrap items-center justify-center gap-2">
+        <div className="hero-reveal hero-delay-3 mt-10 flex flex-wrap items-center justify-center gap-2">
           {formats.map((fmt) => (
             <Badge key={fmt} variant="secondary" className="text-xs">
               {fmt}

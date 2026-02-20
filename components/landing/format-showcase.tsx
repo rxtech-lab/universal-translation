@@ -1,5 +1,3 @@
-"use client";
-
 import { AppWindow, FileText, Globe, Subtitles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { AnimateOnScroll } from "./animate-on-scroll";
@@ -35,8 +33,6 @@ const formats = [
   },
 ];
 
-const delays = ["delay-0", "delay-100", "delay-200", "delay-300"];
-
 export function FormatShowcase() {
   return (
     <section className="border-t border-border bg-muted/40 px-6 py-20 md:py-32">
@@ -50,13 +46,9 @@ export function FormatShowcase() {
           </p>
         </AnimateOnScroll>
 
-        <div className="mt-12 grid gap-4">
-          {formats.map((fmt, i) => (
-            <AnimateOnScroll
-              key={fmt.name}
-              animation="animate-in fade-in slide-in-from-left-4"
-              delay={delays[i]}
-            >
+        <div className="mt-12 grid gap-4 scroll-stagger">
+          {formats.map((fmt) => (
+            <AnimateOnScroll key={fmt.name} variant="left">
               <div className="flex items-start gap-4 border border-border bg-background p-5">
                 <div className="flex size-10 shrink-0 items-center justify-center bg-primary/10">
                   <fmt.icon className="size-5 text-primary" />

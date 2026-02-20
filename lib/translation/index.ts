@@ -65,3 +65,9 @@ export type { XclocFormatData } from "./xcloc/client";
 export { XclocClient } from "./xcloc/client";
 export { xclocDescriptor } from "./xcloc/descriptor";
 export type { XclocTranslationEvent } from "./xcloc/events";
+export type { HtmlFormatData } from "./html/client";
+// HTML
+export { HtmlClient } from "./html/client";
+export { htmlDescriptor } from "./html/descriptor";
+export type { HtmlTranslationEvent } from "./html/events";
+export { parseHtml, serializeHtml } from "./html/parser";

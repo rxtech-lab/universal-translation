@@ -1,5 +1,3 @@
-"use client";
-
 import { Download, Sparkles, Upload } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AnimateOnScroll } from "./animate-on-scroll";
@@ -25,8 +23,6 @@ const steps = [
   },
 ];
 
-const delays = ["delay-0", "delay-150", "delay-300"];
-
 export function HowItWorks() {
   return (
     <section className="border-t border-border bg-muted/40 px-6 py-20 md:py-32">
@@ -40,9 +36,9 @@ export function HowItWorks() {
           </p>
         </AnimateOnScroll>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {steps.map((step, i) => (
-            <AnimateOnScroll key={step.title} delay={delays[i]}>
+        <div className="mt-12 grid gap-6 md:grid-cols-3 scroll-stagger">
+          {steps.map((step) => (
+            <AnimateOnScroll key={step.title}>
               <Card className="h-full">
                 <CardHeader>
                   <div className="mb-2 flex size-10 items-center justify-center bg-primary/10">

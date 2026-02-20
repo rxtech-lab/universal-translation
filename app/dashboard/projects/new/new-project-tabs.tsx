@@ -1,13 +1,14 @@
 "use client";
 
-import { Type, Upload } from "lucide-react";
+import { Globe, Type, Upload } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { TextInputClient } from "./text-input-client";
 import { UploadClient } from "./upload-client";
+import { UrlInputClient } from "./url-input-client";
 
 export function NewProjectTabs() {
-  const [tab, setTab] = useState<"upload" | "text">("upload");
+  const [tab, setTab] = useState<"upload" | "text" | "url">("upload");
 
   return (
     <div className="w-full max-w-lg space-y-4">
@@ -30,8 +31,23 @@ export function NewProjectTabs() {
           <Type className="h-3.5 w-3.5 mr-1" />
           Text Input
         </Button>
+        <Button
+          variant={tab === "url" ? "default" : "ghost"}
+          size="sm"
+          className="flex-1"
+          onClick={() => setTab("url")}
+        >
+          <Globe className="h-3.5 w-3.5 mr-1" />
+          URL
+        </Button>
       </div>
-      {tab === "upload" ? <UploadClient /> : <TextInputClient />}
+      {tab === "upload" ? (
+        <UploadClient />
+      ) : tab === "text" ? (
+        <TextInputClient />
+      ) : (
+        <UrlInputClient />
+      )}
     </div>
   );
 }

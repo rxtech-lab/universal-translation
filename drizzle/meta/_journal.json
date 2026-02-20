@@ -8,6 +8,13 @@
       "when": 1771488326828,
       "tag": "0000_melted_mojo",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1771592735857,
+      "tag": "0001_waiting_list",
+      "breakpoints": true
     }
   ]
 }

@@ -124,3 +124,88 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* ─── Hero page-load animations (CSS @starting-style) ────────────────────── */
+
+@keyframes hero-entry {
+  from {
+    opacity: 0;
+    translate: 0 1.75rem;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+.hero-reveal {
+  animation: hero-entry 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.hero-delay-0 {
+  animation-delay: 0ms;
+}
+.hero-delay-1 {
+  animation-delay: 150ms;
+}
+.hero-delay-2 {
+  animation-delay: 300ms;
+}
+.hero-delay-3 {
+  animation-delay: 500ms;
+}
+
+/* ─── Scroll-driven entry animations ─────────────────────────────────────── */
+
+@keyframes scroll-reveal-up {
+  from {
+    opacity: 0;
+    translate: 0 1.5rem;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes scroll-reveal-left {
+  from {
+    opacity: 0;
+    translate: -1.5rem 0;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  .scroll-reveal {
+    animation: scroll-reveal-up linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 35%;
+  }
+
+  .scroll-reveal-left {
+    animation: scroll-reveal-left linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 35%;
+  }
+
+  /* Stagger: each successive child within .scroll-stagger starts slightly later */
+  .scroll-stagger > *:nth-child(2) {
+    animation-range: entry 5% entry 40%;
+  }
+  .scroll-stagger > *:nth-child(3) {
+    animation-range: entry 10% entry 45%;
+  }
+  .scroll-stagger > *:nth-child(4) {
+    animation-range: entry 15% entry 50%;
+  }
+  .scroll-stagger > *:nth-child(5) {
+    animation-range: entry 20% entry 55%;
+  }
+  .scroll-stagger > *:nth-child(6) {
+    animation-range: entry 25% entry 60%;
+  }
+}

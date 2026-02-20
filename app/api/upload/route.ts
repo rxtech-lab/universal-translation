@@ -26,6 +26,7 @@ export async function POST(request: Request): Promise<NextResponse> {
             "text/markdown",
             "text/x-markdown",
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "text/html",
           ],
           maximumSizeInBytes: 100 * 1024 * 1024, // 100MB
           allowOverwrite: true,

@@ -1,15 +1,18 @@
-"use client";
-
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { WaitingListButton } from "./waiting-list-button";
 import { AnimateOnScroll } from "./animate-on-scroll";
 
 export function FooterCta({
   isSignedIn,
   signInAction,
+  waitingListEnabled,
+  isOnWaitingList,
+  isApproved,
 }: {
   isSignedIn: boolean;
   signInAction: () => Promise<void>;
+  waitingListEnabled: boolean;
+  isOnWaitingList: boolean;
+  isApproved: boolean;
 }) {
   return (
     <section className="px-6 py-20 md:py-32">
@@ -22,17 +25,13 @@ export function FooterCta({
             Upload your first file and see AI-powered translation in action.
           </p>
           <div className="mt-8">
-            {isSignedIn ? (
-              <Button asChild size="lg">
-                <Link href="/dashboard">Go to Dashboard</Link>
-              </Button>
-            ) : (
-              <form action={signInAction}>
-                <Button size="lg" type="submit">
-                  Get Started
-                </Button>
-              </form>
-            )}
+            <WaitingListButton
+              isSignedIn={isSignedIn}
+              signInAction={signInAction}
+              waitingListEnabled={waitingListEnabled}
+              isOnWaitingList={isOnWaitingList}
+              isApproved={isApproved}
+            />
           </div>
         </AnimateOnScroll>
 
