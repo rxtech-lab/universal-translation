@@ -1,10 +1,11 @@
 import { count, desc, eq } from "drizzle-orm";
 import { Plus } from "lucide-react";
-import Link from "next/link";
-import { redirect } from "next/navigation";
+import { getExtracted } from "next-intl/server";
 import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { redirect } from "next/navigation";
+import { Link } from "@/i18n/navigation";
 import { db } from "@/lib/db";
 import { projects } from "@/lib/db/schema";
 import { ProjectCard } from "./project-card";
@@ -17,6 +18,7 @@ export default async function ProjectsPage({
 }: {
   searchParams: Promise<{ page?: string }>;
 }) {
+  const t = await getExtracted();
   const session = await auth();
   if (!session?.user?.id) redirect("/");
 
@@ -52,15 +54,15 @@ export default async function ProjectsPage({
     <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
       <div className="flex items-center justify-between px-4 lg:px-6">
         <div>
-          <h1 className="text-lg font-semibold">Translations</h1>
+          <h1 className="text-lg font-semibold">{t("Translations")}</h1>
           <p className="text-muted-foreground text-sm">
-            Manage your translation projects
+            {t("Manage your translation projects")}
           </p>
         </div>
         <Button asChild size="sm">
           <Link href="/dashboard/projects/new">
             <Plus className="h-3.5 w-3.5 mr-1" />
-            New Project
+            {t("New Project")}
           </Link>
         </Button>
       </div>
@@ -70,12 +72,14 @@ export default async function ProjectsPage({
           <Card>
             <CardContent className="flex flex-col items-center justify-center py-12">
               <p className="text-sm text-muted-foreground mb-4">
-                No projects yet. Upload a translation file to get started.
+                {t(
+                  "No projects yet. Upload a translation file to get started.",
+                )}
               </p>
               <Button asChild variant="outline" size="sm">
                 <Link href="/dashboard/projects/new">
                   <Plus className="h-3.5 w-3.5 mr-1" />
-                  Create your first project
+                  {t("Create your first project")}
                 </Link>
               </Button>
             </CardContent>

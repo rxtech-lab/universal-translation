@@ -1,8 +1,8 @@
 "use client";
 
 import { ArrowRight, Globe, Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
+import { useExtracted } from "next-intl";
 import { createProjectFromParsed } from "@/app/actions/upload";
 import { fetchUrlHtml } from "@/app/actions/html-fetch";
 import { Button } from "@/components/ui/button";
@@ -21,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useRouter } from "@/i18n/navigation";
 import { HtmlClient } from "@/lib/translation/html/client";
 import { LANGUAGES } from "@/lib/translation/languages";
 import type { TranslationProject } from "@/lib/translation/types";
@@ -37,6 +38,7 @@ type UrlState =
   | { step: "error"; message: string };
 
 export function UrlInputClient() {
+  const t = useExtracted();
   const router = useRouter();
   const [url, setUrl] = useState("");
   const [state, setState] = useState<UrlState>({ step: "input" });
@@ -133,20 +135,23 @@ export function UrlInputClient() {
     return (
       <Card className="w-full max-w-lg animate-in fade-in slide-in-from-bottom-4 duration-500">
         <CardHeader>
-          <CardTitle>Configure Languages</CardTitle>
+          <CardTitle>{t("Configure Languages")}</CardTitle>
           <CardDescription>
-            Found {entryCount} translatable segments in {state.fileName}
+            {t("Found {count} translatable segments in {fileName}", {
+              count: String(entryCount),
+              fileName: state.fileName,
+            })}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center gap-3">
             <div className="flex-1">
               <label className="text-xs font-medium text-muted-foreground mb-1.5 block">
-                Source Language
+                {t("Source Language")}
               </label>
               <Select value={sourceLanguage} onValueChange={setSourceLanguage}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select language" />
+                  <SelectValue placeholder={t("Select language")} />
                 </SelectTrigger>
                 <SelectContent>
                   {LANGUAGES.map((lang) => (
@@ -162,11 +167,11 @@ export function UrlInputClient() {
 
             <div className="flex-1">
               <label className="text-xs font-medium text-muted-foreground mb-1.5 block">
-                Target Language
+                {t("Target Language")}
               </label>
               <Select value={targetLanguage} onValueChange={setTargetLanguage}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select language" />
+                  <SelectValue placeholder={t("Select language")} />
                 </SelectTrigger>
                 <SelectContent>
                   {LANGUAGES.filter((lang) => lang.code !== sourceLanguage).map(
@@ -187,14 +192,14 @@ export function UrlInputClient() {
               size="sm"
               onClick={() => setState({ step: "input" })}
             >
-              Back
+              {t("Back")}
             </Button>
             <Button
               size="sm"
               disabled={!targetLanguage || sourceLanguage === targetLanguage}
               onClick={handleCreate}
             >
-              Create Project
+              {t("Create Project")}
             </Button>
           </div>
         </CardContent>
@@ -205,15 +210,15 @@ export function UrlInputClient() {
   return (
     <Card className="w-full max-w-lg animate-in fade-in slide-in-from-bottom-4 duration-500">
       <CardHeader>
-        <CardTitle>New Translation Project</CardTitle>
+        <CardTitle>{t("New Translation Project")}</CardTitle>
         <CardDescription>
-          Enter a URL to fetch and translate a webpage
+          {t("Enter a URL to fetch and translate a webpage")}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div>
           <label className="text-xs font-medium text-muted-foreground mb-1.5 block">
-            Webpage URL
+            {t("Webpage URL")}
           </label>
           <div className="flex gap-2">
             <Input
@@ -239,7 +244,7 @@ export function UrlInputClient() {
               ) : (
                 <Globe className="h-3.5 w-3.5" />
               )}
-              Fetch
+              {t("Fetch")}
             </Button>
           </div>
         </div>
@@ -247,14 +252,14 @@ export function UrlInputClient() {
         {state.step === "fetching" && (
           <div className="flex items-center gap-2 text-sm text-muted-foreground animate-in fade-in duration-300">
             <Loader2 className="h-3.5 w-3.5 animate-spin" />
-            Fetching webpage...
+            {t("Fetching webpage...")}
           </div>
         )}
 
         {state.step === "creating" && (
           <div className="flex items-center gap-2 text-sm text-muted-foreground animate-in fade-in duration-300">
             <Loader2 className="h-3.5 w-3.5 animate-spin" />
-            Creating project...
+            {t("Creating project...")}
           </div>
         )}
 
@@ -266,7 +271,7 @@ export function UrlInputClient() {
               size="sm"
               onClick={() => setState({ step: "input" })}
             >
-              Try again
+              {t("Try again")}
             </Button>
           </div>
         )}

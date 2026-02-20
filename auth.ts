@@ -36,7 +36,18 @@ async function refreshAccessToken(refreshToken: string) {
   };
 }
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+// E2E mock session — returned when IS_E2E is set (server-side only)
+const E2E_MOCK_SESSION = {
+  user: {
+    id: "e2e-test-user",
+    name: "E2E Test",
+    email: "e2e@test.local",
+    image: null,
+  },
+  expires: new Date(Date.now() + 86400000).toISOString(),
+};
+
+const nextAuth = NextAuth({
   debug: process.env.NODE_ENV === "development",
   providers: [
     {
@@ -129,3 +140,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     signIn: "/login",
   },
 });
+
+export const handlers = nextAuth.handlers;
+export const signIn = nextAuth.signIn;
+export const signOut = nextAuth.signOut;
+
+// Override auth() to return mock session when IS_E2E is set
+export const auth: typeof nextAuth.auth = process.env.IS_E2E
+  ? ((() =>
+      Promise.resolve(E2E_MOCK_SESSION)) as unknown as typeof nextAuth.auth)
+  : nextAuth.auth;

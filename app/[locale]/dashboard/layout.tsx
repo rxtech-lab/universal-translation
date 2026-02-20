@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { setRequestLocale } from "next-intl/server";
 import { auth } from "@/auth";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
@@ -6,9 +7,14 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 export default async function DashboardLayout({
   children,
+  params,
 }: {
   children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   const session = await auth();
   if (!session) redirect("/");
 

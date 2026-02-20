@@ -1,57 +1,59 @@
-import { Download, Sparkles, Upload } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getExtracted } from "next-intl/server";
 import { AnimateOnScroll } from "./animate-on-scroll";
 
-const steps = [
-  {
-    icon: Upload,
-    title: "Upload",
-    description:
-      "Drop your translation files in any supported format — Xcode catalogs, subtitles, PO files, or documents.",
-  },
-  {
-    icon: Sparkles,
-    title: "Translate",
-    description:
-      "AI translates with full context awareness, respecting your terminology glossary and maintaining consistency.",
-  },
-  {
-    icon: Download,
-    title: "Download",
-    description:
-      "Export your translated files in their original format, ready to use in your project.",
-  },
-];
+export async function HowItWorks() {
+  const t = await getExtracted();
 
-export function HowItWorks() {
+  const steps = [
+    {
+      number: "01",
+      title: t("Upload"),
+      description: t(
+        "Drop your translation files in any supported format — Xcode catalogs, subtitles, PO files, or documents.",
+      ),
+    },
+    {
+      number: "02",
+      title: t("Translate"),
+      description: t(
+        "AI translates with full context awareness, respecting your terminology glossary and maintaining consistency.",
+      ),
+    },
+    {
+      number: "03",
+      title: t("Download"),
+      description: t(
+        "Export your translated files in their original format, ready to use in your project.",
+      ),
+    },
+  ];
+
   return (
-    <section className="border-t border-border bg-muted/40 px-6 py-20 md:py-32">
+    <section className="px-6 py-28 md:py-40">
       <div className="mx-auto max-w-6xl">
         <AnimateOnScroll className="text-center">
-          <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-            How it works
-          </h2>
-          <p className="mt-3 text-muted-foreground">
-            Three steps from source to translated files
+          <p className="text-xs font-medium tracking-widest text-muted-foreground uppercase">
+            {t("Simple workflow")}
           </p>
+          <h2 className="mt-4 text-4xl font-bold tracking-tight md:text-5xl">
+            {t("How it works")}
+          </h2>
         </AnimateOnScroll>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-3 scroll-stagger">
+        <div className="mt-20 grid gap-8 md:grid-cols-3 md:gap-0 scroll-stagger">
           {steps.map((step) => (
-            <AnimateOnScroll key={step.title}>
-              <Card className="h-full">
-                <CardHeader>
-                  <div className="mb-2 flex size-10 items-center justify-center bg-primary/10">
-                    <step.icon className="size-5 text-primary" />
-                  </div>
-                  <CardTitle className="text-base">{step.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">
-                    {step.description}
-                  </p>
-                </CardContent>
-              </Card>
+            <AnimateOnScroll key={step.number}>
+              <div className="flex flex-col items-center text-center md:px-8">
+                <span className="text-5xl font-bold tracking-tighter text-primary/20 md:text-6xl">
+                  {step.number}
+                </span>
+                <h3 className="mt-4 text-lg font-semibold tracking-tight">
+                  {step.title}
+                </h3>
+                <p className="mt-2 max-w-xs text-sm leading-relaxed text-muted-foreground">
+                  {step.description}
+                </p>
+              </div>
             </AnimateOnScroll>
           ))}
         </div>

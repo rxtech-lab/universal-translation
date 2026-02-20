@@ -25,6 +25,11 @@ interface XclocEditorProps {
     entryId: string,
     update: { targetText?: string; comment?: string },
   ) => void;
+  onTranslateLine: (
+    resourceId: string,
+    entryId: string,
+    suggestion?: string,
+  ) => void;
   streamingEntryIds: Set<string>;
   terms: Term[];
 }
@@ -32,6 +37,7 @@ interface XclocEditorProps {
 export function XclocEditor({
   project,
   onEntryUpdate,
+  onTranslateLine,
   streamingEntryIds,
   terms,
 }: XclocEditorProps) {
@@ -172,6 +178,9 @@ export function XclocEditor({
                       entry={entry}
                       resourceId={activeResourceId}
                       onUpdate={(update) => handleEntryUpdate(entry.id, update)}
+                      onTranslateLine={(suggestion) =>
+                        onTranslateLine(activeResourceId, entry.id, suggestion)
+                      }
                       isStreaming={streamingEntryIds.has(
                         `${activeResourceId}:${entry.id}`,
                       )}

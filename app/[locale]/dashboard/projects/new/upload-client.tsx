@@ -2,8 +2,8 @@
 
 import { upload } from "@vercel/blob/client";
 import { FileArchive, FileText, Loader2, Upload } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useCallback, useRef, useState } from "react";
+import { useExtracted } from "next-intl";
 import { createProjectFromParsed } from "@/app/actions/upload";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -14,9 +14,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useRouter } from "@/i18n/navigation";
 import type { TranslationClient } from "@/lib/translation/client";
 import { LyricsClient } from "@/lib/translation/lyrics/client";
+import type { PoClient } from "@/lib/translation/po/client";
 import { PoLanguageSelector } from "@/lib/translation/po/language-selector";
+import { PoReferenceUpload } from "@/lib/translation/po/reference-upload";
 import { createDefaultRegistry } from "@/lib/translation/registry-impl";
 import { SrtLanguageSelector } from "@/lib/translation/srt/language-selector";
 import type { TranslationProject } from "@/lib/translation/types";
@@ -37,6 +40,14 @@ type UploadState =
       fileContent: string;
     }
   | {
+      step: "reference-upload";
+      client: TranslationClient;
+      formatId: string;
+      formatData: Record<string, unknown>;
+      blobUrl: string;
+      fileName: string;
+    }
+  | {
       step: "language-select";
       client: TranslationClient;
       formatId: string;
@@ -48,6 +59,7 @@ type UploadState =
   | { step: "error"; message: string };
 
 export function UploadClient() {
+  const t = useExtracted();
   const router = useRouter();
   const [state, setState] = useState<UploadState>({ step: "idle" });
   const [dragOver, setDragOver] = useState(false);
@@ -56,12 +68,18 @@ export function UploadClient() {
   const processFile = useCallback(
     async (file: File) => {
       try {
-        // Step 1: Upload to Vercel Blob
+        // Step 1: Upload to Vercel Blob (skip in e2e mode)
         setState({ step: "uploading", progress: 0 });
-        const blob = await upload(file.name, file, {
-          access: "public",
-          handleUploadUrl: "/api/upload",
-        });
+        let blobUrl: string;
+        if (process.env.NEXT_PUBLIC_IS_E2E) {
+          blobUrl = `e2e://local/${file.name}`;
+        } else {
+          const blob = await upload(file.name, file, {
+            access: "public",
+            handleUploadUrl: "/api/upload",
+          });
+          blobUrl = blob.url;
+        }
 
         // Step 2: Parse locally
         setState({ step: "parsing" });
@@ -124,9 +142,25 @@ export function UploadClient() {
               client: resolved.client,
               formatId,
               formatData,
-              blobUrl: blob.url,
+              blobUrl,
               fileName: file.name,
               fileContent,
+            });
+            return;
+          }
+        }
+
+        // For PO files, check if msgids are hash-based and need a reference file
+        if (formatId === "po") {
+          const poClient = resolved.client as PoClient;
+          if (poClient.hasHashMsgids()) {
+            setState({
+              step: "reference-upload",
+              client: resolved.client,
+              formatId,
+              formatData,
+              blobUrl,
+              fileName: file.name,
             });
             return;
           }
@@ -144,7 +178,7 @@ export function UploadClient() {
             client: resolved.client,
             formatId,
             formatData,
-            blobUrl: blob.url,
+            blobUrl,
             fileName: file.name,
           });
           return;
@@ -159,7 +193,7 @@ export function UploadClient() {
         const projectId = await createProjectFromParsed({
           name: file.name.replace(/\.zip$/, ""),
           formatId,
-          blobUrl: blob.url,
+          blobUrl,
           content: project,
           formatData,
           sourceLanguage,
@@ -279,6 +313,57 @@ export function UploadClient() {
     [state],
   );
 
+  const handleReferenceConfirm = useCallback(
+    (referencePoText: string) => {
+      if (state.step !== "reference-upload") return;
+
+      const poClient = state.client as unknown as PoClient;
+      const result = poClient.applyReferenceDocument(referencePoText);
+
+      if (result.hasError) {
+        setState({
+          step: "error",
+          message: result.errorMessage,
+        });
+        return;
+      }
+
+      // Re-get format data after applying reference
+      let formatData: Record<string, unknown> = {};
+      if (
+        "getFormatData" in state.client &&
+        typeof state.client.getFormatData === "function"
+      ) {
+        formatData = (
+          state.client as { getFormatData: () => unknown }
+        ).getFormatData() as Record<string, unknown>;
+      }
+
+      setState({
+        step: "language-select",
+        client: state.client,
+        formatId: state.formatId,
+        formatData,
+        blobUrl: state.blobUrl,
+        fileName: state.fileName,
+      });
+    },
+    [state],
+  );
+
+  const handleReferenceSkip = useCallback(() => {
+    if (state.step !== "reference-upload") return;
+
+    setState({
+      step: "language-select",
+      client: state.client,
+      formatId: state.formatId,
+      formatData: state.formatData,
+      blobUrl: state.blobUrl,
+      fileName: state.fileName,
+    });
+  }, [state]);
+
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
       e.preventDefault();
@@ -308,6 +393,18 @@ export function UploadClient() {
     );
   }
 
+  // Show reference file upload for PO files with hash-based msgids
+  if (state.step === "reference-upload") {
+    return (
+      <PoReferenceUpload
+        fileName={state.fileName}
+        onConfirm={handleReferenceConfirm}
+        onSkip={handleReferenceSkip}
+        onCancel={() => setState({ step: "idle" })}
+      />
+    );
+  }
+
   // Show language selector for single-file formats
   if (state.step === "language-select") {
     const LangSelector =
@@ -326,9 +423,9 @@ export function UploadClient() {
   return (
     <Card className="w-full max-w-lg animate-in fade-in slide-in-from-bottom-4 duration-500">
       <CardHeader>
-        <CardTitle>New Translation Project</CardTitle>
+        <CardTitle>{t("New Translation Project")}</CardTitle>
         <CardDescription>
-          Upload a translation file to get started
+          {t("Upload a translation file to get started")}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -353,6 +450,7 @@ export function UploadClient() {
           }}
           role="button"
           tabIndex={0}
+          data-testid="upload-dropzone"
         >
           <input
             ref={inputRef}
@@ -360,6 +458,7 @@ export function UploadClient() {
             accept=".zip,.xcloc,.srt,.po,.txt,.md,.markdown,.docx,.html,.htm"
             onChange={handleFileSelect}
             className="hidden"
+            data-testid="upload-file-input"
           />
 
           {state.step === "idle" && (
@@ -367,11 +466,12 @@ export function UploadClient() {
               <Upload className="h-8 w-8 text-muted-foreground" />
               <div>
                 <p className="text-sm font-medium">
-                  Drop your file here or click to browse
+                  {t("Drop your file here or click to browse")}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Supports .xcloc (as .zip), .srt, .po, .txt, .md, .docx, and
-                  .html
+                  {t(
+                    "Supports .xcloc (as .zip), .srt, .po, .txt, .md, .docx, and .html",
+                  )}
                 </p>
               </div>
               <div className="flex flex-wrap justify-center gap-2">
@@ -410,27 +510,32 @@ export function UploadClient() {
           {state.step === "uploading" && (
             <div className="flex flex-col items-center gap-3 animate-in fade-in duration-300">
               <Loader2 className="h-8 w-8 text-primary animate-spin" />
-              <p className="text-sm font-medium">Uploading...</p>
+              <p className="text-sm font-medium">{t("Uploading...")}</p>
             </div>
           )}
 
           {state.step === "parsing" && (
             <div className="flex flex-col items-center gap-3 animate-in fade-in duration-300">
               <Loader2 className="h-8 w-8 text-primary animate-spin" />
-              <p className="text-sm font-medium">Parsing translation file...</p>
+              <p className="text-sm font-medium">
+                {t("Parsing translation file...")}
+              </p>
             </div>
           )}
 
           {state.step === "creating" && (
             <div className="flex flex-col items-center gap-3 animate-in fade-in duration-300">
               <Loader2 className="h-8 w-8 text-primary animate-spin" />
-              <p className="text-sm font-medium">Creating project...</p>
+              <p className="text-sm font-medium">{t("Creating project...")}</p>
             </div>
           )}
 
           {state.step === "error" && (
             <div className="flex flex-col items-center gap-3 animate-in fade-in duration-300">
-              <p className="text-sm font-medium text-destructive">
+              <p
+                className="text-sm font-medium text-destructive"
+                data-testid="upload-error"
+              >
                 {state.message}
               </p>
               <Button
@@ -441,7 +546,7 @@ export function UploadClient() {
                   setState({ step: "idle" });
                 }}
               >
-                Try again
+                {t("Try again")}
               </Button>
             </div>
           )}

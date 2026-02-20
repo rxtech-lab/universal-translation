@@ -5,6 +5,7 @@ import { memo, useCallback, useRef, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { EntryRowActions } from "../components/entry-row-actions";
 import { PlaceholderText } from "../components/placeholder-text";
 import { TermText } from "../components/term-text";
 import type { Term } from "../tools/term-tools";
@@ -14,6 +15,7 @@ interface XclocEntryRowProps {
   entry: TranslationEntry;
   resourceId: string;
   onUpdate: (update: { targetText?: string; comment?: string }) => void;
+  onTranslateLine: (suggestion?: string) => void;
   isStreaming: boolean;
   terms: Term[];
 }
@@ -21,6 +23,7 @@ interface XclocEntryRowProps {
 export const XclocEntryRow = memo(function XclocEntryRow({
   entry,
   onUpdate,
+  onTranslateLine,
   isStreaming,
   terms,
 }: XclocEntryRowProps) {
@@ -81,6 +84,13 @@ export const XclocEntryRow = memo(function XclocEntryRow({
             max: {entry.maxLength}
           </span>
         )}
+        <EntryRowActions
+          sourceText={entry.sourceText}
+          isTranslated={isTranslated}
+          isStreaming={isStreaming}
+          onTranslateLine={onTranslateLine}
+          onClearTranslation={() => onUpdate({ targetText: "" })}
+        />
       </div>
 
       {/* Source text with placeholder highlighting */}

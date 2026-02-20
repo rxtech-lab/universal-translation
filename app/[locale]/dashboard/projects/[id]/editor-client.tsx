@@ -541,6 +541,7 @@ export function EditorClient({
         <DocumentEditor
           project={project}
           onEntryUpdate={handleEntryUpdate}
+          onTranslateLine={handleTranslateLine}
           streamingEntryIds={streamingEntryIds}
           terms={terms}
         />
@@ -548,6 +549,7 @@ export function EditorClient({
         <PoEditor
           project={project}
           onEntryUpdate={handleEntryUpdate}
+          onTranslateLine={handleTranslateLine}
           streamingEntryIds={streamingEntryIds}
           terms={terms}
         />
@@ -555,6 +557,7 @@ export function EditorClient({
         <SrtEditor
           project={project}
           onEntryUpdate={handleEntryUpdate}
+          onTranslateLine={handleTranslateLine}
           streamingEntryIds={streamingEntryIds}
           terms={terms}
         />
@@ -563,6 +566,7 @@ export function EditorClient({
           project={project}
           client={client as HtmlClient}
           onEntryUpdate={handleEntryUpdate}
+          onTranslateLine={handleTranslateLine}
           streamingEntryIds={streamingEntryIds}
           terms={terms}
         />
@@ -570,6 +574,7 @@ export function EditorClient({
         <XclocEditor
           project={project}
           onEntryUpdate={handleEntryUpdate}
+          onTranslateLine={handleTranslateLine}
           streamingEntryIds={streamingEntryIds}
           terms={terms}
         />

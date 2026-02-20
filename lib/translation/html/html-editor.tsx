@@ -27,6 +27,11 @@ interface HtmlEditorProps {
     entryId: string,
     update: { targetText?: string; comment?: string },
   ) => void;
+  onTranslateLine: (
+    resourceId: string,
+    entryId: string,
+    suggestion?: string,
+  ) => void;
   streamingEntryIds: Set<string>;
   terms: Term[];
 }
@@ -35,6 +40,7 @@ export function HtmlEditor({
   project,
   client,
   onEntryUpdate,
+  onTranslateLine,
   streamingEntryIds,
   terms,
 }: HtmlEditorProps) {
@@ -180,6 +186,9 @@ export function HtmlEditor({
                       entry={entry}
                       resourceId={activeResourceId}
                       onUpdate={(update) => handleEntryUpdate(entry.id, update)}
+                      onTranslateLine={(suggestion) =>
+                        onTranslateLine(activeResourceId, entry.id, suggestion)
+                      }
                       isStreaming={streamingEntryIds.has(
                         `${activeResourceId}:${entry.id}`,
                       )}

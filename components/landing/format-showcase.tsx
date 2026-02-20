@@ -1,71 +1,92 @@
 import { AppWindow, FileText, Globe, Subtitles } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { getExtracted } from "next-intl/server";
 import { AnimateOnScroll } from "./animate-on-scroll";
 
-const formats = [
-  {
-    icon: AppWindow,
-    name: "Xcode Localization",
-    extensions: [".xcloc"],
-    description:
-      "Apple's localization export format containing XLIFF translations. Ship your iOS, macOS, and visionOS apps in every language.",
-  },
-  {
-    icon: Subtitles,
-    name: "SubRip Subtitles",
-    extensions: [".srt"],
-    description:
-      "Timestamp-based subtitle files for video content and lyrics. AI preserves tone, rhyme, and readability.",
-  },
-  {
-    icon: Globe,
-    name: "GNU gettext",
-    extensions: [".po"],
-    description:
-      "Industry-standard format for app and website localization used by thousands of open-source projects.",
-  },
-  {
-    icon: FileText,
-    name: "Documents",
-    extensions: [".txt", ".md", ".docx"],
-    description:
-      "Plain text, Markdown, and Word documents. From READMEs to full manuscripts — translate any written content.",
-  },
-];
+export async function FormatShowcase() {
+  const t = await getExtracted();
 
-export function FormatShowcase() {
+  const formats = [
+    {
+      icon: AppWindow,
+      name: t("Xcode Localization"),
+      extensions: [".xcloc"],
+      description: t(
+        "Ship your iOS, macOS, and visionOS apps in every language with Apple's native localization format.",
+      ),
+    },
+    {
+      icon: Subtitles,
+      name: t("SubRip Subtitles"),
+      extensions: [".srt"],
+      description: t(
+        "Timestamp-aware subtitle translation that preserves tone, rhyme, and readability.",
+      ),
+    },
+    {
+      icon: Globe,
+      name: t("GNU gettext"),
+      extensions: [".po"],
+      description: t(
+        "Industry-standard localization used by thousands of open-source projects.",
+      ),
+    },
+    {
+      icon: FileText,
+      name: t("Documents"),
+      extensions: [".txt", ".md", ".docx"],
+      description: t(
+        "From READMEs to manuscripts — translate any written content while preserving formatting.",
+      ),
+    },
+  ];
+
   return (
-    <section className="border-t border-border bg-muted/40 px-6 py-20 md:py-32">
+    <section className="relative px-6 py-28 md:py-40">
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-px"
+        style={{
+          background:
+            "linear-gradient(to right, transparent, var(--color-border), transparent)",
+        }}
+        aria-hidden="true"
+      />
+
       <div className="mx-auto max-w-6xl">
         <AnimateOnScroll className="text-center">
-          <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-            Supported formats
+          <p className="text-xs font-medium tracking-widest text-muted-foreground uppercase">
+            {t("File formats")}
+          </p>
+          <h2 className="mt-4 text-4xl font-bold tracking-tight md:text-5xl">
+            {t("Supports what you use")}
           </h2>
-          <p className="mt-3 text-muted-foreground">
-            From app developer to content creator, we have you covered
+          <p className="mx-auto mt-4 max-w-lg text-base text-muted-foreground">
+            {t("From app developer to content creator, we have you covered")}
           </p>
         </AnimateOnScroll>
 
-        <div className="mt-12 grid gap-4 scroll-stagger">
+        <div className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 scroll-stagger">
           {formats.map((fmt) => (
-            <AnimateOnScroll key={fmt.name} variant="left">
-              <div className="flex items-start gap-4 border border-border bg-background p-5">
-                <div className="flex size-10 shrink-0 items-center justify-center bg-primary/10">
-                  <fmt.icon className="size-5 text-primary" />
+            <AnimateOnScroll key={fmt.name}>
+              <div className="group relative flex h-full flex-col items-center border border-border bg-card p-8 text-center transition-colors hover:bg-accent/50">
+                <div className="flex size-14 items-center justify-center bg-primary/10">
+                  <fmt.icon className="size-6 text-primary" />
                 </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-sm font-semibold">{fmt.name}</h3>
-                    {fmt.extensions.map((ext) => (
-                      <Badge key={ext} variant="outline" className="text-xs">
-                        {ext}
-                      </Badge>
-                    ))}
-                  </div>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    {fmt.description}
-                  </p>
+                <h3 className="mt-5 text-sm font-semibold tracking-tight">
+                  {fmt.name}
+                </h3>
+                <div className="mt-2 flex flex-wrap justify-center gap-1.5">
+                  {fmt.extensions.map((ext) => (
+                    <span
+                      key={ext}
+                      className="inline-block bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground"
+                    >
+                      {ext}
+                    </span>
+                  ))}
                 </div>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  {fmt.description}
+                </p>
               </div>
             </AnimateOnScroll>
           ))}

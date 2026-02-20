@@ -1,8 +1,8 @@
 "use client";
 
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
+import { useExtracted } from "next-intl";
 import { toast } from "sonner";
 import { deleteProject, renameProject } from "@/app/actions/projects";
 import {
@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Link } from "@/i18n/navigation";
 
 interface ProjectCardProps {
   project: {
@@ -48,6 +49,7 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project }: ProjectCardProps) {
+  const t = useExtracted();
   const [renameDialogOpen, setRenameDialogOpen] = useState(false);
   const [deleteAlertOpen, setDeleteAlertOpen] = useState(false);
   const [newName, setNewName] = useState(project.name);
@@ -62,10 +64,10 @@ export function ProjectCard({ project }: ProjectCardProps) {
     setIsRenaming(true);
     try {
       await renameProject(project.id, newName.trim());
-      toast.success("Project renamed");
+      toast.success(t("Project renamed"));
       setRenameDialogOpen(false);
     } catch {
-      toast.error("Failed to rename project");
+      toast.error(t("Failed to rename project"));
     } finally {
       setIsRenaming(false);
     }
@@ -75,9 +77,9 @@ export function ProjectCard({ project }: ProjectCardProps) {
     setIsDeleting(true);
     try {
       await deleteProject(project.id);
-      toast.success("Project deleted");
+      toast.success(t("Project deleted"));
     } catch {
-      toast.error("Failed to delete project");
+      toast.error(t("Failed to delete project"));
       setIsDeleting(false);
     }
   };
@@ -125,7 +127,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
                     }}
                   >
                     <Pencil className="h-3.5 w-3.5" />
-                    Rename
+                    {t("Rename")}
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
@@ -133,7 +135,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
                     onClick={() => setDeleteAlertOpen(true)}
                   >
                     <Trash2 className="h-3.5 w-3.5" />
-                    Delete
+                    {t("Delete")}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -145,10 +147,10 @@ export function ProjectCard({ project }: ProjectCardProps) {
       <Dialog open={renameDialogOpen} onOpenChange={setRenameDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Rename Project</DialogTitle>
+            <DialogTitle>{t("Rename Project")}</DialogTitle>
           </DialogHeader>
           <div className="grid gap-2">
-            <Label htmlFor="project-name">Project name</Label>
+            <Label htmlFor="project-name">{t("Project name")}</Label>
             <Input
               id="project-name"
               value={newName}
@@ -162,7 +164,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
           <DialogFooter>
             <DialogClose asChild>
               <Button variant="outline" size="sm">
-                Cancel
+                {t("Cancel")}
               </Button>
             </DialogClose>
             <Button
@@ -170,7 +172,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
               onClick={handleRename}
               disabled={isRenaming || !newName.trim()}
             >
-              {isRenaming ? "Renaming..." : "Rename"}
+              {isRenaming ? t("Renaming...") : t("Rename")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -179,15 +181,17 @@ export function ProjectCard({ project }: ProjectCardProps) {
       <AlertDialog open={deleteAlertOpen} onOpenChange={setDeleteAlertOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete project?</AlertDialogTitle>
+            <AlertDialogTitle>{t("Delete project?")}</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete &ldquo;{project.name}&rdquo; and all
-              its translations. This action cannot be undone.
+              {t(
+                'This will permanently delete "{name}" and all its translations. This action cannot be undone.',
+                { name: project.name },
+              )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel size="sm" disabled={isDeleting}>
-              Cancel
+              {t("Cancel")}
             </AlertDialogCancel>
             <AlertDialogAction
               size="sm"
@@ -195,7 +199,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
               onClick={handleDelete}
               disabled={isDeleting}
             >
-              {isDeleting ? "Deleting..." : "Delete"}
+              {isDeleting ? t("Deleting...") : t("Delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

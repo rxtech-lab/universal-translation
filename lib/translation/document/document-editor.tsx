@@ -15,6 +15,11 @@ interface DocumentEditorProps {
     entryId: string,
     update: { targetText?: string; comment?: string },
   ) => void;
+  onTranslateLine: (
+    resourceId: string,
+    entryId: string,
+    suggestion?: string,
+  ) => void;
   streamingEntryIds: Set<string>;
   terms: Term[];
 }
@@ -22,6 +27,7 @@ interface DocumentEditorProps {
 export function DocumentEditor({
   project,
   onEntryUpdate,
+  onTranslateLine,
   streamingEntryIds,
   terms,
 }: DocumentEditorProps) {
@@ -52,11 +58,14 @@ export function DocumentEditor({
   );
 
   return (
-    <Card className="flex-1 flex flex-col min-h-0">
+    <Card
+      className="flex-1 flex flex-col min-h-0"
+      data-testid="document-editor"
+    >
       <CardHeader className="border-b shrink-0">
         <div className="flex items-center justify-between">
           <CardTitle>{resource?.label ?? "Document"}</CardTitle>
-          <Badge variant="outline">
+          <Badge variant="outline" data-testid="document-stats">
             {stats.translated}/{stats.total} translated
           </Badge>
         </div>
@@ -84,6 +93,9 @@ export function DocumentEditor({
                     entry={entry}
                     resourceId={resourceId}
                     onUpdate={(update) => handleEntryUpdate(entry.id, update)}
+                    onTranslateLine={(suggestion) =>
+                      onTranslateLine(resourceId, entry.id, suggestion)
+                    }
                     isStreaming={streamingEntryIds.has(
                       `${resourceId}:${entry.id}`,
                     )}

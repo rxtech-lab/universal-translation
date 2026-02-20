@@ -1,10 +1,9 @@
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { getExtracted } from "next-intl/server";
+import { LanguageMorph } from "@/components/landing/language-morph";
+import { ParticleCanvas } from "@/components/landing/particle-canvas";
 import { WaitingListButton } from "@/components/landing/waiting-list-button";
 
-const formats = [".xcloc", ".srt", ".po", ".txt", ".md", ".docx"];
-
-export function HeroSection({
+export async function HeroSection({
   isSignedIn,
   signInAction,
   waitingListEnabled,
@@ -17,21 +16,35 @@ export function HeroSection({
   isOnWaitingList: boolean;
   isApproved: boolean;
 }) {
-  return (
-    <section className="flex min-h-screen flex-col items-center justify-center px-6">
-      <div className="mx-auto max-w-4xl text-center">
-        <h1 className="hero-reveal hero-delay-0 text-5xl font-bold tracking-tight md:text-7xl">
-          Translate anything,{" "}
-          <span className="text-primary">powered by AI</span>
-        </h1>
+  const t = await getExtracted();
 
-        <p className="hero-reveal hero-delay-1 mx-auto mt-6 max-w-2xl text-lg text-muted-foreground md:text-xl">
-          From Xcode localization catalogs to subtitles and documents. Upload
-          your files, get context-aware translations with terminology
-          consistency.
+  return (
+    <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6">
+      <ParticleCanvas />
+      <div className="hero-gradient" aria-hidden="true">
+        <div className="hero-blob hero-blob-1" />
+        <div className="hero-blob hero-blob-2" />
+        <div className="hero-blob hero-blob-3" />
+      </div>
+
+      <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center gap-10 text-center">
+        <p className="hero-reveal hero-delay-0 text-xs font-medium tracking-widest text-muted-foreground uppercase">
+          {t("Universal Translation")}
         </p>
 
-        <div className="hero-reveal hero-delay-2 mt-8 flex items-center justify-center gap-3">
+        <h1 className="hero-reveal hero-delay-0 text-4xl font-bold tracking-tight md:text-5xl">
+          {t("Every language. One click.")}
+        </h1>
+
+        <div className="hero-reveal hero-delay-1">
+          <LanguageMorph />
+        </div>
+
+        <p className="hero-reveal hero-delay-2 text-sm font-light tracking-widest text-muted-foreground uppercase">
+          {t("Upload. Translate. Done.")}
+        </p>
+
+        <div className="hero-reveal hero-delay-3">
           <WaitingListButton
             isSignedIn={isSignedIn}
             signInAction={signInAction}
@@ -39,17 +52,6 @@ export function HeroSection({
             isOnWaitingList={isOnWaitingList}
             isApproved={isApproved}
           />
-          <Button variant="outline" size="lg" asChild>
-            <a href="#features">Learn More</a>
-          </Button>
-        </div>
-
-        <div className="hero-reveal hero-delay-3 mt-10 flex flex-wrap items-center justify-center gap-2">
-          {formats.map((fmt) => (
-            <Badge key={fmt} variant="secondary" className="text-xs">
-              {fmt}
-            </Badge>
-          ))}
         </div>
       </div>
     </section>
