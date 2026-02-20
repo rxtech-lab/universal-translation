@@ -1,4 +1,4 @@
-import { strToU8, zipSync } from "fflate";
+import { strToU8, unzipSync, zipSync } from "fflate";
 import type { TranslationClient } from "../client";
 import type { Term } from "../tools/term-tools";
 import type {
@@ -359,10 +359,12 @@ export class DocumentClient
     };
   }
 
-  private exportDocx(
+  private async exportDocx(
     resource: TranslationResource,
     getTranslatedText: (entry: TranslationEntry) => string,
-  ): OperationResult<{ downloadUrl?: string; blob?: Blob; fileName: string }> {
+  ): Promise<
+    OperationResult<{ downloadUrl?: string; blob?: Blob; fileName: string }>
+  > {
     if (!this.documentXml) {
       return {
         hasError: true,
@@ -391,6 +393,27 @@ export class DocumentClient
         } else {
           zipEntries[file.path] = file.content;
         }
+      }
+    } else if (this.blobUrl) {
+      // Fetch the original archive from blob storage and reconstruct
+      try {
+        const response = await fetch(this.blobUrl);
+        const buffer = new Uint8Array(await response.arrayBuffer());
+        const entries = unzipSync(buffer);
+
+        for (const [path, content] of Object.entries(entries)) {
+          if (path.endsWith("/") || path.includes("__MACOSX")) continue;
+          if (path === this.documentXmlPath) {
+            zipEntries[path] = translatedXmlBytes;
+          } else {
+            zipEntries[path] = content;
+          }
+        }
+      } catch (err) {
+        return {
+          hasError: true,
+          errorMessage: `Failed to download original file: ${err instanceof Error ? err.message : String(err)}`,
+        };
       }
     } else if (this.documentXmlPath) {
       zipEntries[this.documentXmlPath] = translatedXmlBytes;
