@@ -34,7 +34,12 @@ export function TranslateDropdown({
 
   if (isTranslating) {
     return (
-      <Button variant="outline" size="sm" onClick={onStopTranslation}>
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={onStopTranslation}
+        data-testid="translate-stop-button"
+      >
         <Square className="h-3 w-3 mr-1" />
         Stop
       </Button>
@@ -45,18 +50,21 @@ export function TranslateDropdown({
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" data-testid="translate-button">
             <Languages className="h-3.5 w-3.5 mr-1" />
             Translate
             <ChevronDown className="h-3 w-3 ml-1" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={onTranslate}>
+          <DropdownMenuItem onClick={onTranslate} data-testid="translate-all">
             <Languages className="h-3.5 w-3.5" />
             Translate All
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setEditDialogOpen(true)}>
+          <DropdownMenuItem
+            onClick={() => setEditDialogOpen(true)}
+            data-testid="translate-edit"
+          >
             <MessageSquare className="h-3.5 w-3.5" />
             Edit Translate
           </DropdownMenuItem>

@@ -52,7 +52,7 @@ export function SrtLanguageSelector({
               Source Language
             </label>
             <Select value={sourceLanguage} onValueChange={setSourceLanguage}>
-              <SelectTrigger>
+              <SelectTrigger data-testid="source-language-trigger">
                 <SelectValue placeholder="Select language" />
               </SelectTrigger>
               <SelectContent>
@@ -72,7 +72,7 @@ export function SrtLanguageSelector({
               Target Language
             </label>
             <Select value={targetLanguage} onValueChange={setTargetLanguage}>
-              <SelectTrigger>
+              <SelectTrigger data-testid="target-language-trigger">
                 <SelectValue placeholder="Select language" />
               </SelectTrigger>
               <SelectContent>
@@ -96,6 +96,7 @@ export function SrtLanguageSelector({
             size="sm"
             disabled={!canConfirm}
             onClick={() => onConfirm(sourceLanguage, targetLanguage)}
+            data-testid="create-project-button"
           >
             Create Project
           </Button>

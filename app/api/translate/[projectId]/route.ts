@@ -45,6 +45,68 @@ export async function POST(
 
   const encoder = new TextEncoder();
 
+  // E2E mock: return fake translations without calling AI
+  if (process.env.IS_E2E) {
+    const mockStream = new ReadableStream({
+      async start(controller) {
+        const emit = (data: string) =>
+          controller.enqueue(encoder.encode(`data: ${data}\n\n`));
+
+        emit(
+          JSON.stringify({
+            type: "translate-start",
+            total: body.entries.length,
+          }),
+        );
+
+        for (let i = 0; i < body.entries.length; i++) {
+          const entry = body.entries[i];
+          const mockTranslation = `[E2E] ${entry.sourceText}`;
+
+          const resource = projectContent.resources.find(
+            (r) => r.id === entry.resourceId,
+          );
+          if (resource) {
+            const projectEntry = resource.entries.find(
+              (e) => e.id === entry.id,
+            );
+            if (projectEntry) {
+              projectEntry.targetText = mockTranslation;
+            }
+          }
+
+          emit(
+            JSON.stringify({
+              type: "entry-translated",
+              resourceId: entry.resourceId,
+              entryId: entry.id,
+              targetText: mockTranslation,
+              current: i + 1,
+            }),
+          );
+        }
+
+        await db
+          .update(projects)
+          .set({ content: projectContent, updatedAt: new Date() })
+          .where(and(eq(projects.id, projectId), eq(projects.userId, userId)));
+
+        emit(JSON.stringify({ type: "batch-complete", batchIndex: 0 }));
+        emit(JSON.stringify({ type: "complete" }));
+        emit("[DONE]");
+        controller.close();
+      },
+    });
+
+    return new Response(mockStream, {
+      headers: {
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+        Connection: "keep-alive",
+      },
+    });
+  }
+
   const stream = new ReadableStream({
     async start(controller) {
       const emit = (data: string) =>

@@ -56,12 +56,18 @@ export function UploadClient() {
   const processFile = useCallback(
     async (file: File) => {
       try {
-        // Step 1: Upload to Vercel Blob
+        // Step 1: Upload to Vercel Blob (skip in e2e mode)
         setState({ step: "uploading", progress: 0 });
-        const blob = await upload(file.name, file, {
-          access: "public",
-          handleUploadUrl: "/api/upload",
-        });
+        let blobUrl: string;
+        if (process.env.NEXT_PUBLIC_IS_E2E) {
+          blobUrl = `e2e://local/${file.name}`;
+        } else {
+          const blob = await upload(file.name, file, {
+            access: "public",
+            handleUploadUrl: "/api/upload",
+          });
+          blobUrl = blob.url;
+        }
 
         // Step 2: Parse locally
         setState({ step: "parsing" });
@@ -124,7 +130,7 @@ export function UploadClient() {
               client: resolved.client,
               formatId,
               formatData,
-              blobUrl: blob.url,
+              blobUrl,
               fileName: file.name,
               fileContent,
             });
@@ -144,7 +150,7 @@ export function UploadClient() {
             client: resolved.client,
             formatId,
             formatData,
-            blobUrl: blob.url,
+            blobUrl,
             fileName: file.name,
           });
           return;
@@ -159,7 +165,7 @@ export function UploadClient() {
         const projectId = await createProjectFromParsed({
           name: file.name.replace(/\.zip$/, ""),
           formatId,
-          blobUrl: blob.url,
+          blobUrl,
           content: project,
           formatData,
           sourceLanguage,
@@ -353,6 +359,7 @@ export function UploadClient() {
           }}
           role="button"
           tabIndex={0}
+          data-testid="upload-dropzone"
         >
           <input
             ref={inputRef}
@@ -360,6 +367,7 @@ export function UploadClient() {
             accept=".zip,.xcloc,.srt,.po,.txt,.md,.markdown,.docx,.html,.htm"
             onChange={handleFileSelect}
             className="hidden"
+            data-testid="upload-file-input"
           />
 
           {state.step === "idle" && (
@@ -430,7 +438,10 @@ export function UploadClient() {
 
           {state.step === "error" && (
             <div className="flex flex-col items-center gap-3 animate-in fade-in duration-300">
-              <p className="text-sm font-medium text-destructive">
+              <p
+                className="text-sm font-medium text-destructive"
+                data-testid="upload-error"
+              >
                 {state.message}
               </p>
               <Button

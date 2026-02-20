@@ -57,6 +57,7 @@ export const DocumentEntryRow = memo(function DocumentEntryRow({
         "border-b px-3 md:px-4 py-3 transition-colors",
         isStreaming && "bg-primary/5 animate-in fade-in duration-300",
       )}
+      data-testid={`entry-row-${entry.id}`}
     >
       {/* Paragraph number, kind, and status */}
       <div className="flex items-center gap-2 mb-2 flex-wrap">
@@ -90,7 +91,10 @@ export const DocumentEntryRow = memo(function DocumentEntryRow({
         <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">
           Source
         </span>
-        <div className="mt-1 text-xs bg-muted/50 px-2.5 py-1.5 border whitespace-pre-wrap">
+        <div
+          className="mt-1 text-xs bg-muted/50 px-2.5 py-1.5 border whitespace-pre-wrap"
+          data-testid={`entry-source-${entry.id}`}
+        >
           <PlaceholderText text={entry.sourceText} />
         </div>
       </div>
@@ -106,6 +110,7 @@ export const DocumentEntryRow = memo(function DocumentEntryRow({
             value={entry.targetText}
             onChange={handleTargetChange}
             onBlur={isTranslated ? handleBlur : undefined}
+            data-testid={`entry-target-${entry.id}`}
             className={cn(
               "mt-1 min-h-10",
               isStreaming && "border-primary/30 bg-primary/5",
@@ -116,6 +121,7 @@ export const DocumentEntryRow = memo(function DocumentEntryRow({
           <button
             type="button"
             onClick={handleDisplayClick}
+            data-testid={`entry-target-${entry.id}`}
             className={cn(
               "mt-1 text-xs px-2.5 py-1.5 border cursor-text min-h-10 w-full text-left whitespace-pre-wrap",
               isStreaming

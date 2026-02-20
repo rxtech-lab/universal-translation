@@ -15,16 +15,37 @@ export function FooterCta({
   isApproved: boolean;
 }) {
   return (
-    <section className="px-6 py-20 md:py-32">
-      <div className="mx-auto max-w-6xl">
+    <section className="relative overflow-hidden px-6 py-28 md:py-40">
+      {/* Ambient gradient background */}
+      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 60% 50% at 50% 50%, oklch(0.59 0.22 1 / 6%), transparent)",
+          }}
+        />
+      </div>
+
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-px"
+        style={{
+          background:
+            "linear-gradient(to right, transparent, var(--color-border), transparent)",
+        }}
+        aria-hidden="true"
+      />
+
+      <div className="relative mx-auto max-w-6xl">
         <AnimateOnScroll className="flex flex-col items-center text-center">
-          <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
+          <h2 className="text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
             Ready to translate?
           </h2>
-          <p className="mt-3 max-w-md text-muted-foreground">
-            Upload your first file and see AI-powered translation in action.
+          <p className="mt-5 max-w-md text-base text-muted-foreground">
+            Upload your first file and see AI-powered translation in action. No
+            setup required.
           </p>
-          <div className="mt-8">
+          <div className="mt-10">
             <WaitingListButton
               isSignedIn={isSignedIn}
               signInAction={signInAction}
@@ -35,7 +56,7 @@ export function FooterCta({
           </div>
         </AnimateOnScroll>
 
-        <div className="mt-20 border-t border-border pt-6 text-center text-xs text-muted-foreground">
+        <div className="mt-28 text-center text-xs text-muted-foreground/60">
           Built by RxLab
         </div>
       </div>

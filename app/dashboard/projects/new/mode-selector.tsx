@@ -45,6 +45,7 @@ export function ModeSelector({
                 : "border-border hover:border-muted-foreground/50"
             }`}
             onClick={() => setMode("universal")}
+            data-testid="mode-universal"
           >
             <FileText className="h-5 w-5 mb-2 text-muted-foreground" />
             <div className="font-medium text-sm">Universal</div>
@@ -60,6 +61,7 @@ export function ModeSelector({
                 : "border-border hover:border-muted-foreground/50"
             }`}
             onClick={() => setMode("lyrics")}
+            data-testid="mode-lyrics"
           >
             <Music className="h-5 w-5 mb-2 text-muted-foreground" />
             <div className="font-medium text-sm">Lyrics</div>
@@ -72,7 +74,11 @@ export function ModeSelector({
           <Button variant="outline" size="sm" onClick={onCancel}>
             Cancel
           </Button>
-          <Button size="sm" onClick={() => onConfirm(mode)}>
+          <Button
+            size="sm"
+            onClick={() => onConfirm(mode)}
+            data-testid="mode-continue"
+          >
             Continue
           </Button>
         </div>

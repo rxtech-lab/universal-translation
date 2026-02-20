@@ -23,30 +23,41 @@ export function NavBar({
   return (
     <nav
       className={cn(
-        "sticky top-0 z-50 flex h-14 items-center justify-between px-6 transition-all",
+        "sticky top-0 z-50 flex h-12 items-center justify-between px-6 transition-all duration-300",
         scrolled
-          ? "border-b border-border bg-background/80 backdrop-blur-lg"
+          ? "border-b border-border/50 bg-background/60 backdrop-blur-xl backdrop-saturate-150"
           : "bg-transparent",
       )}
     >
-      <Link href="/" className="flex items-center gap-2">
-        <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center text-xs font-bold">
+      <Link href="/" className="flex items-center gap-2.5">
+        <div className="flex size-6 items-center justify-center bg-primary text-xs font-bold text-primary-foreground">
           UT
         </div>
-        <span className="text-sm font-semibold">Universal Translation</span>
+        <span className="text-sm font-medium tracking-tight">
+          Universal Translation
+        </span>
       </Link>
 
-      {isSignedIn ? (
-        <Button asChild size="sm">
-          <Link href="/dashboard">Go to Dashboard</Link>
-        </Button>
-      ) : (
-        <form action={signInAction}>
-          <Button size="sm" type="submit">
-            Sign in
+      <div className="flex items-center gap-3">
+        <Link
+          href="#features"
+          className="hidden text-xs text-muted-foreground transition-colors hover:text-foreground sm:block"
+        >
+          Features
+        </Link>
+
+        {isSignedIn ? (
+          <Button asChild size="sm" className="h-8 text-xs">
+            <Link href="/dashboard">Dashboard</Link>
           </Button>
-        </form>
-      )}
+        ) : (
+          <form action={signInAction}>
+            <Button size="sm" type="submit" className="h-8 text-xs">
+              Sign in
+            </Button>
+          </form>
+        )}
+      </div>
     </nav>
   );
 }

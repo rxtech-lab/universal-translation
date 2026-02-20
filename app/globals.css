@@ -142,6 +142,147 @@
   animation: hero-entry 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+/* ─── Hero animated mesh gradient ────────────────────────────────────────── */
+
+.hero-gradient {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  animation: hero-entry 1.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.hero-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+}
+
+.hero-blob-1 {
+  width: 50%;
+  height: 50%;
+  top: 10%;
+  left: 20%;
+  background: oklch(0.59 0.22 1 / 8%);
+  animation: blob-drift-1 20s ease-in-out infinite;
+}
+
+.hero-blob-2 {
+  width: 40%;
+  height: 40%;
+  top: 30%;
+  right: 15%;
+  background: oklch(0.73 0.18 350 / 6%);
+  animation: blob-drift-2 25s ease-in-out infinite;
+}
+
+.hero-blob-3 {
+  width: 35%;
+  height: 45%;
+  bottom: 10%;
+  left: 35%;
+  background: oklch(0.82 0.11 346 / 5%);
+  animation: blob-drift-3 22s ease-in-out infinite;
+}
+
+:is(.dark) .hero-blob-1 {
+  background: oklch(0.66 0.21 354 / 10%);
+}
+:is(.dark) .hero-blob-2 {
+  background: oklch(0.73 0.18 350 / 8%);
+}
+:is(.dark) .hero-blob-3 {
+  background: oklch(0.82 0.11 346 / 6%);
+}
+
+@keyframes blob-drift-1 {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  25% {
+    translate: 5% 8%;
+  }
+  50% {
+    translate: -3% 4%;
+  }
+  75% {
+    translate: 4% -6%;
+  }
+}
+
+@keyframes blob-drift-2 {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  25% {
+    translate: -6% -4%;
+  }
+  50% {
+    translate: 4% 6%;
+  }
+  75% {
+    translate: -3% 3%;
+  }
+}
+
+@keyframes blob-drift-3 {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  25% {
+    translate: 3% -5%;
+  }
+  50% {
+    translate: -5% -3%;
+  }
+  75% {
+    translate: 6% 4%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-blob {
+    animation: none;
+  }
+}
+
+/* ─── Language morph transitions ─────────────────────────────────────────── */
+
+.morph-word {
+  transition:
+    opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    translate 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.morph-word[data-visible="true"] {
+  opacity: 1;
+  filter: blur(0);
+  translate: 0 0;
+}
+
+.morph-word[data-visible="false"] {
+  opacity: 0;
+  filter: blur(6px);
+  translate: 0 -0.15em;
+}
+
+.morph-lang {
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.morph-lang[data-visible="true"] {
+  opacity: 1;
+}
+
+.morph-lang[data-visible="false"] {
+  opacity: 0;
+}
+
 .hero-delay-0 {
   animation-delay: 0ms;
 }
@@ -208,4 +349,26 @@
   .scroll-stagger > *:nth-child(6) {
     animation-range: entry 25% entry 60%;
   }
+  .scroll-stagger > *:nth-child(7) {
+    animation-range: entry 30% entry 65%;
+  }
+  .scroll-stagger > *:nth-child(8) {
+    animation-range: entry 35% entry 70%;
+  }
+}
+
+/* ─── Bento card hover ─────────────────────────────────────────────────── */
+
+.bento-card {
+  transition:
+    background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bento-card:hover {
+  box-shadow: 0 2px 20px oklch(0 0 0 / 4%);
+}
+
+:is(.dark) .bento-card:hover {
+  box-shadow: 0 2px 20px oklch(1 0 0 / 4%);
 }

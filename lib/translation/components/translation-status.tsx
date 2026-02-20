@@ -31,9 +31,15 @@ export function TranslationStatus({
         "flex items-center gap-2 text-xs text-muted-foreground",
         className,
       )}
+      data-testid="translation-status"
     >
       {status.state === "idle" && (
-        <span className="animate-in fade-in duration-300">Ready</span>
+        <span
+          className="animate-in fade-in duration-300"
+          data-testid="status-idle"
+        >
+          Ready
+        </span>
       )}
       {status.state === "saving" && (
         <span className="animate-in fade-in duration-300">Saving...</span>
@@ -44,12 +50,18 @@ export function TranslationStatus({
         </span>
       )}
       {status.state === "translating" && (
-        <span className="animate-in fade-in duration-300">
+        <span
+          className="animate-in fade-in duration-300"
+          data-testid="status-translating"
+        >
           Translating {status.current}/{status.total}
         </span>
       )}
       {status.state === "error" && (
-        <span className="text-destructive animate-in fade-in duration-300">
+        <span
+          className="text-destructive animate-in fade-in duration-300"
+          data-testid="status-error"
+        >
           Error: {status.message}
         </span>
       )}

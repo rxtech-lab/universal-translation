@@ -52,11 +52,14 @@ export function DocumentEditor({
   );
 
   return (
-    <Card className="flex-1 flex flex-col min-h-0">
+    <Card
+      className="flex-1 flex flex-col min-h-0"
+      data-testid="document-editor"
+    >
       <CardHeader className="border-b shrink-0">
         <div className="flex items-center justify-between">
           <CardTitle>{resource?.label ?? "Document"}</CardTitle>
-          <Badge variant="outline">
+          <Badge variant="outline" data-testid="document-stats">
             {stats.translated}/{stats.total} translated
           </Badge>
         </div>

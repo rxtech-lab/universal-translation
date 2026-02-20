@@ -71,7 +71,10 @@ export function TranslationEditor({
   const [editName, setEditName] = useState(projectName);
 
   return (
-    <div className="flex flex-col h-full gap-4 animate-in fade-in slide-in-from-bottom-2 duration-500">
+    <div
+      className="flex flex-col h-full gap-4 animate-in fade-in slide-in-from-bottom-2 duration-500"
+      data-testid="translation-editor"
+    >
       {/* Header */}
       <Card size="sm" className="sticky top-0 z-10">
         <CardHeader>
