@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { projects } from "@/lib/db/schema";
 import type { EntryWithResource } from "@/lib/translation/tools/context-tools";
 import type { TranslationProject } from "@/lib/translation/types";
+import { translateLyricsEntries } from "@/lib/translation/lyrics/agent";
 import { translateEntries } from "@/lib/translation/xcloc/agent";
 
 export const maxDuration = 300; // 5 minutes for long translations
@@ -49,20 +50,29 @@ export async function POST(
         controller.enqueue(encoder.encode(`data: ${data}\n\n`));
 
       try {
-        const events = translateEntries({
-          entries: body.entries,
-          sourceLanguage: body.sourceLanguage,
-          targetLanguage: body.targetLanguage,
-          projectId,
-          formatContext:
-            dbProject.formatId === "srt"
-              ? "subtitle"
-              : dbProject.formatId === "po"
-                ? "po-localization"
-                : dbProject.formatId === "document"
-                  ? "document"
-                  : undefined,
-        });
+        const isLyrics = dbProject.formatId === "lyrics";
+
+        const events = isLyrics
+          ? translateLyricsEntries({
+              entries: body.entries,
+              sourceLanguage: body.sourceLanguage,
+              targetLanguage: body.targetLanguage,
+              projectId,
+            })
+          : translateEntries({
+              entries: body.entries,
+              sourceLanguage: body.sourceLanguage,
+              targetLanguage: body.targetLanguage,
+              projectId,
+              formatContext:
+                dbProject.formatId === "srt"
+                  ? "subtitle"
+                  : dbProject.formatId === "po"
+                    ? "po-localization"
+                    : dbProject.formatId === "document"
+                      ? "document"
+                      : undefined,
+            });
 
         for await (const event of events) {
           // Apply each translation to in-memory project content
@@ -80,8 +90,40 @@ export async function POST(
             }
           }
 
-          // Flush to DB on batch boundaries
-          if (event.type === "batch-complete") {
+          // Persist lyrics analysis into entry metadata
+          if (
+            isLyrics &&
+            (event.type === "line-rhythm-analyzed" ||
+              event.type === "line-rhyme-analyzed" ||
+              event.type === "line-review-result")
+          ) {
+            const resource = projectContent.resources[0];
+            if (resource) {
+              const entry = resource.entries.find(
+                (e) => e.id === event.entryId,
+              );
+              if (entry) {
+                entry.metadata = entry.metadata ?? {};
+                if (event.type === "line-rhythm-analyzed") {
+                  entry.metadata.syllableCount = event.syllableCount;
+                  entry.metadata.stressPattern = event.stressPattern;
+                } else if (event.type === "line-rhyme-analyzed") {
+                  entry.metadata.rhymeWords = event.rhymeWords;
+                  entry.metadata.relatedLineIds = event.relatedLineIds;
+                } else if (event.type === "line-review-result") {
+                  entry.metadata.reviewPassed = event.passed;
+                  entry.metadata.reviewFeedback = event.feedback;
+                }
+              }
+            }
+          }
+
+          // Flush to DB on batch boundaries or after each lyrics line
+          const shouldSave =
+            event.type === "batch-complete" ||
+            (isLyrics && event.type === "line-complete");
+
+          if (shouldSave) {
             try {
               await db
                 .update(projects)
@@ -95,7 +137,8 @@ export async function POST(
               emit(
                 JSON.stringify({
                   type: "entries-saved",
-                  batchIndex: event.batchIndex,
+                  batchIndex:
+                    event.type === "batch-complete" ? event.batchIndex : 0,
                 }),
               );
             } catch (saveErr) {
@@ -106,7 +149,8 @@ export async function POST(
                     saveErr instanceof Error
                       ? saveErr.message
                       : String(saveErr),
-                  batchIndex: event.batchIndex,
+                  batchIndex:
+                    event.type === "batch-complete" ? event.batchIndex : 0,
                 }),
               );
             }

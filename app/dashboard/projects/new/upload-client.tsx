@@ -15,16 +15,27 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import type { TranslationClient } from "@/lib/translation/client";
-import { createDefaultRegistry } from "@/lib/translation/registry-impl";
+import { LyricsClient } from "@/lib/translation/lyrics/client";
 import { PoLanguageSelector } from "@/lib/translation/po/language-selector";
+import { createDefaultRegistry } from "@/lib/translation/registry-impl";
 import { SrtLanguageSelector } from "@/lib/translation/srt/language-selector";
 import type { TranslationProject } from "@/lib/translation/types";
 import { DefaultUploadProcessor } from "@/lib/translation/upload-processor";
+import { ModeSelector, type TranslationMode } from "./mode-selector";
 
 type UploadState =
   | { step: "idle" }
   | { step: "uploading"; progress: number }
   | { step: "parsing" }
+  | {
+      step: "mode-select";
+      client: TranslationClient;
+      formatId: string;
+      formatData: Record<string, unknown>;
+      blobUrl: string;
+      fileName: string;
+      fileContent: string;
+    }
   | {
       step: "language-select";
       client: TranslationClient;
@@ -96,6 +107,29 @@ export function UploadClient() {
             string,
             unknown
           >;
+        }
+
+        // For txt/md document files, show mode selector first (universal vs lyrics)
+        if (formatId === "document") {
+          const name = file.name.toLowerCase();
+          const isTxtOrMd =
+            name.endsWith(".txt") ||
+            name.endsWith(".md") ||
+            name.endsWith(".markdown");
+
+          if (isTxtOrMd) {
+            const fileContent = await file.text();
+            setState({
+              step: "mode-select",
+              client: resolved.client,
+              formatId,
+              formatData,
+              blobUrl: blob.url,
+              fileName: file.name,
+              fileContent,
+            });
+            return;
+          }
         }
 
         // Single-file formats need language selection before project creation
@@ -199,6 +233,48 @@ export function UploadClient() {
     [state, router],
   );
 
+  const handleModeConfirm = useCallback(
+    (mode: TranslationMode) => {
+      if (state.step !== "mode-select") return;
+
+      if (mode === "lyrics") {
+        const lyricsClient = new LyricsClient();
+        lyricsClient.loadFromText(state.fileContent, state.fileName);
+
+        let formatData: Record<string, unknown> = {};
+        if (
+          "getFormatData" in lyricsClient &&
+          typeof lyricsClient.getFormatData === "function"
+        ) {
+          formatData = lyricsClient.getFormatData() as unknown as Record<
+            string,
+            unknown
+          >;
+        }
+
+        setState({
+          step: "language-select",
+          client: lyricsClient,
+          formatId: "lyrics",
+          formatData,
+          blobUrl: state.blobUrl,
+          fileName: state.fileName,
+        });
+      } else {
+        // Universal mode — proceed with existing document client
+        setState({
+          step: "language-select",
+          client: state.client,
+          formatId: state.formatId,
+          formatData: state.formatData,
+          blobUrl: state.blobUrl,
+          fileName: state.fileName,
+        });
+      }
+    },
+    [state],
+  );
+
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
       e.preventDefault();
@@ -216,6 +292,17 @@ export function UploadClient() {
     },
     [processFile],
   );
+
+  // Show mode selector for txt/md files
+  if (state.step === "mode-select") {
+    return (
+      <ModeSelector
+        fileName={state.fileName}
+        onConfirm={handleModeConfirm}
+        onCancel={() => setState({ step: "idle" })}
+      />
+    );
+  }
 
   // Show language selector for single-file formats
   if (state.step === "language-select") {

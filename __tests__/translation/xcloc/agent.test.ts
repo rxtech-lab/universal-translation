@@ -138,8 +138,8 @@ describe("translateProject (mocked AI)", () => {
       ],
     });
     mockStreamText.mockImplementation(() => ({
-      textStream: (async function* () {
-        yield mockTranslationJson;
+      fullStream: (async function* () {
+        yield { type: "text-delta", text: mockTranslationJson };
       })(),
     }));
 
@@ -179,8 +179,8 @@ describe("translateProject (mocked AI)", () => {
       ],
     };
     mockStreamText.mockImplementation(() => ({
-      textStream: (async function* () {
-        yield JSON.stringify(mockTranslations);
+      fullStream: (async function* () {
+        yield { type: "text-delta", text: JSON.stringify(mockTranslations) };
       })(),
     }));
 
@@ -224,8 +224,8 @@ describe("translateProject (mocked AI)", () => {
       ],
     };
     mockStreamText.mockImplementation(() => ({
-      textStream: (async function* () {
-        yield JSON.stringify(mockTranslations);
+      fullStream: (async function* () {
+        yield { type: "text-delta", text: JSON.stringify(mockTranslations) };
       })(),
     }));
 
@@ -252,8 +252,8 @@ describe("translateProject (mocked AI)", () => {
   it("splits entries into batches of 20", async () => {
     mockGenerateText.mockResolvedValue({ output: [] });
     mockStreamText.mockImplementation(() => ({
-      textStream: (async function* () {
-        yield '{"translations": []}';
+      fullStream: (async function* () {
+        yield { type: "text-delta", text: '{"translations": []}' };
       })(),
     }));
 
@@ -281,8 +281,8 @@ describe("translateProject (mocked AI)", () => {
   it("handles streamText returning invalid JSON gracefully", async () => {
     mockGenerateText.mockResolvedValue({ output: [] });
     mockStreamText.mockImplementation(() => ({
-      textStream: (async function* () {
-        yield "This is not valid JSON at all";
+      fullStream: (async function* () {
+        yield { type: "text-delta", text: "This is not valid JSON at all" };
       })(),
     }));
 

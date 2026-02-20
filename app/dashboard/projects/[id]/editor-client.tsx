@@ -1,18 +1,26 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { updateProjectContent } from "@/app/actions/projects";
+import { renameProject, updateProjectContent } from "@/app/actions/projects";
 import { saveProjectTerms } from "@/app/actions/terms";
 import { TranslationEditor } from "@/lib/translation/components/translation-editor";
 import { useAutoSave } from "@/lib/translation/components/use-auto-save";
 import { useTranslationProject } from "@/lib/translation/components/use-translation-project";
-import { useTranslationStream } from "@/lib/translation/components/use-translation-stream";
+import {
+  type LyricsAnalysis,
+  useTranslationStream,
+} from "@/lib/translation/components/use-translation-stream";
 import {
   DocumentClient,
   type DocumentFormatData,
 } from "@/lib/translation/document/client";
 import { DocumentEditor } from "@/lib/translation/document/document-editor";
+import {
+  LyricsClient,
+  type LyricsFormatData,
+} from "@/lib/translation/lyrics/client";
+import { LyricsEditor } from "@/lib/translation/lyrics/lyrics-editor";
 import { PoClient, type PoFormatData } from "@/lib/translation/po/client";
 import { PoEditor } from "@/lib/translation/po/po-editor";
 import { SrtClient, type SrtFormatData } from "@/lib/translation/srt/client";
@@ -51,6 +59,20 @@ export function EditorClient({
   initialTerms,
 }: EditorClientProps) {
   const [client] = useState(() => {
+    if (dbProject.formatId === "lyrics") {
+      const c = new LyricsClient();
+      if (dbProject.content && dbProject.formatData) {
+        c.loadFromJson(
+          dbProject.content as TranslationProject,
+          dbProject.formatData as unknown as LyricsFormatData,
+          {
+            blobUrl: dbProject.blobUrl ?? undefined,
+            projectId: dbProject.id,
+          },
+        );
+      }
+      return c;
+    }
     if (dbProject.formatId === "document") {
       const c = new DocumentClient();
       if (dbProject.content && dbProject.formatData) {
@@ -107,6 +129,8 @@ export function EditorClient({
     return c;
   });
 
+  const [projectName, setProjectName] = useState(dbProject.name);
+
   const { project, updateEntry, applyStreamUpdate, refreshFromClient } =
     useTranslationProject(client);
 
@@ -118,10 +142,43 @@ export function EditorClient({
     terms,
     setTerms,
     streamingEntryIds,
+    lyricsAnalysis,
     startStream,
     cancelStream,
     markUserEdited,
   } = useTranslationStream(initialTerms);
+
+  // Build initial lyrics analysis from persisted entry metadata, then overlay
+  // any live stream data on top (stream data takes priority during translation).
+  const mergedLyricsAnalysis = useMemo(() => {
+    if (dbProject.formatId !== "lyrics") return lyricsAnalysis;
+
+    const merged = new Map<string, LyricsAnalysis>();
+
+    // Seed from project entry metadata (persisted in DB)
+    for (const resource of project.resources) {
+      for (const entry of resource.entries) {
+        const m = entry.metadata as Record<string, unknown> | undefined;
+        if (m && (m.syllableCount != null || m.rhymeWords)) {
+          merged.set(entry.id, {
+            syllableCount: m.syllableCount as number | undefined,
+            stressPattern: m.stressPattern as string | undefined,
+            rhymeWords: m.rhymeWords as string[] | undefined,
+            relatedLineIds: m.relatedLineIds as string[] | undefined,
+            reviewPassed: m.reviewPassed as boolean | undefined,
+            reviewFeedback: m.reviewFeedback as string | undefined,
+          });
+        }
+      }
+    }
+
+    // Overlay live stream data
+    for (const [id, analysis] of lyricsAnalysis) {
+      merged.set(id, { ...merged.get(id), ...analysis });
+    }
+
+    return merged;
+  }, [dbProject.formatId, project.resources, lyricsAnalysis]);
 
   const TOAST_ID = "translation-agent";
 
@@ -214,29 +271,34 @@ export function EditorClient({
       classNames: { description: "!text-foreground" },
     });
 
-    await startStream({
-      projectId: dbProject.id,
-      entries: flatEntries,
-      sourceLanguage:
-        project.sourceLanguage ?? dbProject.sourceLanguage ?? "en",
-      targetLanguage:
-        project.targetLanguages?.[0] ?? dbProject.targetLanguage ?? "zh-Hans",
-      onEntryTranslated: (resourceId, entryId, targetText) => {
-        applyStreamUpdate(resourceId, entryId, { targetText });
-        client.updateEntry(resourceId, entryId, { targetText });
-      },
-      onTermsFound: (foundTerms) => {
-        setTerms(foundTerms);
-        saveProjectTerms(dbProject.id, foundTerms);
-      },
-      onComplete: () => {
-        refreshFromClient();
-        dismissTranslationToast();
-      },
-      onAgentTextDelta: handleAgentTextDelta,
-      onAgentToolCall: handleAgentToolCall,
-      onAgentToolResult: handleAgentToolResult,
-    });
+    try {
+      await startStream({
+        projectId: dbProject.id,
+        entries: flatEntries,
+        sourceLanguage:
+          project.sourceLanguage ?? dbProject.sourceLanguage ?? "en",
+        targetLanguage:
+          project.targetLanguages?.[0] ?? dbProject.targetLanguage ?? "zh-Hans",
+        onEntryTranslated: (resourceId, entryId, targetText) => {
+          applyStreamUpdate(resourceId, entryId, { targetText });
+          client.updateEntry(resourceId, entryId, { targetText });
+        },
+        onTermsFound: (foundTerms) => {
+          setTerms(foundTerms);
+          saveProjectTerms(dbProject.id, foundTerms);
+        },
+        onComplete: () => {
+          refreshFromClient();
+          dismissTranslationToast();
+        },
+        onAgentTextDelta: handleAgentTextDelta,
+        onAgentToolCall: handleAgentToolCall,
+        onAgentToolResult: handleAgentToolResult,
+      });
+    } finally {
+      // Always dismiss the toast when stream ends (error, abort, or success)
+      dismissTranslationToast();
+    }
   }, [
     project,
     dbProject,
@@ -277,6 +339,19 @@ export function EditorClient({
     });
   }, [client, refreshFromClient, markDirty]);
 
+  const handleRename = useCallback(
+    async (newName: string) => {
+      try {
+        await renameProject(dbProject.id, newName);
+        setProjectName(newName);
+        toast.success("Project renamed");
+      } catch {
+        toast.error("Failed to rename project");
+      }
+    },
+    [dbProject.id],
+  );
+
   const handleExport = useCallback(async () => {
     const result = await client.exportFile(terms);
     if (!result.hasError && result.data.blob) {
@@ -308,12 +383,14 @@ export function EditorClient({
           ? "Gettext PO"
           : dbProject.formatId === "document"
             ? "Document"
-            : dbProject.formatId;
+            : dbProject.formatId === "lyrics"
+              ? "Lyrics"
+              : dbProject.formatId;
 
   return (
     <TranslationEditor
       projectId={dbProject.id}
-      projectName={dbProject.name}
+      projectName={projectName}
       formatId={dbProject.formatId}
       formatDisplayName={formatDisplayName}
       sourceLanguage={dbProject.sourceLanguage ?? undefined}
@@ -329,8 +406,17 @@ export function EditorClient({
       onTermsChange={setTerms}
       onTranslationUpdated={handleTranslationUpdated}
       onClearAllTranslations={handleClearAllTranslations}
+      onRename={handleRename}
     >
-      {dbProject.formatId === "document" ? (
+      {dbProject.formatId === "lyrics" ? (
+        <LyricsEditor
+          project={project}
+          onEntryUpdate={handleEntryUpdate}
+          streamingEntryIds={streamingEntryIds}
+          terms={terms}
+          lyricsAnalysis={mergedLyricsAnalysis}
+        />
+      ) : dbProject.formatId === "document" ? (
         <DocumentEditor
           project={project}
           onEntryUpdate={handleEntryUpdate}

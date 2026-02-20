@@ -1,38 +1,52 @@
-import { desc, eq } from "drizzle-orm";
+import { count, desc, eq } from "drizzle-orm";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { db } from "@/lib/db";
 import { projects } from "@/lib/db/schema";
+import { ProjectCard } from "./project-card";
+import { ProjectsPagination } from "./projects-pagination";
 
-export default async function ProjectsPage() {
+const PAGE_SIZE = 10;
+
+export default async function ProjectsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
   const session = await auth();
   if (!session?.user?.id) redirect("/");
 
-  const userProjects = await db
-    .select({
-      id: projects.id,
-      name: projects.name,
-      formatId: projects.formatId,
-      sourceLanguage: projects.sourceLanguage,
-      targetLanguage: projects.targetLanguage,
-      status: projects.status,
-      createdAt: projects.createdAt,
-      updatedAt: projects.updatedAt,
-    })
-    .from(projects)
-    .where(eq(projects.userId, session.user.id))
-    .orderBy(desc(projects.updatedAt));
+  const { page: pageParam } = await searchParams;
+  const page = Math.max(1, Number(pageParam) || 1);
+
+  const [userProjects, [{ total }]] = await Promise.all([
+    db
+      .select({
+        id: projects.id,
+        name: projects.name,
+        formatId: projects.formatId,
+        sourceLanguage: projects.sourceLanguage,
+        targetLanguage: projects.targetLanguage,
+        status: projects.status,
+        createdAt: projects.createdAt,
+        updatedAt: projects.updatedAt,
+      })
+      .from(projects)
+      .where(eq(projects.userId, session.user.id))
+      .orderBy(desc(projects.updatedAt))
+      .limit(PAGE_SIZE)
+      .offset((page - 1) * PAGE_SIZE),
+    db
+      .select({ total: count() })
+      .from(projects)
+      .where(eq(projects.userId, session.user.id)),
+  ]);
+
+  const totalPages = Math.ceil(total / PAGE_SIZE);
 
   return (
     <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
@@ -52,7 +66,7 @@ export default async function ProjectsPage() {
       </div>
 
       <div className="px-4 lg:px-6">
-        {userProjects.length === 0 ? (
+        {userProjects.length === 0 && page === 1 ? (
           <Card>
             <CardContent className="flex flex-col items-center justify-center py-12">
               <p className="text-sm text-muted-foreground mb-4">
@@ -69,35 +83,11 @@ export default async function ProjectsPage() {
         ) : (
           <div className="grid gap-3">
             {userProjects.map((project) => (
-              <Link key={project.id} href={`/dashboard/projects/${project.id}`}>
-                <Card className="hover:bg-accent/50 transition-colors cursor-pointer">
-                  <CardHeader>
-                    <CardTitle className="text-sm">{project.name}</CardTitle>
-                    <CardAction>
-                      <div className="flex items-center gap-2">
-                        <Badge variant="outline">{project.formatId}</Badge>
-                        {project.sourceLanguage && project.targetLanguage && (
-                          <Badge variant="secondary">
-                            {project.sourceLanguage} → {project.targetLanguage}
-                          </Badge>
-                        )}
-                        <Badge
-                          variant={
-                            project.status === "completed"
-                              ? "default"
-                              : "secondary"
-                          }
-                        >
-                          {project.status}
-                        </Badge>
-                      </div>
-                    </CardAction>
-                  </CardHeader>
-                </Card>
-              </Link>
+              <ProjectCard key={project.id} project={project} />
             ))}
           </div>
         )}
+        <ProjectsPagination page={page} totalPages={totalPages} />
       </div>
     </div>
   );

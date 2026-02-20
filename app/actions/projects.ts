@@ -1,6 +1,7 @@
 "use server";
 
 import { and, eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { projects } from "@/lib/db/schema";
@@ -91,4 +92,45 @@ export async function updateProjectFormatData(
     .update(projects)
     .set({ formatData, updatedAt: new Date() })
     .where(and(eq(projects.id, projectId), eq(projects.userId, userId)));
+}
+
+export async function renameProject(projectId: string, newName: string) {
+  const userId = await requireUserId();
+
+  const trimmed = newName.trim();
+  if (!trimmed) throw new Error("Project name cannot be empty");
+
+  await db
+    .update(projects)
+    .set({ name: trimmed, updatedAt: new Date() })
+    .where(and(eq(projects.id, projectId), eq(projects.userId, userId)));
+
+  revalidatePath("/dashboard/projects");
+  revalidatePath(`/dashboard/projects/${projectId}`);
+}
+
+export async function deleteProject(projectId: string) {
+  const userId = await requireUserId();
+
+  const [project] = await db
+    .select({ blobUrl: projects.blobUrl })
+    .from(projects)
+    .where(and(eq(projects.id, projectId), eq(projects.userId, userId)));
+
+  if (!project) throw new Error("Project not found");
+
+  await db
+    .delete(projects)
+    .where(and(eq(projects.id, projectId), eq(projects.userId, userId)));
+
+  if (project.blobUrl) {
+    try {
+      const { del } = await import("@vercel/blob");
+      await del(project.blobUrl);
+    } catch {
+      // Best-effort blob cleanup
+    }
+  }
+
+  revalidatePath("/dashboard/projects");
 }

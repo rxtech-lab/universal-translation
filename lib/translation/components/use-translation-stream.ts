@@ -4,6 +4,15 @@ import { useCallback, useRef, useState } from "react";
 import type { Term } from "../tools/term-tools";
 import type { EditorStatus } from "./types";
 
+export interface LyricsAnalysis {
+  syllableCount?: number;
+  stressPattern?: string;
+  rhymeWords?: string[];
+  relatedLineIds?: string[];
+  reviewPassed?: boolean;
+  reviewFeedback?: string;
+}
+
 export function useTranslationStream(initialTerms?: Term[]) {
   const [status, setStatus] = useState<EditorStatus>({ state: "idle" });
   const [errors, setErrors] = useState<string[]>([]);
@@ -11,6 +20,9 @@ export function useTranslationStream(initialTerms?: Term[]) {
   const [streamingEntryIds, setStreamingEntryIds] = useState<Set<string>>(
     new Set(),
   );
+  const [lyricsAnalysis, setLyricsAnalysis] = useState<
+    Map<string, LyricsAnalysis>
+  >(new Map());
   const abortRef = useRef<AbortController | null>(null);
   const userEditedIdsRef = useRef<Set<string>>(new Set());
 
@@ -63,6 +75,7 @@ export function useTranslationStream(initialTerms?: Term[]) {
 
       resetUserEdited();
       setStreamingEntryIds(new Set());
+      setLyricsAnalysis(new Map());
       setErrors([]);
       setStatus({
         state: "translating",
@@ -165,6 +178,39 @@ export function useTranslationStream(initialTerms?: Term[]) {
                   event.toolCallId,
                   event.toolName,
                 );
+              } else if (event.type === "line-rhythm-analyzed") {
+                setLyricsAnalysis((prev) => {
+                  const next = new Map(prev);
+                  const existing = next.get(event.entryId) ?? {};
+                  next.set(event.entryId, {
+                    ...existing,
+                    syllableCount: event.syllableCount,
+                    stressPattern: event.stressPattern,
+                  });
+                  return next;
+                });
+              } else if (event.type === "line-rhyme-analyzed") {
+                setLyricsAnalysis((prev) => {
+                  const next = new Map(prev);
+                  const existing = next.get(event.entryId) ?? {};
+                  next.set(event.entryId, {
+                    ...existing,
+                    rhymeWords: event.rhymeWords,
+                    relatedLineIds: event.relatedLineIds,
+                  });
+                  return next;
+                });
+              } else if (event.type === "line-review-result") {
+                setLyricsAnalysis((prev) => {
+                  const next = new Map(prev);
+                  const existing = next.get(event.entryId) ?? {};
+                  next.set(event.entryId, {
+                    ...existing,
+                    reviewPassed: event.passed,
+                    reviewFeedback: event.feedback,
+                  });
+                  return next;
+                });
               }
             } catch {
               // skip malformed lines
@@ -175,6 +221,12 @@ export function useTranslationStream(initialTerms?: Term[]) {
         if ((err as Error).name !== "AbortError") {
           setStatus({ state: "error", message: String(err) });
         }
+      } finally {
+        // Ensure we never leave status stuck at "translating"
+        setStatus((prev) =>
+          prev.state === "translating" ? { state: "idle" } : prev,
+        );
+        setStreamingEntryIds(new Set());
       }
     },
     [resetUserEdited],
@@ -196,6 +248,7 @@ export function useTranslationStream(initialTerms?: Term[]) {
     terms,
     setTerms,
     streamingEntryIds,
+    lyricsAnalysis,
     startStream,
     cancelStream,
     markUserEdited,
