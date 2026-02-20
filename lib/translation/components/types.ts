@@ -32,4 +32,5 @@ export interface TranslationEditorProps {
     targetText: string,
   ) => void;
   onClearAllTranslations: () => void;
+  onRename?: (newName: string) => void;
 }

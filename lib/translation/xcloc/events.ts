@@ -15,6 +15,7 @@ export type XclocTranslationEvent =
       current: number;
       total: number;
     }
+  | { type: "translate-line-start"; resourceId: string; entryId: string }
   | { type: "batch-complete"; batchIndex: number; totalBatches: number }
   | { type: "term-resolution-complete" }
   | { type: "entries-saved"; batchIndex: number }

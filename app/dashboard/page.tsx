@@ -44,26 +44,31 @@ export default async function DashboardPage() {
     .orderBy(desc(projects.updatedAt));
 
   const totalProjects = userProjects.length;
-  const inProgressCount = userProjects.filter(
-    (p) => p.status === "translating",
-  ).length;
-  const completedCount = userProjects.filter(
-    (p) => p.status === "completed",
-  ).length;
   const recentProjects = userProjects.slice(0, 5);
 
   let totalEntries = 0;
   let translatedEntries = 0;
+  let inProgressCount = 0;
+  let completedCount = 0;
   for (const project of userProjects) {
     const content = project.content as TranslationProject | null;
     if (content?.resources) {
+      let projectTotal = 0;
+      let projectTranslated = 0;
       for (const resource of content.resources) {
         for (const entry of resource.entries) {
+          projectTotal++;
           totalEntries++;
           if (entry.targetText && entry.targetText.trim() !== "") {
+            projectTranslated++;
             translatedEntries++;
           }
         }
+      }
+      if (projectTotal > 0 && projectTranslated === projectTotal) {
+        completedCount++;
+      } else if (projectTranslated > 0) {
+        inProgressCount++;
       }
     }
   }

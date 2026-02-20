@@ -136,6 +136,34 @@ export class DocumentClient
     return { hasError: false, data: undefined };
   }
 
+  /**
+   * Load from raw text content (for text input tab — no file upload).
+   */
+  loadFromText(text: string, fileName: string): OperationResult {
+    this.originalFileName = fileName;
+    const name = fileName.toLowerCase();
+
+    if (name.endsWith(".md") || name.endsWith(".markdown")) {
+      this.subType = "md";
+      const parsed = parseMd(text);
+      this.paragraphs = parsed.paragraphs;
+      this.rawMetadata = parsed.frontmatter;
+    } else {
+      this.subType = "txt";
+      this.paragraphs = parseTxt(text);
+    }
+
+    if (this.paragraphs.length === 0) {
+      return {
+        hasError: true,
+        errorMessage: "No translatable content found",
+      };
+    }
+
+    this.buildProject();
+    return { hasError: false, data: undefined };
+  }
+
   /** Set source and target languages (called after user selects languages). */
   setLanguages(sourceLanguage: string, targetLanguage: string): void {
     this.sourceLanguage = sourceLanguage;

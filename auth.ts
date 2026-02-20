@@ -13,6 +13,29 @@ declare module "next-auth" {
   }
 }
 
+async function refreshAccessToken(refreshToken: string) {
+  console.log("Refreshing access token...");
+  const response = await fetch(`${process.env.AUTH_ISSUER}/api/oauth/token`, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      grant_type: "refresh_token",
+      refresh_token: refreshToken,
+      client_id: process.env.AUTH_CLIENT_ID!,
+      client_secret: process.env.AUTH_CLIENT_SECRET!,
+    }),
+  });
+
+  const tokens = await response.json();
+  if (!response.ok) throw tokens;
+
+  return {
+    accessToken: tokens.access_token as string,
+    refreshToken: (tokens.refresh_token ?? refreshToken) as string,
+    expiresAt: Math.floor(Date.now() / 1000) + tokens.expires_in,
+  };
+}
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   debug: process.env.NODE_ENV === "development",
   providers: [
@@ -48,7 +71,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
 
       // Token still valid - return as is
-      if (token.expiresAt && Date.now() < (token.expiresAt as number) * 1000) {
+      if (
+        token.expiresAt &&
+        Date.now() < (token.expiresAt as number) * 1000 - 60000
+      ) {
         return token;
       }
 
@@ -59,28 +85,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
 
       try {
-        const response = await fetch(
-          `${process.env.AUTH_ISSUER}/api/oauth/token`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: new URLSearchParams({
-              grant_type: "refresh_token",
-              refresh_token: token.refreshToken as string,
-              client_id: process.env.AUTH_CLIENT_ID!,
-              client_secret: process.env.AUTH_CLIENT_SECRET!,
-            }),
-          },
+        const freshTokens = await refreshAccessToken(
+          token.refreshToken as string,
         );
 
-        const tokens = await response.json();
-        if (!response.ok) throw tokens;
+        console.log("Token refreshed successfully", freshTokens);
 
         return {
           ...token,
-          accessToken: tokens.access_token,
-          refreshToken: tokens.refresh_token ?? token.refreshToken,
-          expiresAt: Math.floor(Date.now() / 1000) + tokens.expires_in,
+          accessToken: freshTokens.accessToken,
+          refreshToken: freshTokens.refreshToken,
+          expiresAt: freshTokens.expiresAt,
           error: undefined,
         };
       } catch (error) {

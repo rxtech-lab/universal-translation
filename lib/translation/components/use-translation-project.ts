@@ -72,7 +72,7 @@ export function useTranslationProject(client: TranslationClient) {
   const refreshFromClient = useCallback(() => {
     dispatch({
       type: "SET_PROJECT",
-      project: clientRef.current.getProject(),
+      project: structuredClone(clientRef.current.getProject()),
     });
   }, []);
 

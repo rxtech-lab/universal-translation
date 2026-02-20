@@ -1,0 +1,82 @@
+"use client";
+
+import { FileText, Music } from "lucide-react";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
+export type TranslationMode = "universal" | "lyrics";
+
+interface ModeSelectorProps {
+  fileName: string;
+  onConfirm: (mode: TranslationMode) => void;
+  onCancel: () => void;
+}
+
+export function ModeSelector({
+  fileName,
+  onConfirm,
+  onCancel,
+}: ModeSelectorProps) {
+  const [mode, setMode] = useState<TranslationMode>("universal");
+
+  return (
+    <Card className="w-full max-w-lg animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <CardHeader>
+        <CardTitle>Translation Mode</CardTitle>
+        <CardDescription>
+          Choose how to translate{" "}
+          <span className="font-medium text-foreground">{fileName}</span>
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="grid grid-cols-2 gap-3">
+          <button
+            type="button"
+            className={`p-4 border text-left transition-colors ${
+              mode === "universal"
+                ? "border-primary bg-primary/5"
+                : "border-border hover:border-muted-foreground/50"
+            }`}
+            onClick={() => setMode("universal")}
+          >
+            <FileText className="h-5 w-5 mb-2 text-muted-foreground" />
+            <div className="font-medium text-sm">Universal</div>
+            <div className="text-xs text-muted-foreground mt-1">
+              Standard document translation
+            </div>
+          </button>
+          <button
+            type="button"
+            className={`p-4 border text-left transition-colors ${
+              mode === "lyrics"
+                ? "border-primary bg-primary/5"
+                : "border-border hover:border-muted-foreground/50"
+            }`}
+            onClick={() => setMode("lyrics")}
+          >
+            <Music className="h-5 w-5 mb-2 text-muted-foreground" />
+            <div className="font-medium text-sm">Lyrics</div>
+            <div className="text-xs text-muted-foreground mt-1">
+              Rhythm & rhyme preserving
+            </div>
+          </button>
+        </div>
+        <div className="flex justify-end gap-2">
+          <Button variant="outline" size="sm" onClick={onCancel}>
+            Cancel
+          </Button>
+          <Button size="sm" onClick={() => onConfirm(mode)}>
+            Continue
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}

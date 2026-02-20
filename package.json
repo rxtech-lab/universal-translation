@@ -7,6 +7,7 @@
     "build": "bun db:push && next build",
     "start": "next start",
     "lint": "eslint",
+    "test": "vitest run",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push"
   },

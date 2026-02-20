@@ -1,6 +1,13 @@
 "use client";
 
-import { BookOpen, Download, MoreHorizontal, Save, Trash2 } from "lucide-react";
+import {
+  BookOpen,
+  Download,
+  MoreHorizontal,
+  Pencil,
+  Save,
+  Trash2,
+} from "lucide-react";
 import { useState } from "react";
 import {
   AlertDialog,
@@ -23,6 +30,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -53,10 +62,13 @@ export function TranslationEditor({
   onTermsChange,
   onTranslationUpdated,
   onClearAllTranslations,
+  onRename,
 }: TranslationEditorProps) {
   const isTranslating = status.state === "translating";
   const [termsDialogOpen, setTermsDialogOpen] = useState(false);
   const [clearAlertOpen, setClearAlertOpen] = useState(false);
+  const [renameDialogOpen, setRenameDialogOpen] = useState(false);
+  const [editName, setEditName] = useState(projectName);
 
   return (
     <div className="flex flex-col h-full gap-4 animate-in fade-in slide-in-from-bottom-2 duration-500">
@@ -67,6 +79,19 @@ export function TranslationEditor({
             <CardTitle className="text-base font-semibold truncate">
               {projectName}
             </CardTitle>
+            {onRename && (
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                className="shrink-0"
+                onClick={() => {
+                  setEditName(projectName);
+                  setRenameDialogOpen(true);
+                }}
+              >
+                <Pencil className="h-3 w-3" />
+              </Button>
+            )}
             <Badge variant="outline" className="hidden md:inline-flex">
               {formatDisplayName}
             </Badge>
@@ -211,6 +236,51 @@ export function TranslationEditor({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Rename Dialog — controlled */}
+      {onRename && (
+        <Dialog open={renameDialogOpen} onOpenChange={setRenameDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Rename Project</DialogTitle>
+            </DialogHeader>
+            <div className="grid gap-2">
+              <Label htmlFor="editor-project-name">Project name</Label>
+              <Input
+                id="editor-project-name"
+                value={editName}
+                onChange={(e) => setEditName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && editName.trim()) {
+                    onRename(editName.trim());
+                    setRenameDialogOpen(false);
+                  }
+                }}
+                autoFocus
+              />
+            </div>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="outline" size="sm">
+                  Cancel
+                </Button>
+              </DialogClose>
+              <Button
+                size="sm"
+                onClick={() => {
+                  if (editName.trim()) {
+                    onRename(editName.trim());
+                    setRenameDialogOpen(false);
+                  }
+                }}
+                disabled={!editName.trim()}
+              >
+                Rename
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 }
