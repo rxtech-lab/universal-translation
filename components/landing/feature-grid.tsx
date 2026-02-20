@@ -1,5 +1,3 @@
-"use client";
-
 import {
   BookOpen,
   Captions,
@@ -50,15 +48,6 @@ const features = [
   },
 ];
 
-const delays = [
-  "delay-0",
-  "delay-100",
-  "delay-200",
-  "delay-300",
-  "delay-400",
-  "delay-500",
-];
-
 export function FeatureGrid() {
   return (
     <section id="features" className="px-6 py-20 md:py-32">
@@ -72,9 +61,9 @@ export function FeatureGrid() {
           </p>
         </AnimateOnScroll>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {features.map((feature, i) => (
-            <AnimateOnScroll key={feature.title} delay={delays[i]}>
+        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3 scroll-stagger">
+          {features.map((feature) => (
+            <AnimateOnScroll key={feature.title}>
               <Card className="h-full">
                 <CardHeader>
                   <div className="mb-2 flex size-10 items-center justify-center bg-primary/10">

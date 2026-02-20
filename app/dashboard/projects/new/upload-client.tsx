@@ -81,7 +81,7 @@ export function UploadClient() {
           setState({
             step: "error",
             message:
-              "Unsupported file format. Supported: .xcloc (as .zip), .srt, .po, .txt, .md, .docx",
+              "Unsupported file format. Supported: .xcloc (as .zip), .srt, .po, .txt, .md, .docx, .html",
           });
           return;
         }
@@ -136,7 +136,8 @@ export function UploadClient() {
         if (
           formatId === "srt" ||
           formatId === "po" ||
-          formatId === "document"
+          formatId === "document" ||
+          formatId === "html"
         ) {
           setState({
             step: "language-select",
@@ -210,7 +211,10 @@ export function UploadClient() {
 
         setState({ step: "creating" });
         const projectId = await createProjectFromParsed({
-          name: fileName.replace(/\.(srt|po|txt|md|markdown|docx)$/i, ""),
+          name: fileName.replace(
+            /\.(srt|po|txt|md|markdown|docx|html|htm)$/i,
+            "",
+          ),
           formatId,
           blobUrl,
           content: project as TranslationProject,
@@ -353,7 +357,7 @@ export function UploadClient() {
           <input
             ref={inputRef}
             type="file"
-            accept=".zip,.xcloc,.srt,.po,.txt,.md,.markdown,.docx"
+            accept=".zip,.xcloc,.srt,.po,.txt,.md,.markdown,.docx,.html,.htm"
             onChange={handleFileSelect}
             className="hidden"
           />
@@ -366,10 +370,11 @@ export function UploadClient() {
                   Drop your file here or click to browse
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Supports .xcloc (as .zip), .srt, .po, .txt, .md, and .docx
+                  Supports .xcloc (as .zip), .srt, .po, .txt, .md, .docx, and
+                  .html
                 </p>
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap justify-center gap-2">
                 <Badge variant="outline">
                   <FileArchive className="h-3 w-3 mr-1" />
                   .xcloc
@@ -393,6 +398,10 @@ export function UploadClient() {
                 <Badge variant="outline">
                   <FileArchive className="h-3 w-3 mr-1" />
                   .docx
+                </Badge>
+                <Badge variant="outline">
+                  <FileText className="h-3 w-3 mr-1" />
+                  .html
                 </Badge>
               </div>
             </div>

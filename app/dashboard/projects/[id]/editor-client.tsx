@@ -16,6 +16,8 @@ import {
   type DocumentFormatData,
 } from "@/lib/translation/document/client";
 import { DocumentEditor } from "@/lib/translation/document/document-editor";
+import { HtmlClient, type HtmlFormatData } from "@/lib/translation/html/client";
+import { HtmlEditor } from "@/lib/translation/html/html-editor";
 import {
   LyricsClient,
   type LyricsFormatData,
@@ -109,6 +111,19 @@ export function EditorClient({
           dbProject.formatData as unknown as SrtFormatData,
           {
             blobUrl: dbProject.blobUrl ?? undefined,
+            projectId: dbProject.id,
+          },
+        );
+      }
+      return c;
+    }
+    if (dbProject.formatId === "html") {
+      const c = new HtmlClient();
+      if (dbProject.content && dbProject.formatData) {
+        c.loadFromJson(
+          dbProject.content as TranslationProject,
+          dbProject.formatData as unknown as HtmlFormatData,
+          {
             projectId: dbProject.id,
           },
         );
@@ -488,7 +503,9 @@ export function EditorClient({
             ? "Document"
             : dbProject.formatId === "lyrics"
               ? "Lyrics"
-              : dbProject.formatId;
+              : dbProject.formatId === "html"
+                ? "HTML"
+                : dbProject.formatId;
 
   return (
     <TranslationEditor
@@ -537,6 +554,14 @@ export function EditorClient({
       ) : dbProject.formatId === "srt" ? (
         <SrtEditor
           project={project}
+          onEntryUpdate={handleEntryUpdate}
+          streamingEntryIds={streamingEntryIds}
+          terms={terms}
+        />
+      ) : dbProject.formatId === "html" ? (
+        <HtmlEditor
+          project={project}
+          client={client as HtmlClient}
           onEntryUpdate={handleEntryUpdate}
           streamingEntryIds={streamingEntryIds}
           terms={terms}

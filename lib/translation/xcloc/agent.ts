@@ -97,7 +97,9 @@ async function* scanTerminology(params: {
       ? "subtitle translation"
       : params.formatContext === "document"
         ? "document translation"
-        : "software localization";
+        : params.formatContext === "html"
+          ? "HTML content translation"
+          : "software localization";
 
   const result = await generateText({
     model: params.model,
@@ -229,6 +231,15 @@ async function* translateBatch(params: {
 3. Preserve paragraph structure — do not merge or split paragraphs.
 4. Maintain the tone, register, and style of the original document.
 5. Use lookup tools if you need context about surrounding paragraphs.`;
+  } else if (params.formatContext === "html") {
+    systemRole = "You are a professional HTML content translator.";
+    formatRules = `1. For recognized terminology, use the template format ${templateFormat} instead of translating directly.
+   Example: if "Argo Trading" has ID "argo-trading", translate "About Argo Trading" as "关于 ${exampleTemplate}".
+2. Preserve all HTML tags and their attributes exactly as-is. Only translate the text content.
+3. For inline elements like <b>, <i>, <em>, <a>, <span>, keep the tags intact and translate text within them.
+4. Preserve HTML entities (e.g., &amp;, &nbsp;) unless they represent translatable content.
+5. Do not add or remove HTML tags.
+6. Use lookup tools if you need context about surrounding content blocks.`;
   } else {
     systemRole = "You are a professional translator for software localization.";
     formatRules = `1. For recognized terminology, use the template format ${templateFormat} instead of translating directly.

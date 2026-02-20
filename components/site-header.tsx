@@ -18,7 +18,8 @@ export function SiteHeader() {
       <SidebarTrigger className="-ml-1" />
       {isProjectDetail && (
         <>
-          <Separator orientation="vertical" className="mx-1 h-4" />
+          <Separator orientation="vertical" className="mx-1 h-4 my-auto" />
+
           <Button variant="ghost" size="sm" asChild>
             <Link href="/dashboard/projects">
               <ArrowLeftIcon className="size-4" />

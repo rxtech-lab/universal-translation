@@ -1,5 +1,12 @@
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
+export const waitingList = sqliteTable("waiting_list", {
+  id: text("id").primaryKey(),
+  email: text("email").notNull().unique(),
+  approved: integer("approved", { mode: "boolean" }).notNull().default(false),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
+});
+
 export const projects = sqliteTable("projects", {
   id: text("id").primaryKey(),
   userId: text("user_id").notNull(),
