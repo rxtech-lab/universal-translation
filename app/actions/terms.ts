@@ -118,6 +118,13 @@ export async function saveProjectTerms(
   }
 }
 
+export async function deleteAllTermsByProject(projectId: string) {
+  const userId = await requireUserId();
+  await verifyProjectOwner(projectId, userId);
+
+  await db.delete(terms).where(eq(terms.projectId, projectId));
+}
+
 export async function getTermsByProject(projectId: string) {
   const userId = await requireUserId();
   await verifyProjectOwner(projectId, userId);

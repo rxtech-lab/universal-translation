@@ -109,4 +109,10 @@ export interface TranslationClient<TEvent = unknown> {
    * Restore state from a previously saved project.
    */
   open(projectId: string): Promise<OperationResult>;
+
+  /**
+   * Return format-specific data for DB persistence.
+   * Keeps the internal document in sync with project content across saves.
+   */
+  getFormatData(): unknown;
 }

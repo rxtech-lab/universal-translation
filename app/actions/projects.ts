@@ -84,7 +84,7 @@ export async function updateProjectStatus(projectId: string, status: string) {
 
 export async function updateProjectFormatData(
   projectId: string,
-  formatData: Record<string, unknown>,
+  formatData: object,
 ) {
   const userId = await requireUserId();
 

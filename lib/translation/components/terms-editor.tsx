@@ -75,6 +75,7 @@ export function TermsEditor({ projectId, terms }: TermsEditorProps) {
         <div
           key={term.id}
           className="grid grid-cols-[1fr_1fr_1fr_auto] gap-2 items-center animate-in fade-in duration-200"
+          data-testid="term-row"
         >
           <Input value={term.originalText} readOnly className="bg-muted/50" />
           <Input
@@ -106,12 +107,14 @@ export function TermsEditor({ projectId, terms }: TermsEditorProps) {
           onChange={(e) => setNewOriginal(e.target.value)}
           placeholder={t("Original text")}
           onKeyDown={(e) => e.key === "Enter" && handleAdd()}
+          data-testid="term-original-input"
         />
         <Input
           value={newTranslation}
           onChange={(e) => setNewTranslation(e.target.value)}
           placeholder={t("Translation")}
           onKeyDown={(e) => e.key === "Enter" && handleAdd()}
+          data-testid="term-translation-input"
         />
         <span />
         <Button
@@ -119,6 +122,7 @@ export function TermsEditor({ projectId, terms }: TermsEditorProps) {
           size="sm"
           className="h-8 w-8 p-0"
           onClick={handleAdd}
+          data-testid="term-add-button"
         >
           <Plus className="h-3.5 w-3.5" />
         </Button>

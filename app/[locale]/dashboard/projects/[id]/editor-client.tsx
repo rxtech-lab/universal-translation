@@ -4,7 +4,11 @@ import { useCallback, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useExtracted } from "next-intl";
 import { toast } from "sonner";
-import { renameProject, updateProjectContent } from "@/app/actions/projects";
+import {
+  renameProject,
+  updateProjectContent,
+  updateProjectFormatData,
+} from "@/app/actions/projects";
 import { saveProjectTerms } from "@/app/actions/terms";
 import { TranslationEditor } from "@/lib/translation/components/translation-editor";
 import { useAutoSave } from "@/lib/translation/components/use-auto-save";
@@ -255,7 +259,10 @@ export function EditorClient({
       setStatus((prev) =>
         prev.state === "translating" ? prev : { state: "saving" },
       );
-      await updateProjectContent(dbProject.id, client.getProject());
+      await Promise.all([
+        updateProjectContent(dbProject.id, client.getProject()),
+        updateProjectFormatData(dbProject.id, client.getFormatData()),
+      ]);
       setStatus((prev) =>
         prev.state === "translating"
           ? prev
@@ -394,8 +401,14 @@ export function EditorClient({
             applyStreamUpdate(resId, eId, { targetText });
             client.updateEntry(resId, eId, { targetText });
           },
+          onTermsFound: (foundTerms) => {
+            saveProjectTerms(dbProject.id, foundTerms).then(() => {
+              startTransition(() => router.refresh());
+            });
+          },
           onComplete: () => {
             refreshFromClient();
+            startTransition(() => router.refresh());
             dismissTranslationToast();
           },
           onAgentTextDelta: handleAgentTextDelta,
@@ -413,6 +426,7 @@ export function EditorClient({
       startStream,
       applyStreamUpdate,
       client,
+      router,
       refreshFromClient,
       dismissTranslationToast,
       handleAgentTextDelta,
@@ -458,7 +472,7 @@ export function EditorClient({
   }, [client, clearLyricsAnalysis, refreshFromClient, markDirty, t]);
 
   const handleUpdatePo = useCallback(
-    (newPoText: string, referencePoText?: string) => {
+    async (newPoText: string, referencePoText?: string) => {
       const result = (client as PoClient).updateFromPo(
         newPoText,
         referencePoText,
@@ -469,6 +483,8 @@ export function EditorClient({
       }
       refreshFromClient();
       markDirty();
+      // Persist formatData immediately — document layout changed
+      await updateProjectFormatData(dbProject.id, client.getFormatData());
       setUpdateDialogOpen(false);
       toast.success(
         t("Updated: {preserved} preserved, {added} new, {removed} removed", {
@@ -478,7 +494,7 @@ export function EditorClient({
         }),
       );
     },
-    [client, refreshFromClient, markDirty, t],
+    [client, refreshFromClient, markDirty, dbProject.id, t],
   );
 
   const handleRename = useCallback(

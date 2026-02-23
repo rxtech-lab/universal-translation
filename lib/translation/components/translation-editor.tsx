@@ -9,8 +9,10 @@ import {
   Save,
   Trash2,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { useExtracted } from "next-intl";
+import { deleteAllTermsByProject } from "@/app/actions/terms";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -67,9 +69,12 @@ export function TranslationEditor({
   onUpdatePo,
 }: TranslationEditorProps) {
   const t = useExtracted();
+  const router = useRouter();
+  const [isClearingTerms, startClearingTerms] = useTransition();
   const isTranslating = status.state === "translating";
   const [termsDialogOpen, setTermsDialogOpen] = useState(false);
   const [clearAlertOpen, setClearAlertOpen] = useState(false);
+  const [clearTermsAlertOpen, setClearTermsAlertOpen] = useState(false);
   const [renameDialogOpen, setRenameDialogOpen] = useState(false);
   const [editName, setEditName] = useState(projectName);
 
@@ -120,6 +125,7 @@ export function TranslationEditor({
                 variant="ghost"
                 size="sm"
                 onClick={() => setTermsDialogOpen(true)}
+                data-testid="terms-button"
               >
                 <BookOpen className="h-3.5 w-3.5 mr-1" />
                 {t("Terms")} ({terms.length})
@@ -212,14 +218,33 @@ export function TranslationEditor({
 
       {/* Terms Dialog — controlled */}
       <Dialog open={termsDialogOpen} onOpenChange={setTermsDialogOpen}>
-        <DialogContent className="max-w-5xl! max-h-[80vh] overflow-y-auto">
+        <DialogContent
+          className="max-w-5xl! max-h-[80vh] flex flex-col"
+          data-testid="terms-dialog"
+        >
           <DialogHeader>
             <DialogTitle>{t("Terminology")}</DialogTitle>
           </DialogHeader>
-          <TermsEditor projectId={projectId} terms={terms} />
+          <div className="flex-1 overflow-y-auto min-h-0">
+            <TermsEditor projectId={projectId} terms={terms} />
+          </div>
           <DialogFooter>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={terms.length === 0 || isClearingTerms}
+              onClick={() => setClearTermsAlertOpen(true)}
+              data-testid="terms-clear-button"
+            >
+              <Trash2 className="h-3.5 w-3.5 mr-1" />
+              {t("Clear")}
+            </Button>
             <DialogClose asChild>
-              <Button size="sm" onClick={onSave}>
+              <Button
+                size="sm"
+                onClick={onSave}
+                data-testid="terms-save-button"
+              >
                 <Save className="h-3.5 w-3.5 mr-1" />
                 {t("Save")}
               </Button>
@@ -227,6 +252,39 @@ export function TranslationEditor({
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Clear Terms AlertDialog — controlled */}
+      <AlertDialog
+        open={clearTermsAlertOpen}
+        onOpenChange={setClearTermsAlertOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("Clear all terms?")}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t(
+                "This will remove all terminology entries for this project. This action cannot be undone.",
+              )}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel size="sm">{t("Cancel")}</AlertDialogCancel>
+            <AlertDialogAction
+              size="sm"
+              variant="destructive"
+              data-testid="terms-clear-confirm"
+              onClick={() => {
+                startClearingTerms(async () => {
+                  await deleteAllTermsByProject(projectId);
+                  router.refresh();
+                });
+              }}
+            >
+              {t("Clear All")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {/* Clear All AlertDialog — controlled */}
       <AlertDialog open={clearAlertOpen} onOpenChange={setClearAlertOpen}>
