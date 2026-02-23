@@ -145,7 +145,10 @@ export async function* translateLyricsEntries(params: {
 
       translatedText = translation.translatedText;
 
-      // Emit events for any previous translation modifications
+      // Emit events for any previous translation modifications.
+      // The previous-translation-modified event is also handled by the API route
+      // (same as entry-translated) to persist the change, and by the UI to
+      // update the displayed text.
       for (const mod of translation.modifications) {
         const idx = mod.lineNumber - 1;
         if (idx >= 0 && idx < completedEntryMeta.length) {
@@ -155,15 +158,6 @@ export async function* translateLyricsEntries(params: {
             entryId: meta.entryId,
             resourceId: meta.resourceId,
             targetText: mod.newTranslation,
-          };
-          // Also emit entry-translated so the UI updates the entry
-          yield {
-            type: "entry-translated",
-            resourceId: meta.resourceId,
-            entryId: meta.entryId,
-            targetText: mod.newTranslation,
-            current,
-            total,
           };
         }
       }

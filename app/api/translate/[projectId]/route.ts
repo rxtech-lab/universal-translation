@@ -150,7 +150,10 @@ export async function POST(
 
         for await (const event of events) {
           // Apply each translation to in-memory project content
-          if (event.type === "entry-translated") {
+          if (
+            event.type === "entry-translated" ||
+            event.type === "previous-translation-modified"
+          ) {
             const resource = projectContent.resources.find(
               (r) => r.id === event.resourceId,
             );
