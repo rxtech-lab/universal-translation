@@ -1,0 +1,55 @@
+# Updated PO file — adds new entries to the terms-based project
+# KEPT:    all 6 original entries (translations preserved via PO update merge)
+# ADDED:   "Sharpe Ratio", "Risk-adjusted Return", "Export Backtest Report"
+# REMOVED: none
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: zh-Hans\n"
+"MIME-Version: 1.0\n"
+
+#. App name reference
+#: src/components/Header.tsx:5
+msgid "Welcome to Argo Trading"
+msgstr ""
+
+#. Portfolio page heading
+#: src/pages/Portfolio.tsx:10
+msgid "Your Backtest Results"
+msgstr ""
+
+#. Stats display
+#: src/components/Stats.tsx:20
+msgid "Current Win Rate"
+msgstr ""
+
+#. Strategy description
+#: src/pages/Strategy.tsx:15
+msgid "Backtest your strategy with Argo Trading"
+msgstr ""
+
+#. Risk metrics heading
+#: src/components/RiskMetrics.tsx:8
+msgid "Maximum Drawdown"
+msgstr ""
+
+#. Overview description
+#: src/pages/Dashboard.tsx:25
+msgid "View your portfolio performance and win rate"
+msgstr ""
+
+#. NEW: Sharpe ratio metric
+#: src/components/RiskMetrics.tsx:20
+msgid "Sharpe Ratio"
+msgstr ""
+
+#. NEW: Risk-adjusted return explanation
+#: src/pages/Analytics.tsx:10
+msgid "Risk-adjusted Return"
+msgstr ""
+
+#. NEW: Export button with term reference
+#: src/components/ExportPanel.tsx:5
+msgid "Export Backtest Report"
+msgstr ""

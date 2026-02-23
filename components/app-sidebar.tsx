@@ -86,7 +86,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem className="mb-2 ml-2">
-            <LanguageSwitcher />
+            <LanguageSwitcher align="start" />
           </SidebarMenuItem>
           <SidebarMenuItem>
             <form action={signOutAction}>

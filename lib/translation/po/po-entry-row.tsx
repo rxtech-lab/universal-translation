@@ -63,6 +63,7 @@ export const PoEntryRow = memo(function PoEntryRow({
 
   return (
     <div
+      data-testid={`po-entry-${entry.id}`}
       className={cn(
         "border-b px-3 md:px-4 py-3 transition-colors",
         isStreaming && "bg-primary/5 animate-in fade-in duration-300",

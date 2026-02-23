@@ -25,7 +25,6 @@ export interface TranslationEditorProps {
   onSave: () => void;
   children: React.ReactNode;
   terms: Term[];
-  onTermsChange: (terms: Term[]) => void;
   onTranslationUpdated: (
     resourceId: string,
     entryId: string,

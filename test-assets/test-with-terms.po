@@ -1,0 +1,38 @@
+# PO file with translations that use term templates (${{slug}})
+# Simulates state AFTER first translation run with AI-generated terms
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: zh-Hans\n"
+"MIME-Version: 1.0\n"
+
+#. App name reference
+#: src/components/Header.tsx:5
+msgid "Welcome to Argo Trading"
+msgstr "欢迎使用 ${{argo-trading}}"
+
+#. Portfolio page heading
+#: src/pages/Portfolio.tsx:10
+msgid "Your Backtest Results"
+msgstr "您的${{backtest}}结果"
+
+#. Stats display
+#: src/components/Stats.tsx:20
+msgid "Current Win Rate"
+msgstr "当前${{win-rate}}"
+
+#. Strategy description
+#: src/pages/Strategy.tsx:15
+msgid "Backtest your strategy with Argo Trading"
+msgstr "${{backtest}}您的策略，使用 ${{argo-trading}}"
+
+#. Risk metrics heading
+#: src/components/RiskMetrics.tsx:8
+msgid "Maximum Drawdown"
+msgstr "最大${{drawdown}}"
+
+#. Overview description
+#: src/pages/Dashboard.tsx:25
+msgid "View your portfolio performance and win rate"
+msgstr "查看您的投资组合表现和${{win-rate}}"

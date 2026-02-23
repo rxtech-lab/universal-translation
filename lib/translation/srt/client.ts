@@ -190,7 +190,7 @@ export class SrtClient implements TranslationClient<SrtTranslationEvent> {
 
       // Resolve term templates if terms are provided
       if (terms && terms.length > 0 && text) {
-        const termsMap = new Map(terms.map((t) => [t.id, t]));
+        const termsMap = new Map(terms.map((t) => [t.slug, t]));
         text = resolveTermTemplates(text, termsMap);
       }
 

@@ -14,7 +14,7 @@ declare module "next-auth" {
 }
 
 async function refreshAccessToken(refreshToken: string) {
-  console.log("Refreshing access token...");
+  console.log(`Refreshing access token... ${refreshToken}`);
   const response = await fetch(`${process.env.AUTH_ISSUER}/api/oauth/token`, {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -84,7 +84,7 @@ const nextAuth = NextAuth({
       // Token still valid - return as is
       if (
         token.expiresAt &&
-        Date.now() < (token.expiresAt as number) * 1000 - 60000
+        Date.now() < (token.expiresAt as number) * 1000 - 60000 // Refresh 1 minute before expiry
       ) {
         return token;
       }

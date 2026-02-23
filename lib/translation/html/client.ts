@@ -304,7 +304,7 @@ export class HtmlClient implements TranslationClient<HtmlTranslationEvent> {
     if (!parsed) return "";
 
     const termsMap =
-      terms && terms.length > 0 ? new Map(terms.map((t) => [t.id, t])) : null;
+      terms && terms.length > 0 ? new Map(terms.map((t) => [t.slug, t])) : null;
 
     // Build translation map from current entries
     const translations = new Map<number, string>();
@@ -393,7 +393,7 @@ export class HtmlClient implements TranslationClient<HtmlTranslationEvent> {
     OperationResult<{ downloadUrl?: string; blob?: Blob; fileName: string }>
   > {
     const termsMap =
-      terms && terms.length > 0 ? new Map(terms.map((t) => [t.id, t])) : null;
+      terms && terms.length > 0 ? new Map(terms.map((t) => [t.slug, t])) : null;
 
     const getTranslatedText = (entry: TranslationEntry): string => {
       let text = entry.targetText || entry.sourceText;

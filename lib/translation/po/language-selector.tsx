@@ -72,7 +72,7 @@ export function PoLanguageSelector({
               Target Language
             </label>
             <Select value={targetLanguage} onValueChange={setTargetLanguage}>
-              <SelectTrigger>
+              <SelectTrigger data-testid="target-language-trigger">
                 <SelectValue placeholder="Select language" />
               </SelectTrigger>
               <SelectContent>
@@ -95,6 +95,7 @@ export function PoLanguageSelector({
           <Button
             size="sm"
             disabled={!canConfirm}
+            data-testid="create-project-button"
             onClick={() => onConfirm(sourceLanguage, targetLanguage)}
           >
             Create Project

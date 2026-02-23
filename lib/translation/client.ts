@@ -1,4 +1,5 @@
 import type React from "react";
+import type { Term } from "./tools/term-tools";
 import type {
   OperationResult,
   TranslationEntry,
@@ -92,7 +93,9 @@ export interface TranslationClient<TEvent = unknown> {
    * Export the translated content back to its original format.
    * Returns a download URL or a Blob the caller can trigger a download from.
    */
-  exportFile(): Promise<
+  exportFile(
+    terms?: Term[],
+  ): Promise<
     OperationResult<{ downloadUrl?: string; blob?: Blob; fileName: string }>
   >;
 
@@ -106,4 +109,10 @@ export interface TranslationClient<TEvent = unknown> {
    * Restore state from a previously saved project.
    */
   open(projectId: string): Promise<OperationResult>;
+
+  /**
+   * Return format-specific data for DB persistence.
+   * Keeps the internal document in sync with project content across saves.
+   */
+  getFormatData(): unknown;
 }

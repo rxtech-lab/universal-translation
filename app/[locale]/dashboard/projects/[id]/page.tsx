@@ -23,6 +23,7 @@ export default async function ProjectPage({
     db
       .select({
         id: terms.id,
+        slug: terms.slug,
         originalText: terms.originalText,
         translation: terms.translation,
         comment: terms.comment,

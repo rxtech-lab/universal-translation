@@ -372,3 +372,14 @@
 :is(.dark) .bento-card:hover {
   box-shadow: 0 2px 20px oklch(1 0 0 / 4%);
 }
+
+/* ─── Apple-style loading spinner ────────────────────────────────────────── */
+
+@keyframes spinner-fade {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.15;
+  }
+}

@@ -10,20 +10,20 @@ msgstr ""
 #: components/app-sidebar.tsx:28
 #: components/landing/nav-bar.tsx:56
 msgid "hzSNj4"
-msgstr "${{dashboard}}"
+msgstr "仪表板"
 
 #: app/[locale]/dashboard/page.tsx:85
 msgid "tWcRaD"
-msgstr "您的翻译${{project}}概览"
+msgstr "翻译项目概览"
 
 #: app/[locale]/dashboard/page.tsx:91
 #: app/[locale]/dashboard/projects/page.tsx:65
 msgid "YBY/lc"
-msgstr "新建${{project}}"
+msgstr "新建项目"
 
 #: app/[locale]/dashboard/page.tsx:101
 msgid "gkvdf7"
-msgstr "暂无${{project}}"
+msgstr "暂无项目"
 
 #: app/[locale]/dashboard/page.tsx:103
 msgid "3oqXCa"
@@ -32,15 +32,15 @@ msgstr "上传翻译文件以开始。"
 #: app/[locale]/dashboard/page.tsx:108
 #: app/[locale]/dashboard/projects/page.tsx:82
 msgid "iRkI8S"
-msgstr "创建您的第一个${{project}}"
+msgstr "创建您的首个项目"
 
 #: app/[locale]/dashboard/page.tsx:119
 msgid "RP6NBP"
-msgstr "${{project}}总数"
+msgstr "项目总数"
 
 #: app/[locale]/dashboard/page.tsx:126
 msgid "m3wERc"
-msgstr "${{project}}"
+msgstr "项目"
 
 #: app/[locale]/dashboard/page.tsx:131
 msgid "B487HA"
@@ -56,7 +56,7 @@ msgstr "已完成"
 
 #: app/[locale]/dashboard/page.tsx:152
 msgid "T2DELw"
-msgstr "已完成"
+msgstr "已结束"
 
 #: app/[locale]/dashboard/page.tsx:157
 msgid "sIMS7i"
@@ -64,15 +64,70 @@ msgstr "进度"
 
 #: app/[locale]/dashboard/page.tsx:165
 msgid "Cz+sg6"
-msgstr "{translated} / {total} 个字符串"
+msgstr "{translated} / {total} 条字符串"
 
 #: app/[locale]/dashboard/page.tsx:176
 msgid "E+UaDm"
-msgstr "最近${{project}}"
+msgstr "最近项目"
 
 #: app/[locale]/dashboard/page.tsx:179
 msgid "pFK6bJ"
 msgstr "查看全部"
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:217
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:236
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:316
+#: lib/translation/components/entry-row-actions.tsx:60
+#: lib/translation/lyrics/lyrics-entry-row.tsx:194
+msgid "2C42E7"
+msgstr "翻译中..."
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:318
+msgid "by2lJ5"
+msgstr "正在开始翻译..."
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:375
+msgid "qvr1Bb"
+msgstr "正在翻译行..."
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:377
+msgid "G+DatO"
+msgstr "正在翻译第 {id} 行..."
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:426
+msgid "Rx9EpS"
+msgstr "翻译已停止"
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:454
+msgid "S/NHSE"
+msgstr "正在清除翻译..."
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:455
+msgid "wYNhGP"
+msgstr "所有翻译已清除"
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:456
+msgid "R38RUr"
+msgstr "清除翻译失败"
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:474
+msgid "fq475d"
+msgstr "已更新：保留 {preserved} 个，新增 {added} 个，移除 {removed} 个"
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:489
+#: app/[locale]/dashboard/projects/project-card.tsx:67
+msgid "fouJn6"
+msgstr "项目已重命名"
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:491
+#: app/[locale]/dashboard/projects/project-card.tsx:70
+msgid "m3LbFk"
+msgstr "重命名项目失败"
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:502
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:521
+msgid "heAhPr"
+msgstr "导出失败"
 
 #: app/[locale]/dashboard/projects/new/mode-selector.tsx:34
 #: app/[locale]/dashboard/projects/new/text-input-client.tsx:143
@@ -94,17 +149,23 @@ msgstr "标准文档翻译"
 
 #: app/[locale]/dashboard/projects/new/mode-selector.tsx:68
 #: app/[locale]/dashboard/projects/new/text-input-client.tsx:171
+#: lib/translation/lyrics/lyrics-editor.tsx:69
 msgid "D/JyFP"
 msgstr "歌词"
 
 #: app/[locale]/dashboard/projects/new/mode-selector.tsx:70
 msgid "OJ73Ny"
-msgstr "保持节奏与韵律"
+msgstr "保留节奏与韵律"
 
 #: app/[locale]/dashboard/projects/new/mode-selector.tsx:76
 #: app/[locale]/dashboard/projects/project-card.tsx:167
 #: app/[locale]/dashboard/projects/project-card.tsx:194
 #: components/landing/waiting-list-button.tsx:139
+#: lib/translation/components/entry-row-actions.tsx:124
+#: lib/translation/components/translation-editor.tsx:246
+#: lib/translation/components/translation-editor.tsx:283
+#: lib/translation/lyrics/lyrics-entry-row.tsx:367
+#: lib/translation/po/po-update-dialog.tsx:349
 msgid "47FYwb"
 msgstr "取消"
 
@@ -126,17 +187,17 @@ msgstr "网址"
 
 #: app/[locale]/dashboard/projects/new/text-input-client.tsx:109
 #: app/[locale]/dashboard/projects/new/upload-client.tsx:426
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:213
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:216
 msgid "9aWdwz"
-msgstr "新建翻译${{project}}"
+msgstr "新建翻译项目"
 
 #: app/[locale]/dashboard/projects/new/text-input-client.tsx:111
 msgid "ql6Lx3"
-msgstr "直接粘贴文本以创建翻译${{project}}"
+msgstr "直接粘贴文本以创建翻译项目"
 
 #: app/[locale]/dashboard/projects/new/text-input-client.tsx:118
 msgid "Az9uwz"
-msgstr "${{project}}名称"
+msgstr "项目名称"
 
 #: app/[locale]/dashboard/projects/new/text-input-client.tsx:121
 msgid "3kbIhS"
@@ -156,29 +217,29 @@ msgstr "标准翻译"
 
 #: app/[locale]/dashboard/projects/new/text-input-client.tsx:173
 msgid "DLuKou"
-msgstr "兼顾节奏与韵律"
+msgstr "考虑节奏与韵脚"
 
 #: app/[locale]/dashboard/projects/new/text-input-client.tsx:183
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:150
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:153
 msgid "BEQpGU"
 msgstr "源语言"
 
 #: app/[locale]/dashboard/projects/new/text-input-client.tsx:187
 #: app/[locale]/dashboard/projects/new/text-input-client.tsx:207
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:154
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:174
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:157
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:177
 msgid "eVlu1R"
 msgstr "选择语言"
 
 #: app/[locale]/dashboard/projects/new/text-input-client.tsx:203
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:170
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:173
 msgid "NU4hHH"
-msgstr "${{target-language}}"
+msgstr "目标语言"
 
 #: app/[locale]/dashboard/projects/new/text-input-client.tsx:235
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:202
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:205
 msgid "9cabk2"
-msgstr "创建${{project}}"
+msgstr "创建项目"
 
 #: app/[locale]/dashboard/projects/new/upload-client.tsx:428
 msgid "ARrrzI"
@@ -186,7 +247,7 @@ msgstr "上传翻译文件以开始"
 
 #: app/[locale]/dashboard/projects/new/upload-client.tsx:469
 msgid "NkM/L5"
-msgstr "将文件拖放到此处或点击浏览"
+msgstr "将文件拖放到此处，或点击浏览"
 
 #: app/[locale]/dashboard/projects/new/upload-client.tsx:472
 msgid "cuThZz"
@@ -201,41 +262,41 @@ msgid "jOJOQG"
 msgstr "正在解析翻译文件..."
 
 #: app/[locale]/dashboard/projects/new/upload-client.tsx:529
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:262
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:265
 msgid "XKrAeH"
-msgstr "正在创建${{project}}..."
+msgstr "正在创建项目..."
 
 #: app/[locale]/dashboard/projects/new/upload-client.tsx:549
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:274
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:277
 msgid "FazwRl"
 msgstr "重试"
 
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:138
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:141
 msgid "HNPgYl"
 msgstr "配置语言"
 
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:140
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:143
 msgid "mEnkEL"
-msgstr "在 {fileName} 中找到 {count} 个可翻译片段"
+msgstr "在 {fileName} 中找到 {count} 个可翻译句段"
 
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:195
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:198
 #: components/site-header.tsx:27
 msgid "cyR7Kh"
 msgstr "返回"
 
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:215
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:218
 msgid "g+Ihon"
 msgstr "输入 URL 以获取并翻译网页"
 
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:221
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:224
 msgid "dYPPeg"
 msgstr "网页 URL"
 
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:247
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:250
 msgid "SucWt8"
 msgstr "获取"
 
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:255
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:258
 msgid "7GJT8g"
 msgstr "正在获取网页..."
 
@@ -246,30 +307,23 @@ msgstr "翻译"
 
 #: app/[locale]/dashboard/projects/page.tsx:59
 msgid "djFCzM"
-msgstr "管理您的翻译${{project}}"
+msgstr "管理您的翻译项目"
 
 #: app/[locale]/dashboard/projects/page.tsx:75
 msgid "B78XPL"
-msgstr "暂无${{project}}。上传翻译文件以开始。"
-
-#: app/[locale]/dashboard/projects/project-card.tsx:67
-msgid "fouJn6"
-msgstr "${{project}}已重命名"
-
-#: app/[locale]/dashboard/projects/project-card.tsx:70
-msgid "m3LbFk"
-msgstr "重命名${{project}}失败"
+msgstr "暂无项目。上传翻译文件以开始。"
 
 #: app/[locale]/dashboard/projects/project-card.tsx:80
 msgid "34J8Gr"
-msgstr "${{project}}已删除"
+msgstr "项目已删除"
 
 #: app/[locale]/dashboard/projects/project-card.tsx:82
 msgid "Hknxdz"
-msgstr "删除${{project}}失败"
+msgstr "删除项目失败"
 
 #: app/[locale]/dashboard/projects/project-card.tsx:130
 #: app/[locale]/dashboard/projects/project-card.tsx:175
+#: lib/translation/components/translation-editor.tsx:296
 msgid "iXNbPf"
 msgstr "重命名"
 
@@ -279,12 +333,14 @@ msgid "K3r6DQ"
 msgstr "删除"
 
 #: app/[locale]/dashboard/projects/project-card.tsx:150
+#: lib/translation/components/translation-editor.tsx:263
 msgid "Eer8li"
-msgstr "重命名${{project}}"
+msgstr "重命名项目"
 
 #: app/[locale]/dashboard/projects/project-card.tsx:153
+#: lib/translation/components/translation-editor.tsx:266
 msgid "D5RCKi"
-msgstr "${{project}}名称"
+msgstr "项目名称"
 
 #: app/[locale]/dashboard/projects/project-card.tsx:175
 msgid "dxAlJ5"
@@ -292,7 +348,7 @@ msgstr "正在重命名..."
 
 #: app/[locale]/dashboard/projects/project-card.tsx:184
 msgid "GsO+rH"
-msgstr "删除${{project}}？"
+msgstr "删除项目？"
 
 #: app/[locale]/dashboard/projects/project-card.tsx:186
 msgid "kBMkkS"
@@ -304,21 +360,21 @@ msgstr "正在删除..."
 
 #: app/[locale]/page.tsx:22
 msgid "ju+J0L"
-msgstr "${{universal-translation}} — AI 驱动的软件本地化"
+msgstr "通用翻译 — AI 驱动的软件本地化"
 
 #: app/[locale]/page.tsx:23
 msgid "fffnKc"
-msgstr "上传 .xcloc、.srt、.po、.md、.txt 和 .docx 文件。几秒钟内即可获取上下文感知、${{terminology}}一致的 AI 翻译。专为开发者和翻译人员打造。"
+msgstr "上传 .xcloc、.srt、.po、.md、.txt 和 .docx 文件。在几秒钟内获取感知上下文、术语一致的 AI 翻译。专为开发者和译者打造。"
 
 #: app/[locale]/page.tsx:73
 msgid "+hb4i3"
-msgstr "AI 驱动的软件本地化翻译平台。支持 ${{xcode}} .xcloc 目录、.srt 字幕、.po gettext 文件、Markdown、纯文本和 Word 文档。"
+msgstr "专为软件本地化打造的 AI 翻译平台。支持 Xcode .xcloc 目录、.srt 字幕、.po gettext 文件、Markdown、纯文本和 Word 文档。"
 
 #: components/app-sidebar.tsx:52
 #: components/landing/hero-section.tsx:32
 #: components/landing/nav-bar.tsx:40
 msgid "vqcy/i"
-msgstr "${{universal-translation}}"
+msgstr "通用翻译"
 
 #: components/app-sidebar.tsx:61
 msgid "fBg+7V"
@@ -334,15 +390,15 @@ msgstr "多格式支持"
 
 #: components/landing/feature-grid.tsx:19
 msgid "4f2+Vy"
-msgstr "从 ${{xcode}} .xcloc 目录到 .srt 字幕、.po gettext 文件以及 .docx 文档。一个平台即可处理全部。"
+msgstr "从 Xcode .xcloc 目录到 .srt 字幕、.po gettext 文件和 .docx 文档。一个平台搞定所有格式。"
 
 #: components/landing/feature-grid.tsx:26
 msgid "/SZZmq"
-msgstr "LLM 驱动的翻译"
+msgstr "LLM 驱动翻译"
 
 #: components/landing/feature-grid.tsx:27
 msgid "XwxEw4"
-msgstr "先进的语言模型能够生成自然、符合上下文的准确翻译，读起来就像母语人士撰写的一样。"
+msgstr "先进的语言模型生成自然且符合语境的准确翻译，读起来就像出自母语者之手。"
 
 #: components/landing/feature-grid.tsx:34
 msgid "jGsVW7"
@@ -350,15 +406,15 @@ msgstr "上下文感知"
 
 #: components/landing/feature-grid.tsx:35
 msgid "KZjjDh"
-msgstr "AI 会读取周围的${{entry}}以获取上下文，生成能自然融入整个文档的翻译。"
+msgstr "AI 通过读取周围条目获取上下文，生成的翻译与整个文档自然契合。"
 
 #: components/landing/feature-grid.tsx:42
 msgid "vzJJ8L"
-msgstr "${{terminology}}一致性"
+msgstr "术语一致性"
 
 #: components/landing/feature-grid.tsx:43
 msgid "CZr/wQ"
-msgstr "只需定义一次词汇表。品牌名称、专业术语和专有名词在所有翻译中都能保持一致。"
+msgstr "一次定义您的术语表。品牌名称、技术术语和专有名词在所有翻译中保持一致。"
 
 #: components/landing/feature-grid.tsx:50
 msgid "4VVKWs"
@@ -366,7 +422,7 @@ msgstr "云端保存"
 
 #: components/landing/feature-grid.tsx:51
 msgid "DPwoiE"
-msgstr "${{project}}会自动保存。随时随地在任何设备上继续您的工作。"
+msgstr "项目会自动保存。随时随地，在任何设备上无缝接续您的工作。"
 
 #: components/landing/feature-grid.tsx:58
 msgid "QUiYRh"
@@ -374,7 +430,7 @@ msgstr "智能字幕"
 
 #: components/landing/feature-grid.tsx:59
 msgid "gYvUA+"
-msgstr "为字幕和歌词提供专属处理——保留口语对话的时间轴、语气、押韵和可读性。"
+msgstr "针对字幕和歌词的专业处理——为口语对白保留时间轴、语调、韵脚和可读性。"
 
 #: components/landing/feature-grid.tsx:81
 msgid "XFievo"
@@ -382,11 +438,11 @@ msgstr "功能特性"
 
 #: components/landing/feature-grid.tsx:84
 msgid "zvwLaK"
-msgstr "满足您的所有需求"
+msgstr "满足您所需的一切"
 
 #: components/landing/feature-grid.tsx:87
 msgid "SA+PbI"
-msgstr "专为开发者、翻译人员和内容创作者打造"
+msgstr "专为开发者、译者和内容创作者打造"
 
 #: components/landing/footer-cta.tsx:45
 msgid "ziQZMb"
@@ -394,35 +450,35 @@ msgstr "准备好开始翻译了吗？"
 
 #: components/landing/footer-cta.tsx:48
 msgid "HXGsdi"
-msgstr "上传您的第一个文件，体验 AI 驱动的翻译。无需进行任何设置。"
+msgstr "上传您的第一个文件，体验 AI 驱动的翻译。无需任何设置。"
 
 #: components/landing/footer-cta.tsx:64
 msgid "sFk7V0"
-msgstr "由 ${{rxlab}} 打造"
+msgstr "由 RxLab 构建"
 
 #: components/landing/format-showcase.tsx:11
 msgid "0biIE1"
-msgstr "${{xcode}} 本地化"
+msgstr "Xcode 本地化"
 
 #: components/landing/format-showcase.tsx:13
 msgid "aRXMRq"
-msgstr "使用 Apple 的原生本地化格式发布支持所有语言的 iOS、macOS 和 visionOS 应用程序。"
+msgstr "使用 Apple 的原生本地化格式，以各种语言发布您的 iOS、macOS 和 visionOS 应用。"
 
 #: components/landing/format-showcase.tsx:19
 msgid "+H1DS1"
-msgstr "${{subrip}} 字幕"
+msgstr "SubRip 字幕"
 
 #: components/landing/format-showcase.tsx:21
 msgid "GZ+2zx"
-msgstr "可感知时间戳的字幕翻译，完美保留语气、押韵和可读性。"
+msgstr "感知时间戳的字幕翻译，保留语气、韵脚和可读性。"
 
 #: components/landing/format-showcase.tsx:27
 msgid "rqMOT7"
-msgstr "${{gnu-gettext}}"
+msgstr "GNU gettext"
 
 #: components/landing/format-showcase.tsx:29
 msgid "jHuNUS"
-msgstr "数以千计的开源${{project}}正在使用的行业标准本地化方案。"
+msgstr "数千个开源项目所采用的行业标准本地化格式。"
 
 #: components/landing/format-showcase.tsx:35
 msgid "vBlT6y"
@@ -430,7 +486,7 @@ msgstr "文档"
 
 #: components/landing/format-showcase.tsx:37
 msgid "AW30fu"
-msgstr "从 README 文件到稿件——在翻译任何书面内容的同时保留原有的格式。"
+msgstr "从 README 到手稿 —— 翻译任何书面内容，同时保留格式。"
 
 #: components/landing/format-showcase.tsx:57
 msgid "mi0bxS"
@@ -438,7 +494,7 @@ msgstr "文件格式"
 
 #: components/landing/format-showcase.tsx:60
 msgid "wG1fgT"
-msgstr "支持您常用的格式"
+msgstr "支持您所使用的格式"
 
 #: components/landing/format-showcase.tsx:63
 msgid "Ljzf7k"
@@ -446,7 +502,7 @@ msgstr "从应用开发者到内容创作者，我们都能满足您的需求"
 
 #: components/landing/hero-section.tsx:36
 msgid "DaqJa0"
-msgstr "所有语言。一键搞定。"
+msgstr "所有语言。一键完成。"
 
 #: components/landing/hero-section.tsx:44
 msgid "QVwKJz"
@@ -458,15 +514,20 @@ msgstr "上传"
 
 #: components/landing/how-it-works.tsx:11
 msgid "6NYcnj"
-msgstr "拖放任何受支持格式的翻译文件——${{xcode}} 目录、字幕、PO 文件或文档。"
+msgstr "拖入任何受支持格式的翻译文件 —— Xcode 目录、字幕、PO 文件 或文档。"
 
 #: components/landing/how-it-works.tsx:17
+#: lib/translation/components/entry-row-actions.tsx:70
+#: lib/translation/components/entry-row-actions.tsx:132
+#: lib/translation/components/translate-dropdown.tsx:57
+#: lib/translation/lyrics/lyrics-entry-row.tsx:204
+#: lib/translation/lyrics/lyrics-entry-row.tsx:375
 msgid "wCy/Tc"
 msgstr "翻译"
 
 #: components/landing/how-it-works.tsx:18
 msgid "N4XcYr"
-msgstr "AI 在具备完整上下文感知的情况下进行翻译，遵循您的${{terminology}}词汇表并保持翻译一致性。"
+msgstr "AI 将结合完整的上下文进行翻译，遵循您的术语表中的术语并保持一致性。"
 
 #: components/landing/how-it-works.tsx:24
 msgid "5q3qC0"
@@ -474,7 +535,7 @@ msgstr "下载"
 
 #: components/landing/how-it-works.tsx:25
 msgid "NTMrbs"
-msgstr "以原始格式导出翻译后的文件，可直接用于您的${{project}}。"
+msgstr "以原始格式导出翻译好的文件，随时可在您的项目中使用。"
 
 #: components/landing/how-it-works.tsx:36
 msgid "d1Wvzs"
@@ -494,7 +555,7 @@ msgstr "登录"
 
 #: components/landing/waiting-list-button.tsx:48
 msgid "LxSJOb"
-msgstr "前往${{dashboard}}"
+msgstr "前往仪表板"
 
 #: components/landing/waiting-list-button.tsx:58
 msgid "9QXm1E"
@@ -502,27 +563,27 @@ msgstr "开始使用"
 
 #: components/landing/waiting-list-button.tsx:68
 msgid "85SC0+"
-msgstr "您已在${{waiting-list}}中"
+msgstr "您已加入候补名单"
 
 #: components/landing/waiting-list-button.tsx:88
 msgid "iuY8kx"
-msgstr "出了点问题。"
+msgstr "出错了。"
 
 #: components/landing/waiting-list-button.tsx:96
 msgid "Mi3Uq0"
-msgstr "加入${{waiting-list}}"
+msgstr "加入候补名单"
 
 #: components/landing/waiting-list-button.tsx:102
 msgid "bV6va1"
-msgstr "加入${{waiting-list}}"
+msgstr "加入候补名单"
 
 #: components/landing/waiting-list-button.tsx:104
 msgid "xQ07+I"
-msgstr "请输入您的电子邮箱地址，开通访问权限后我们会通知您。"
+msgstr "输入您的电子邮箱地址，当您获得访问权限时，我们会通知您。"
 
 #: components/landing/waiting-list-button.tsx:112
 msgid "Q7tRib"
-msgstr "您已加入名单！我们会尽快与您联系。"
+msgstr "您已加入名单！我们将很快与您联系。"
 
 #: components/landing/waiting-list-button.tsx:118
 msgid "hJZwTS"
@@ -530,8 +591,374 @@ msgstr "电子邮箱地址"
 
 #: components/landing/waiting-list-button.tsx:142
 msgid "UCyyxT"
-msgstr "加入中…"
+msgstr "正在加入…"
 
 #: components/landing/waiting-list-button.tsx:142
 msgid "P6PLpi"
 msgstr "加入"
+
+#: lib/translation/components/edit-translate-dialog.tsx:54
+#: lib/translation/components/translate-dropdown.tsx:71
+msgid "hoSwu+"
+msgstr "编辑翻译"
+
+#: lib/translation/components/entry-row-actions.tsx:65
+#: lib/translation/components/entry-row-actions.tsx:132
+#: lib/translation/lyrics/lyrics-entry-row.tsx:199
+#: lib/translation/lyrics/lyrics-entry-row.tsx:375
+msgid "dFElDN"
+msgstr "重新翻译"
+
+#: lib/translation/components/entry-row-actions.tsx:77
+#: lib/translation/lyrics/lyrics-entry-row.tsx:211
+msgid "KQYOy0"
+msgstr "正在翻译..."
+
+#: lib/translation/components/entry-row-actions.tsx:79
+msgid "yQEIYo"
+msgstr "使用可选的指导信息重新翻译此条目"
+
+#: lib/translation/components/entry-row-actions.tsx:80
+msgid "4XGTby"
+msgstr "使用可选指导翻译此条目"
+
+#: lib/translation/components/entry-row-actions.tsx:95
+#: lib/translation/lyrics/lyrics-entry-row.tsx:229
+msgid "Hl39aQ"
+msgstr "清除翻译"
+
+#: lib/translation/components/entry-row-actions.tsx:103
+msgid "UdNqGk"
+msgstr "重新翻译条目"
+
+#: lib/translation/components/entry-row-actions.tsx:103
+msgid "XiLco2"
+msgstr "翻译条目"
+
+#: lib/translation/components/entry-row-actions.tsx:106
+#: lib/translation/lyrics/lyrics-entry-row.tsx:349
+msgid "ogqnL7"
+msgstr "为 AI 翻译提供可选指导。留空则进行自动翻译。"
+
+#: lib/translation/components/entry-row-actions.tsx:118
+msgid "Y4Ppnl"
+msgstr "例如，“使用正式语气”或“保持简洁”"
+
+#: lib/translation/components/terms-editor.tsx:64
+msgid "he9IcT"
+msgstr "原文"
+
+#: lib/translation/components/terms-editor.tsx:65
+#: lib/translation/components/terms-editor.tsx:110
+#: lib/translation/document/document-entry-row.tsx:117
+#: lib/translation/html/html-entry-row.tsx:119
+#: lib/translation/lyrics/lyrics-entry-row.tsx:312
+#: lib/translation/po/po-entry-row.tsx:131
+#: lib/translation/srt/srt-entry-row.tsx:119
+#: lib/translation/xcloc/xcloc-entry-row.tsx:111
+msgid "/vCXIP"
+msgstr "译文"
+
+#: lib/translation/components/terms-editor.tsx:66
+msgid "LgbKvU"
+msgstr "备注"
+
+#: lib/translation/components/terms-editor.tsx:86
+msgid "a3fWIu"
+msgstr "可选备注"
+
+#: lib/translation/components/terms-editor.tsx:104
+msgid "MlOKta"
+msgstr "原文文本"
+
+#: lib/translation/components/terms-editor.tsx:126
+msgid "F1xJu8"
+msgstr "暂无术语。翻译过程中会自动检测术语，或者在上方手动添加。"
+
+#: lib/translation/components/translate-dropdown.tsx:46
+msgid "q/uwLT"
+msgstr "停止"
+
+#: lib/translation/components/translate-dropdown.tsx:64
+msgid "qAeAY3"
+msgstr "翻译全部"
+
+#: lib/translation/components/translation-editor.tsx:125
+#: lib/translation/components/translation-editor.tsx:184
+msgid "xkr+zo"
+msgstr "术语"
+
+#: lib/translation/components/translation-editor.tsx:137
+#: lib/translation/components/translation-editor.tsx:189
+#: lib/translation/po/po-update-dialog.tsx:358
+msgid "BWpuKl"
+msgstr "更新"
+
+#: lib/translation/components/translation-editor.tsx:146
+#: lib/translation/components/translation-editor.tsx:201
+#: lib/translation/components/translation-editor.tsx:252
+msgid "cqlObT"
+msgstr "清除全部"
+
+#: lib/translation/components/translation-editor.tsx:150
+#: lib/translation/components/translation-editor.tsx:194
+msgid "SVwJTM"
+msgstr "导出"
+
+#: lib/translation/components/translation-editor.tsx:154
+#: lib/translation/components/translation-editor.tsx:227
+msgid "jvo0vs"
+msgstr "保存"
+
+#: lib/translation/components/translation-editor.tsx:217
+msgid "JyIWks"
+msgstr "术语"
+
+#: lib/translation/components/translation-editor.tsx:238
+msgid "4aWEkl"
+msgstr "清除所有翻译？"
+
+#: lib/translation/components/translation-editor.tsx:240
+msgid "ap2ut+"
+msgstr "这将删除所有已翻译的文本。此操作无法撤销。"
+
+#: lib/translation/components/translation-status.tsx:44
+msgid "IZFEUg"
+msgstr "就绪"
+
+#: lib/translation/components/translation-status.tsx:49
+msgid "TiR/Hq"
+msgstr "保存中..."
+
+#: lib/translation/components/translation-status.tsx:54
+msgid "fsB/4p"
+msgstr "已保存"
+
+#: lib/translation/components/translation-status.tsx:62
+msgid "tUlsq+"
+msgstr "翻译中"
+
+#: lib/translation/components/translation-status.tsx:70
+msgid "5elgIe"
+msgstr "错误："
+
+#: lib/translation/components/translation-status.tsx:88
+msgid "eRn0dn"
+msgstr "1 个错误"
+
+#: lib/translation/components/translation-status.tsx:89
+msgid "VN18Wb"
+msgstr "{count} 个错误"
+
+#: lib/translation/components/translation-status.tsx:95
+msgid "ASykzc"
+msgstr "翻译错误"
+
+#: lib/translation/document/document-editor.tsx:69
+msgid "wmirkP"
+msgstr "文档"
+
+#: lib/translation/document/document-editor.tsx:71
+#: lib/translation/html/html-editor.tsx:164
+#: lib/translation/lyrics/lyrics-editor.tsx:71
+#: lib/translation/po/po-editor.tsx:75
+#: lib/translation/srt/srt-editor.tsx:68
+#: lib/translation/xcloc/xcloc-editor.tsx:156
+msgid "YSY/0j"
+msgstr "{translated}/{total} 已翻译"
+
+#: lib/translation/document/document-editor.tsx:115
+#: lib/translation/html/html-editor.tsx:208
+#: lib/translation/lyrics/lyrics-editor.tsx:116
+msgid "Ae6AVb"
+msgstr "未找到可翻译内容"
+
+#: lib/translation/document/document-entry-row.tsx:82
+#: lib/translation/html/html-entry-row.tsx:87
+#: lib/translation/lyrics/lyrics-entry-row.tsx:155
+#: lib/translation/po/po-entry-row.tsx:99
+#: lib/translation/srt/srt-entry-row.tsx:87
+#: lib/translation/xcloc/xcloc-entry-row.tsx:74
+msgid "SJzK8D"
+msgstr "已翻译"
+
+#: lib/translation/document/document-entry-row.tsx:89
+#: lib/translation/html/html-entry-row.tsx:94
+#: lib/translation/lyrics/lyrics-entry-row.tsx:162
+#: lib/translation/po/po-entry-row.tsx:106
+#: lib/translation/srt/srt-entry-row.tsx:94
+#: lib/translation/xcloc/xcloc-entry-row.tsx:81
+msgid "Kl+/5u"
+msgstr "未翻译"
+
+#: lib/translation/document/document-entry-row.tsx:104
+#: lib/translation/html/html-entry-row.tsx:109
+#: lib/translation/lyrics/lyrics-entry-row.tsx:237
+#: lib/translation/po/po-entry-row.tsx:121
+#: lib/translation/srt/srt-entry-row.tsx:109
+#: lib/translation/xcloc/xcloc-entry-row.tsx:101
+msgid "aH4De2"
+msgstr "原文"
+
+#: lib/translation/document/document-entry-row.tsx:130
+#: lib/translation/html/html-entry-row.tsx:131
+#: lib/translation/lyrics/lyrics-entry-row.tsx:324
+#: lib/translation/po/po-entry-row.tsx:143
+#: lib/translation/srt/srt-entry-row.tsx:131
+#: lib/translation/xcloc/xcloc-entry-row.tsx:123
+msgid "0b7YDD"
+msgstr "输入翻译..."
+
+#: lib/translation/html/html-editor.tsx:127
+#: lib/translation/html/html-editor.tsx:138
+msgid "m4vqJl"
+msgstr "文件"
+
+#: lib/translation/html/html-editor.tsx:160
+#: lib/translation/xcloc/xcloc-editor.tsx:152
+msgid "a6T0Np"
+msgstr "未选择资源"
+
+#: lib/translation/html/html-editor.tsx:218
+#: lib/translation/po/po-update-dialog.tsx:261
+msgid "TJo5E6"
+msgstr "预览"
+
+#: lib/translation/html/html-editor.tsx:224
+msgid "E/iHax"
+msgstr "HTML 预览"
+
+#: lib/translation/lyrics/lyrics-entry-row.tsx:175
+msgid "aqZxEO"
+msgstr "审核通过"
+
+#: lib/translation/lyrics/lyrics-entry-row.tsx:175
+msgid "UBnPjD"
+msgstr "审核未通过"
+
+#: lib/translation/lyrics/lyrics-entry-row.tsx:213
+msgid "DiLU8s"
+msgstr "重新翻译此行（可提供指导）"
+
+#: lib/translation/lyrics/lyrics-entry-row.tsx:214
+msgid "5Xudt+"
+msgstr "翻译此行（可提供指导）"
+
+#: lib/translation/lyrics/lyrics-entry-row.tsx:253
+msgid "WPMn4T"
+msgstr "{count} 个音节"
+
+#: lib/translation/lyrics/lyrics-entry-row.tsx:266
+msgid "Lmi6hE"
+msgstr "押韵："
+
+#: lib/translation/lyrics/lyrics-entry-row.tsx:346
+msgid "Um0Nm+"
+msgstr "重新翻译该行"
+
+#: lib/translation/lyrics/lyrics-entry-row.tsx:346
+msgid "cLDCC2"
+msgstr "翻译该行"
+
+#: lib/translation/po/po-editor.tsx:67
+msgid "Y1OlpD"
+msgstr "PO 翻译"
+
+#: lib/translation/po/po-editor.tsx:119
+msgid "2lwZNz"
+msgstr "此 PO 文件 中没有条目"
+
+#: lib/translation/po/po-entry-row.tsx:164
+#: lib/translation/xcloc/xcloc-entry-row.tsx:144
+msgid "FqztZR"
+msgstr "备注："
+
+#: lib/translation/po/po-entry-row.tsx:171
+msgid "Gq5sk+"
+msgstr "参考："
+
+#: lib/translation/po/po-update-dialog.tsx:106
+msgid "EbWGMC"
+msgstr "在选定的文件中未找到可翻译的条目。"
+
+#: lib/translation/po/po-update-dialog.tsx:115
+msgid "X3CQNO"
+msgstr "读取文件失败。"
+
+#: lib/translation/po/po-update-dialog.tsx:182
+msgid "Qy2ibd"
+msgstr "更新 PO 文件"
+
+#: lib/translation/po/po-update-dialog.tsx:187
+msgid "IJtHGc"
+msgstr "上传您的 PO 文件 的新版本。对于匹配的条目，现有的翻译将被保留。新条目将被添加但翻译为空，过时的条目将被移除。"
+
+#: lib/translation/po/po-update-dialog.tsx:195
+msgid "W2t7xc"
+msgstr "新 PO 文件"
+
+#: lib/translation/po/po-update-dialog.tsx:228
+msgid "IvE1kf"
+msgstr "正在读取..."
+
+#: lib/translation/po/po-update-dialog.tsx:238
+#: lib/translation/po/po-update-dialog.tsx:324
+msgid "JoZ3lc"
+msgstr "点击以更改文件"
+
+#: lib/translation/po/po-update-dialog.tsx:245
+msgid "Ezb82t"
+msgstr "将更新的 .po 文件拖放到此处或点击浏览"
+
+#: lib/translation/po/po-update-dialog.tsx:264
+msgid "okWaMT"
+msgstr "保留 {count} 项"
+
+#: lib/translation/po/po-update-dialog.tsx:269
+msgid "bS10Bv"
+msgstr "新增 {count} 项"
+
+#: lib/translation/po/po-update-dialog.tsx:272
+msgid "yae7QN"
+msgstr "移除 {count} 项"
+
+#: lib/translation/po/po-update-dialog.tsx:277
+msgid "hQLBM5"
+msgstr "总计 {count} 项"
+
+#: lib/translation/po/po-update-dialog.tsx:282
+msgid "ayEdX9"
+msgstr "警告：不会保留任何现有翻译。"
+
+#: lib/translation/po/po-update-dialog.tsx:292
+msgid "uvyL3w"
+msgstr "参考 PO 文件（基于哈希的 ID 所必需）"
+
+#: lib/translation/po/po-update-dialog.tsx:331
+msgid "cHGvvL"
+msgstr "将参考的 .po 文件拖放到此处或点击浏览"
+
+#: lib/translation/po/po-update-dialog.tsx:334
+msgid "lzZjZe"
+msgstr "通常为 en.po 或源语言文件"
+
+#: lib/translation/srt/srt-editor.tsx:66
+msgid "QQz6fV"
+msgstr "字幕"
+
+#: lib/translation/srt/srt-editor.tsx:112
+msgid "v337Np"
+msgstr "未找到字幕片段"
+
+#: lib/translation/xcloc/xcloc-editor.tsx:119
+#: lib/translation/xcloc/xcloc-editor.tsx:130
+msgid "c/KktL"
+msgstr "资源"
+
+#: lib/translation/xcloc/xcloc-editor.tsx:200
+msgid "iEWDL4"
+msgstr "此资源中没有条目"
+
+#: lib/translation/xcloc/xcloc-entry-row.tsx:151
+msgid "LPpMyQ"
+msgstr "上下文："

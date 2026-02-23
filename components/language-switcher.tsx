@@ -1,6 +1,14 @@
 "use client";
 
+import { GlobeIcon } from "lucide-react";
 import { useLocale } from "next-intl";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 
@@ -9,29 +17,38 @@ const localeLabels: Record<string, string> = {
   zh: "中文",
 };
 
-export function LanguageSwitcher() {
+export function LanguageSwitcher({
+  align = "end",
+}: {
+  align?: "start" | "center" | "end";
+} = {}) {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
 
   return (
-    <div className="flex items-center gap-1 text-xs">
-      {routing.locales.map((l, i) => (
-        <span key={l} className="flex items-center">
-          {i > 0 && <span className="text-muted-foreground/40 mx-1">|</span>}
-          <button
-            type="button"
-            onClick={() => router.replace(pathname, { locale: l })}
-            className={`transition-colors ${
-              l === locale
-                ? "font-medium text-foreground"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            {localeLabels[l] ?? l}
-          </button>
-        </span>
-      ))}
-    </div>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <GlobeIcon className="size-3.5" />
+          {localeLabels[locale] ?? locale}
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align={align}>
+        <DropdownMenuRadioGroup
+          value={locale}
+          onValueChange={(value) => router.replace(pathname, { locale: value })}
+        >
+          {routing.locales.map((l) => (
+            <DropdownMenuRadioItem key={l} value={l}>
+              {localeLabels[l] ?? l}
+            </DropdownMenuRadioItem>
+          ))}
+        </DropdownMenuRadioGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

@@ -5,7 +5,7 @@ import { db } from "@/lib/db";
 import { terms } from "@/lib/db/schema";
 
 export interface TermInput {
-  id: string;
+  slug: string;
   originalText: string;
   translation?: string;
   comment?: string;
@@ -23,7 +23,8 @@ export async function getTerm(termId: string) {
 export async function createTerm(projectId: string, term: TermInput) {
   const now = new Date();
   await db.insert(terms).values({
-    id: term.id,
+    id: crypto.randomUUID(),
+    slug: term.slug,
     projectId,
     originalText: term.originalText,
     translation: term.translation ?? "",
@@ -59,7 +60,8 @@ export async function bulkCreateTerms(
   const now = new Date();
   await db.insert(terms).values(
     termList.map((term) => ({
-      id: term.id,
+      id: crypto.randomUUID(),
+      slug: term.slug,
       projectId,
       originalText: term.originalText,
       translation: term.translation ?? "",
