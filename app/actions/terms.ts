@@ -1,9 +1,10 @@
 "use server";
 
-import { eq, sql } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { projects, terms } from "@/lib/db/schema";
+import { computeTermMerge } from "@/lib/terms/merge";
 
 async function requireUserId(): Promise<string> {
   const session = await auth();
@@ -75,37 +76,53 @@ export async function saveProjectTerms(
   const userId = await requireUserId();
   await verifyProjectOwner(projectId, userId);
 
-  // Delete existing terms for this project, then insert fresh
-  await db.delete(terms).where(eq(terms.projectId, projectId));
+  if (newTerms.length === 0) return;
 
-  if (newTerms.length > 0) {
-    const now = new Date();
+  // Fetch existing terms to merge instead of replace
+  const existingTerms = await db
+    .select({ id: terms.id, slug: terms.slug })
+    .from(terms)
+    .where(eq(terms.projectId, projectId));
+
+  const { toInsert, toUpdate } = computeTermMerge(existingTerms, newTerms);
+
+  const now = new Date();
+
+  // Update existing terms that match by slug
+  for (const t of toUpdate) {
     await db
-      .insert(terms)
-      .values(
-        newTerms.map((t) => ({
-          id: t.id,
-          slug: t.slug,
-          projectId,
-          originalText: t.originalText,
-          translation: t.translation,
-          comment: t.comment ?? null,
-          createdAt: now,
-          updatedAt: now,
-        })),
-      )
-      .onConflictDoUpdate({
-        target: terms.id,
-        set: {
-          slug: sql`excluded.slug`,
-          projectId: sql`excluded.project_id`,
-          originalText: sql`excluded.original_text`,
-          translation: sql`excluded.translation`,
-          comment: sql`excluded.comment`,
-          updatedAt: sql`excluded.updated_at`,
-        },
-      });
+      .update(terms)
+      .set({
+        originalText: t.originalText,
+        translation: t.translation,
+        comment: t.comment ?? null,
+        updatedAt: now,
+      })
+      .where(eq(terms.id, t.existingId));
   }
+
+  // Insert new terms
+  if (toInsert.length > 0) {
+    await db.insert(terms).values(
+      toInsert.map((t) => ({
+        id: crypto.randomUUID(),
+        slug: t.slug,
+        projectId,
+        originalText: t.originalText,
+        translation: t.translation,
+        comment: t.comment ?? null,
+        createdAt: now,
+        updatedAt: now,
+      })),
+    );
+  }
+}
+
+export async function deleteAllTermsByProject(projectId: string) {
+  const userId = await requireUserId();
+  await verifyProjectOwner(projectId, userId);
+
+  await db.delete(terms).where(eq(terms.projectId, projectId));
 }
 
 export async function getTermsByProject(projectId: string) {

@@ -49,6 +49,7 @@ export function EntryRowActions({
             size="sm"
             className="h-5 text-[10px] gap-1 px-1.5"
             disabled={isStreaming}
+            data-testid="entry-retranslate"
             onClick={() => {
               setSuggestion("");
               setDialogOpen(true);
@@ -124,6 +125,7 @@ export function EntryRowActions({
               <Button variant="outline">{t("Cancel")}</Button>
             </DialogClose>
             <Button
+              data-testid="entry-retranslate-confirm"
               onClick={() => {
                 setDialogOpen(false);
                 onTranslateLine(suggestion.trim() || undefined);

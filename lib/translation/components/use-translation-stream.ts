@@ -14,10 +14,9 @@ export interface LyricsAnalysis {
   reviewFeedback?: string;
 }
 
-export function useTranslationStream(initialTerms?: Term[]) {
+export function useTranslationStream() {
   const [status, setStatus] = useState<EditorStatus>({ state: "idle" });
   const [errors, setErrors] = useState<string[]>([]);
-  const [terms, setTerms] = useState<Term[]>(initialTerms ?? []);
   const [streamingEntryIds, setStreamingEntryIds] = useState<Set<string>>(
     new Set(),
   );
@@ -183,7 +182,6 @@ export function useTranslationStream(initialTerms?: Term[]) {
                     : prev,
                 );
               } else if (event.type === "terminology-found") {
-                setTerms(event.terms);
                 params.onTermsFound?.(event.terms);
               } else if (event.type === "complete") {
                 setStatus({ state: "idle" });
@@ -301,8 +299,6 @@ export function useTranslationStream(initialTerms?: Term[]) {
     setStatus,
     errors,
     clearErrors,
-    terms,
-    setTerms,
     streamingEntryIds,
     lyricsAnalysis,
     clearLyricsAnalysis,

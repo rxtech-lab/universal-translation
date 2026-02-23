@@ -74,58 +74,58 @@ msgstr "Recent Projects"
 msgid "pFK6bJ"
 msgstr "View all"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:215
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:234
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:314
-#: lib/translation/components/entry-row-actions.tsx:60
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:221
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:240
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:323
+#: lib/translation/components/entry-row-actions.tsx:61
 #: lib/translation/lyrics/lyrics-entry-row.tsx:194
 msgid "2C42E7"
 msgstr "Translating..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:316
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:325
 msgid "by2lJ5"
 msgstr "Starting translation..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:371
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:382
 msgid "qvr1Bb"
 msgstr "Translating line..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:373
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:384
 msgid "G+DatO"
 msgstr "Translating line #{id}..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:422
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:440
 msgid "Rx9EpS"
 msgstr "Translation stopped"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:450
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:468
 msgid "S/NHSE"
 msgstr "Clearing translations..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:451
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:469
 msgid "wYNhGP"
 msgstr "All translations cleared"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:452
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:470
 msgid "R38RUr"
 msgstr "Failed to clear translations"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:470
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:490
 msgid "fq475d"
 msgstr "Updated: {preserved} preserved, {added} new, {removed} removed"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:485
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:505
 #: app/[locale]/dashboard/projects/project-card.tsx:67
 msgid "fouJn6"
 msgstr "Project renamed"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:487
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:507
 #: app/[locale]/dashboard/projects/project-card.tsx:70
 msgid "m3LbFk"
 msgstr "Failed to rename project"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:499
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:519
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:518
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:537
 msgid "heAhPr"
 msgstr "Export failed"
 
@@ -161,9 +161,10 @@ msgstr "Rhythm & rhyme preserving"
 #: app/[locale]/dashboard/projects/project-card.tsx:167
 #: app/[locale]/dashboard/projects/project-card.tsx:194
 #: components/landing/waiting-list-button.tsx:139
-#: lib/translation/components/entry-row-actions.tsx:124
-#: lib/translation/components/translation-editor.tsx:248
-#: lib/translation/components/translation-editor.tsx:285
+#: lib/translation/components/entry-row-actions.tsx:125
+#: lib/translation/components/translation-editor.tsx:271
+#: lib/translation/components/translation-editor.tsx:301
+#: lib/translation/components/translation-editor.tsx:338
 #: lib/translation/lyrics/lyrics-entry-row.tsx:367
 #: lib/translation/po/po-update-dialog.tsx:349
 msgid "47FYwb"
@@ -323,7 +324,7 @@ msgstr "Failed to delete project"
 
 #: app/[locale]/dashboard/projects/project-card.tsx:130
 #: app/[locale]/dashboard/projects/project-card.tsx:175
-#: lib/translation/components/translation-editor.tsx:298
+#: lib/translation/components/translation-editor.tsx:351
 msgid "iXNbPf"
 msgstr "Rename"
 
@@ -333,12 +334,12 @@ msgid "K3r6DQ"
 msgstr "Delete"
 
 #: app/[locale]/dashboard/projects/project-card.tsx:150
-#: lib/translation/components/translation-editor.tsx:265
+#: lib/translation/components/translation-editor.tsx:318
 msgid "Eer8li"
 msgstr "Rename Project"
 
 #: app/[locale]/dashboard/projects/project-card.tsx:153
-#: lib/translation/components/translation-editor.tsx:268
+#: lib/translation/components/translation-editor.tsx:321
 msgid "D5RCKi"
 msgstr "Project name"
 
@@ -517,8 +518,8 @@ msgid "6NYcnj"
 msgstr "Drop your translation files in any supported format — Xcode catalogs, subtitles, PO files, or documents."
 
 #: components/landing/how-it-works.tsx:17
-#: lib/translation/components/entry-row-actions.tsx:70
-#: lib/translation/components/entry-row-actions.tsx:132
+#: lib/translation/components/entry-row-actions.tsx:71
+#: lib/translation/components/entry-row-actions.tsx:134
 #: lib/translation/components/translate-dropdown.tsx:57
 #: lib/translation/lyrics/lyrics-entry-row.tsx:204
 #: lib/translation/lyrics/lyrics-entry-row.tsx:375
@@ -602,64 +603,64 @@ msgstr "Join"
 msgid "hoSwu+"
 msgstr "Edit Translate"
 
-#: lib/translation/components/entry-row-actions.tsx:65
-#: lib/translation/components/entry-row-actions.tsx:132
+#: lib/translation/components/entry-row-actions.tsx:66
+#: lib/translation/components/entry-row-actions.tsx:134
 #: lib/translation/lyrics/lyrics-entry-row.tsx:199
 #: lib/translation/lyrics/lyrics-entry-row.tsx:375
 msgid "dFElDN"
 msgstr "Retranslate"
 
-#: lib/translation/components/entry-row-actions.tsx:77
+#: lib/translation/components/entry-row-actions.tsx:78
 #: lib/translation/lyrics/lyrics-entry-row.tsx:211
 msgid "KQYOy0"
 msgstr "Translation in progress..."
 
-#: lib/translation/components/entry-row-actions.tsx:79
+#: lib/translation/components/entry-row-actions.tsx:80
 msgid "yQEIYo"
 msgstr "Retranslate this entry with optional guidance"
 
-#: lib/translation/components/entry-row-actions.tsx:80
+#: lib/translation/components/entry-row-actions.tsx:81
 msgid "4XGTby"
 msgstr "Translate this entry with optional guidance"
 
-#: lib/translation/components/entry-row-actions.tsx:95
+#: lib/translation/components/entry-row-actions.tsx:96
 #: lib/translation/lyrics/lyrics-entry-row.tsx:229
 msgid "Hl39aQ"
 msgstr "Clear translation"
 
-#: lib/translation/components/entry-row-actions.tsx:103
+#: lib/translation/components/entry-row-actions.tsx:104
 msgid "UdNqGk"
 msgstr "Retranslate Entry"
 
-#: lib/translation/components/entry-row-actions.tsx:103
+#: lib/translation/components/entry-row-actions.tsx:104
 msgid "XiLco2"
 msgstr "Translate Entry"
 
-#: lib/translation/components/entry-row-actions.tsx:106
+#: lib/translation/components/entry-row-actions.tsx:107
 #: lib/translation/lyrics/lyrics-entry-row.tsx:349
 msgid "ogqnL7"
 msgstr "Provide optional guidance for the AI translation. Leave empty for automatic translation."
 
-#: lib/translation/components/entry-row-actions.tsx:118
+#: lib/translation/components/entry-row-actions.tsx:119
 msgid "Y4Ppnl"
 msgstr "e.g., \"Use formal tone\" or \"Keep it concise\""
 
-#: lib/translation/components/terms-editor.tsx:68
+#: lib/translation/components/terms-editor.tsx:67
 msgid "he9IcT"
 msgstr "Original"
 
-#: lib/translation/components/terms-editor.tsx:69
-#: lib/translation/components/terms-editor.tsx:114
+#: lib/translation/components/terms-editor.tsx:68
+#: lib/translation/components/terms-editor.tsx:115
 #: lib/translation/document/document-entry-row.tsx:117
 #: lib/translation/html/html-entry-row.tsx:119
 #: lib/translation/lyrics/lyrics-entry-row.tsx:312
-#: lib/translation/po/po-entry-row.tsx:131
+#: lib/translation/po/po-entry-row.tsx:132
 #: lib/translation/srt/srt-entry-row.tsx:119
 #: lib/translation/xcloc/xcloc-entry-row.tsx:111
 msgid "/vCXIP"
 msgstr "Translation"
 
-#: lib/translation/components/terms-editor.tsx:70
+#: lib/translation/components/terms-editor.tsx:69
 msgid "LgbKvU"
 msgstr "Comment"
 
@@ -671,7 +672,7 @@ msgstr "Optional comment"
 msgid "MlOKta"
 msgstr "Original text"
 
-#: lib/translation/components/terms-editor.tsx:130
+#: lib/translation/components/terms-editor.tsx:133
 msgid "F1xJu8"
 msgstr "No terms yet. Terms are automatically detected during translation, or add them manually above."
 
@@ -683,42 +684,55 @@ msgstr "Stop"
 msgid "qAeAY3"
 msgstr "Translate All"
 
-#: lib/translation/components/translation-editor.tsx:126
-#: lib/translation/components/translation-editor.tsx:185
+#: lib/translation/components/translation-editor.tsx:131
+#: lib/translation/components/translation-editor.tsx:190
 msgid "xkr+zo"
 msgstr "Terms"
 
-#: lib/translation/components/translation-editor.tsx:138
-#: lib/translation/components/translation-editor.tsx:190
+#: lib/translation/components/translation-editor.tsx:143
+#: lib/translation/components/translation-editor.tsx:195
 #: lib/translation/po/po-update-dialog.tsx:358
 msgid "BWpuKl"
 msgstr "Update"
 
-#: lib/translation/components/translation-editor.tsx:147
-#: lib/translation/components/translation-editor.tsx:202
-#: lib/translation/components/translation-editor.tsx:254
+#: lib/translation/components/translation-editor.tsx:152
+#: lib/translation/components/translation-editor.tsx:207
+#: lib/translation/components/translation-editor.tsx:283
+#: lib/translation/components/translation-editor.tsx:307
 msgid "cqlObT"
 msgstr "Clear All"
 
-#: lib/translation/components/translation-editor.tsx:151
-#: lib/translation/components/translation-editor.tsx:195
+#: lib/translation/components/translation-editor.tsx:156
+#: lib/translation/components/translation-editor.tsx:200
 msgid "SVwJTM"
 msgstr "Export"
 
-#: lib/translation/components/translation-editor.tsx:155
-#: lib/translation/components/translation-editor.tsx:229
+#: lib/translation/components/translation-editor.tsx:160
+#: lib/translation/components/translation-editor.tsx:249
 msgid "jvo0vs"
 msgstr "Save"
 
-#: lib/translation/components/translation-editor.tsx:218
+#: lib/translation/components/translation-editor.tsx:226
 msgid "JyIWks"
 msgstr "Terminology"
 
 #: lib/translation/components/translation-editor.tsx:240
+msgid "/GCoTA"
+msgstr "Clear"
+
+#: lib/translation/components/translation-editor.tsx:263
+msgid "4ijCHJ"
+msgstr "Clear all terms?"
+
+#: lib/translation/components/translation-editor.tsx:265
+msgid "P4F0ma"
+msgstr "This will remove all terminology entries for this project. This action cannot be undone."
+
+#: lib/translation/components/translation-editor.tsx:293
 msgid "4aWEkl"
 msgstr "Clear all translations?"
 
-#: lib/translation/components/translation-editor.tsx:242
+#: lib/translation/components/translation-editor.tsx:295
 msgid "ap2ut+"
 msgstr "This will remove all translated text. This action cannot be undone."
 
@@ -776,7 +790,7 @@ msgstr "No translatable content found"
 #: lib/translation/document/document-entry-row.tsx:82
 #: lib/translation/html/html-entry-row.tsx:87
 #: lib/translation/lyrics/lyrics-entry-row.tsx:155
-#: lib/translation/po/po-entry-row.tsx:99
+#: lib/translation/po/po-entry-row.tsx:100
 #: lib/translation/srt/srt-entry-row.tsx:87
 #: lib/translation/xcloc/xcloc-entry-row.tsx:74
 msgid "SJzK8D"
@@ -785,7 +799,7 @@ msgstr "Translated"
 #: lib/translation/document/document-entry-row.tsx:89
 #: lib/translation/html/html-entry-row.tsx:94
 #: lib/translation/lyrics/lyrics-entry-row.tsx:162
-#: lib/translation/po/po-entry-row.tsx:106
+#: lib/translation/po/po-entry-row.tsx:107
 #: lib/translation/srt/srt-entry-row.tsx:94
 #: lib/translation/xcloc/xcloc-entry-row.tsx:81
 msgid "Kl+/5u"
@@ -794,7 +808,7 @@ msgstr "Untranslated"
 #: lib/translation/document/document-entry-row.tsx:104
 #: lib/translation/html/html-entry-row.tsx:109
 #: lib/translation/lyrics/lyrics-entry-row.tsx:237
-#: lib/translation/po/po-entry-row.tsx:121
+#: lib/translation/po/po-entry-row.tsx:122
 #: lib/translation/srt/srt-entry-row.tsx:109
 #: lib/translation/xcloc/xcloc-entry-row.tsx:101
 msgid "aH4De2"
@@ -803,7 +817,7 @@ msgstr "Source"
 #: lib/translation/document/document-entry-row.tsx:130
 #: lib/translation/html/html-entry-row.tsx:131
 #: lib/translation/lyrics/lyrics-entry-row.tsx:324
-#: lib/translation/po/po-entry-row.tsx:143
+#: lib/translation/po/po-entry-row.tsx:144
 #: lib/translation/srt/srt-entry-row.tsx:131
 #: lib/translation/xcloc/xcloc-entry-row.tsx:123
 msgid "0b7YDD"
@@ -868,12 +882,12 @@ msgstr "PO Translations"
 msgid "2lwZNz"
 msgstr "No entries in this PO file"
 
-#: lib/translation/po/po-entry-row.tsx:164
+#: lib/translation/po/po-entry-row.tsx:165
 #: lib/translation/xcloc/xcloc-entry-row.tsx:144
 msgid "FqztZR"
 msgstr "Note:"
 
-#: lib/translation/po/po-entry-row.tsx:171
+#: lib/translation/po/po-entry-row.tsx:172
 msgid "Gq5sk+"
 msgstr "Ref:"
 
