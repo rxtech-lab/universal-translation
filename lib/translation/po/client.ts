@@ -450,7 +450,7 @@ export class PoClient implements TranslationClient<PoTranslationEvent> {
     this.syncAllToDocument(docToSerialize);
 
     if (terms && terms.length > 0) {
-      const termsMap = new Map(terms.map((t) => [t.id, t]));
+      const termsMap = new Map(terms.map((t) => [t.slug, t]));
       for (const entry of docToSerialize.entries) {
         if (entry.msgstr) {
           entry.msgstr = resolveTermTemplates(entry.msgstr, termsMap);

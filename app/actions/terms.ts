@@ -23,7 +23,7 @@ async function verifyProjectOwner(projectId: string, userId: string) {
 export async function createTerm(
   projectId: string,
   data: {
-    id: string;
+    slug: string;
     originalText: string;
     translation: string;
     comment?: string;
@@ -34,7 +34,8 @@ export async function createTerm(
 
   const now = new Date();
   await db.insert(terms).values({
-    id: data.id,
+    id: crypto.randomUUID(),
+    slug: data.slug,
     projectId,
     originalText: data.originalText,
     translation: data.translation,
@@ -65,6 +66,7 @@ export async function saveProjectTerms(
   projectId: string,
   newTerms: Array<{
     id: string;
+    slug: string;
     originalText: string;
     translation: string;
     comment?: string | null;
@@ -83,6 +85,7 @@ export async function saveProjectTerms(
       .values(
         newTerms.map((t) => ({
           id: t.id,
+          slug: t.slug,
           projectId,
           originalText: t.originalText,
           translation: t.translation,
@@ -94,6 +97,7 @@ export async function saveProjectTerms(
       .onConflictDoUpdate({
         target: terms.id,
         set: {
+          slug: sql`excluded.slug`,
           projectId: sql`excluded.project_id`,
           originalText: sql`excluded.original_text`,
           translation: sql`excluded.translation`,

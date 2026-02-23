@@ -40,7 +40,10 @@ interface TermTextProps {
 }
 
 export function TermText({ text, terms, className }: TermTextProps) {
-  const termsMap = useMemo(() => new Map(terms.map((t) => [t.id, t])), [terms]);
+  const termsMap = useMemo(
+    () => new Map(terms.map((t) => [t.slug, t])),
+    [terms],
+  );
 
   const parts = text.split(TERM_TEMPLATE_RE);
 

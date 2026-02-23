@@ -165,7 +165,7 @@ describe("translateProject (mocked AI)", () => {
     expect(termEvent).toBeDefined();
     if (termEvent?.type === "terminology-found") {
       expect(termEvent.terms).toHaveLength(1);
-      expect(termEvent.terms[0].id).toBe("argo-trading");
+      expect(termEvent.terms[0].slug).toBe("argo-trading");
     }
   });
 

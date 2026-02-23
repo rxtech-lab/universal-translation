@@ -491,16 +491,32 @@ export function EditorClient({
   );
 
   const handleExport = useCallback(async () => {
-    const result = await client.exportFile(terms);
-    if (!result.hasError && result.data.blob) {
-      const url = URL.createObjectURL(result.data.blob);
+    try {
+      const response = await fetch(`/api/export/${dbProject.id}`);
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        toast.error(errorData?.error ?? t("Export failed"));
+        return;
+      }
+
+      const contentDisposition = response.headers.get("Content-Disposition");
+      const fileName = contentDisposition
+        ? decodeURIComponent(
+            contentDisposition.match(/filename="?([^"]+)"?/)?.[1] ?? "export",
+          )
+        : "export";
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = result.data.fileName;
+      a.download = fileName;
       a.click();
       URL.revokeObjectURL(url);
+    } catch {
+      toast.error(t("Export failed"));
     }
-  }, [client, terms]);
+  }, [dbProject.id, t]);
 
   const handleSave = useCallback(async () => {
     setStatus((prev) =>

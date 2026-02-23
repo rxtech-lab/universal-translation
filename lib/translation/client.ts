@@ -1,4 +1,5 @@
 import type React from "react";
+import type { Term } from "./tools/term-tools";
 import type {
   OperationResult,
   TranslationEntry,
@@ -92,7 +93,9 @@ export interface TranslationClient<TEvent = unknown> {
    * Export the translated content back to its original format.
    * Returns a download URL or a Blob the caller can trigger a download from.
    */
-  exportFile(): Promise<
+  exportFile(
+    terms?: Term[],
+  ): Promise<
     OperationResult<{ downloadUrl?: string; blob?: Blob; fileName: string }>
   >;
 

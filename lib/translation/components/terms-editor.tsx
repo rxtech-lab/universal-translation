@@ -7,7 +7,7 @@ import { createTerm, deleteTerm, updateTerm } from "@/app/actions/terms";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type { Term } from "../tools/term-tools";
-import { slugifyTermId, uniqueTermId } from "../tools/term-tools";
+import { slugifyTermId, uniqueTermSlug } from "../tools/term-tools";
 
 interface TermsEditorProps {
   projectId: string;
@@ -26,39 +26,60 @@ export function TermsEditor({
 
   const handleUpdate = useCallback(
     async (termId: string, field: "translation" | "comment", value: string) => {
+      const prev = terms;
       onTermsChange(
         terms.map((tm) => (tm.id === termId ? { ...tm, [field]: value } : tm)),
       );
-      await updateTerm(termId, { [field]: value });
+      try {
+        await updateTerm(termId, { [field]: value });
+      } catch {
+        onTermsChange(prev);
+      }
     },
     [terms, onTermsChange],
   );
 
   const handleDelete = useCallback(
     async (termId: string) => {
+      const prev = terms;
       onTermsChange(terms.filter((tm) => tm.id !== termId));
-      await deleteTerm(termId);
+      try {
+        await deleteTerm(termId);
+      } catch {
+        onTermsChange(prev);
+      }
     },
     [terms, onTermsChange],
   );
 
   const handleAdd = useCallback(async () => {
     if (!newOriginal.trim()) return;
-    const existingIds = new Set(terms.map((tm) => tm.id));
-    const id = uniqueTermId(slugifyTermId(newOriginal), existingIds);
+    const existingSlugs = new Set(terms.map((tm) => tm.slug));
+    const slug = uniqueTermSlug(slugifyTermId(newOriginal), existingSlugs);
+    const id = crypto.randomUUID();
     const newTerm: Term = {
       id,
+      slug,
       originalText: newOriginal,
       translation: newTranslation,
     };
+    const prev = terms;
+    const prevOriginal = newOriginal;
+    const prevTranslation = newTranslation;
     onTermsChange([...terms, newTerm]);
-    await createTerm(projectId, {
-      id,
-      originalText: newOriginal,
-      translation: newTranslation,
-    });
     setNewOriginal("");
     setNewTranslation("");
+    try {
+      await createTerm(projectId, {
+        slug,
+        originalText: newOriginal,
+        translation: newTranslation,
+      });
+    } catch {
+      onTermsChange(prev);
+      setNewOriginal(prevOriginal);
+      setNewTranslation(prevTranslation);
+    }
   }, [newOriginal, newTranslation, terms, projectId, onTermsChange]);
 
   return (

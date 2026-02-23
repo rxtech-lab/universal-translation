@@ -306,7 +306,7 @@ export class DocumentClient
 
     // Build translated texts with term resolution
     const termsMap =
-      terms && terms.length > 0 ? new Map(terms.map((t) => [t.id, t])) : null;
+      terms && terms.length > 0 ? new Map(terms.map((t) => [t.slug, t])) : null;
 
     const getTranslatedText = (entry: TranslationEntry): string => {
       let text = entry.targetText || entry.sourceText;
