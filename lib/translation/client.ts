@@ -93,7 +93,9 @@ export interface TranslationClient<TEvent = unknown> {
    * Export the translated content back to its original format.
    * Returns a download URL or a Blob the caller can trigger a download from.
    */
-  exportFile(terms?: Term[]): Promise<
+  exportFile(
+    terms?: Term[],
+  ): Promise<
     OperationResult<{ downloadUrl?: string; blob?: Blob; fileName: string }>
   >;
 

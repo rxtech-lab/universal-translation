@@ -238,7 +238,7 @@ export class XclocClient implements TranslationClient<XclocTranslationEvent> {
     // Resolve term templates in a clone before serializing
     let docToSerialize = this.xliffDoc;
     if (terms && terms.length > 0) {
-      const termsMap = new Map(terms.map((t) => [t.id, t]));
+      const termsMap = new Map(terms.map((t) => [t.slug, t]));
       docToSerialize = structuredClone(this.xliffDoc);
       for (const file of docToSerialize.files) {
         for (const tu of file.transUnits) {

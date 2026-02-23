@@ -61,6 +61,7 @@ export async function GET(
 
   const projectTerms: Term[] = dbTerms.map((t) => ({
     id: t.id,
+    slug: t.slug,
     originalText: t.originalText,
     translation: t.translation,
     comment: t.comment,

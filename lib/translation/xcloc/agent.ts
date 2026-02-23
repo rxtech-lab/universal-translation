@@ -15,7 +15,7 @@ import {
   createTermTools,
   slugifyTermId,
   type Term,
-  uniqueTermId,
+  uniqueTermSlug,
 } from "../tools/term-tools";
 import type { XclocTranslationEvent } from "./events";
 import { BATCH_SIZE, DEFAULT_MODEL } from "../config";
@@ -119,15 +119,16 @@ Only extract terms that appear in multiple strings or are critical for consisten
     prompt: `Extract terminology from these source texts:\n\n${sourceTexts}`,
   });
 
-  // Ensure unique IDs
-  const existingIds = new Set<string>();
+  // Ensure unique slugs
+  const existingSlugs = new Set<string>();
   const rawTerms = (result.output ?? []) as z.infer<typeof termSchema>[];
   const terms: Term[] = rawTerms.map((t) => {
-    const baseId = t.id || slugifyTermId(t.originalText);
-    const id = uniqueTermId(baseId, existingIds);
-    existingIds.add(id);
+    const baseSlug = t.id || slugifyTermId(t.originalText);
+    const slug = uniqueTermSlug(baseSlug, existingSlugs);
+    existingSlugs.add(slug);
     return {
-      id,
+      id: crypto.randomUUID(),
+      slug,
       originalText: t.originalText,
       translation: t.translation,
       comment: t.comment ?? undefined,
@@ -175,7 +176,7 @@ async function* translateBatch(params: {
   const termListLines = params.terms.map(
     (t) =>
       "- ${{" +
-      t.id +
+      t.slug +
       '}} = "' +
       t.originalText +
       '" → "' +

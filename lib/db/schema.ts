@@ -27,6 +27,7 @@ export const projects = sqliteTable("projects", {
 
 export const terms = sqliteTable("terms", {
   id: text("id").primaryKey(),
+  slug: text("slug").notNull(),
   projectId: text("project_id")
     .notNull()
     .references(() => projects.id, { onDelete: "cascade" }),

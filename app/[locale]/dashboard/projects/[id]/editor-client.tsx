@@ -495,9 +495,7 @@ export function EditorClient({
       const response = await fetch(`/api/export/${dbProject.id}`);
       if (!response.ok) {
         const errorData = await response.json().catch(() => null);
-        toast.error(
-          errorData?.error ?? t("Export failed"),
-        );
+        toast.error(errorData?.error ?? t("Export failed"));
         return;
       }
 

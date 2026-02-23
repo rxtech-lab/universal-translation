@@ -3,24 +3,27 @@ import {
   createTermTools,
   slugifyTermId,
   type Term,
-  uniqueTermId,
+  uniqueTermSlug,
 } from "@/lib/translation/tools/term-tools";
 
 const sampleTerms: Term[] = [
   {
-    id: "argo-trading",
+    id: "uuid-1",
+    slug: "argo-trading",
     originalText: "Argo Trading",
     translation: "Argo Trading",
     comment: "Brand name, keep as-is",
   },
   {
-    id: "backtest",
+    id: "uuid-2",
+    slug: "backtest",
     originalText: "Backtest",
     translation: "回测",
     comment: "Financial term",
   },
   {
-    id: "win-rate",
+    id: "uuid-3",
+    slug: "win-rate",
     originalText: "Win Rate",
     translation: "胜率",
   },
@@ -30,12 +33,12 @@ describe("createTermTools", () => {
   const tools = createTermTools(sampleTerms);
 
   describe("lookupTerm", () => {
-    it("finds a term by exact ID", async () => {
+    it("finds a term by exact slug", async () => {
       const result = await tools.lookupTerm.execute(
         { query: "argo-trading" },
         { toolCallId: "test", messages: [], abortSignal: undefined as never },
       );
-      expect(result).toHaveProperty("id", "argo-trading");
+      expect(result).toHaveProperty("slug", "argo-trading");
       expect(result).toHaveProperty("originalText", "Argo Trading");
     });
 
@@ -44,7 +47,7 @@ describe("createTermTools", () => {
         { query: "Backtest" },
         { toolCallId: "test", messages: [], abortSignal: undefined as never },
       );
-      expect(result).toHaveProperty("id", "backtest");
+      expect(result).toHaveProperty("slug", "backtest");
     });
 
     it("finds a term by partial text match", async () => {
@@ -52,7 +55,7 @@ describe("createTermTools", () => {
         { query: "win" },
         { toolCallId: "test", messages: [], abortSignal: undefined as never },
       );
-      expect(result).toHaveProperty("id", "win-rate");
+      expect(result).toHaveProperty("slug", "win-rate");
     });
 
     it("returns notFound for non-existent term", async () => {
@@ -84,20 +87,23 @@ describe("slugifyTermId", () => {
   });
 });
 
-describe("uniqueTermId", () => {
-  it("returns base ID when no collision", () => {
-    expect(uniqueTermId("argo-trading", new Set())).toBe("argo-trading");
+describe("uniqueTermSlug", () => {
+  it("returns base slug when no collision", () => {
+    expect(uniqueTermSlug("argo-trading", new Set())).toBe("argo-trading");
   });
 
   it("appends -2 on first collision", () => {
-    expect(uniqueTermId("argo-trading", new Set(["argo-trading"]))).toBe(
+    expect(uniqueTermSlug("argo-trading", new Set(["argo-trading"]))).toBe(
       "argo-trading-2",
     );
   });
 
   it("appends -3 when -2 is also taken", () => {
     expect(
-      uniqueTermId("argo-trading", new Set(["argo-trading", "argo-trading-2"])),
+      uniqueTermSlug(
+        "argo-trading",
+        new Set(["argo-trading", "argo-trading-2"]),
+      ),
     ).toBe("argo-trading-3");
   });
 });

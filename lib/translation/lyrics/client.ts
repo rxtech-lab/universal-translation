@@ -249,7 +249,9 @@ export class LyricsClient implements TranslationClient<LyricsTranslationEvent> {
     };
   }
 
-  async exportFile(_terms?: Term[]): Promise<
+  async exportFile(
+    _terms?: Term[],
+  ): Promise<
     OperationResult<{ downloadUrl?: string; blob?: Blob; fileName: string }>
   > {
     const resource = this.project.resources[0];
