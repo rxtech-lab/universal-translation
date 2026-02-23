@@ -29,6 +29,8 @@ export interface LyricsFormatData {
   translationMode: "lyrics";
 }
 
+export type LyricsExportMode = "translation-only" | "bilingual";
+
 /**
  * Lyrics translation client.
  *
@@ -45,6 +47,11 @@ export class LyricsClient implements TranslationClient<LyricsTranslationEvent> {
   private originalFileName = "";
   private projectId: string | null = null;
   private rawMetadata?: string;
+  private _exportMode: LyricsExportMode = "translation-only";
+
+  setExportMode(mode: LyricsExportMode): void {
+    this._exportMode = mode;
+  }
 
   async load(payload: UploadPayload): Promise<OperationResult> {
     if (payload.kind === "single-file") {
@@ -259,7 +266,26 @@ export class LyricsClient implements TranslationClient<LyricsTranslationEvent> {
       return { hasError: true, errorMessage: "No resource found to export" };
     }
 
+    const bilingual = this._exportMode === "bilingual";
+
     if (this.subType === "md") {
+      if (bilingual) {
+        const lines = resource.entries.map(
+          (e) =>
+            `${e.sourceText}\n${e.targetText || e.sourceText}`,
+        );
+        const content = `${lines.join("\n\n")}\n`;
+        const blob = new Blob([content], {
+          type: "text/markdown;charset=utf-8",
+        });
+        const baseName = this.originalFileName.replace(
+          /\.(md|markdown)$/i,
+          "",
+        );
+        const fileName = `${baseName}_bilingual.md`;
+        return { hasError: false, data: { blob, fileName } };
+      }
+
       const translatedParagraphs: DocumentParagraph[] = resource.entries.map(
         (e) => ({
           index: Number(e.id),
@@ -282,7 +308,19 @@ export class LyricsClient implements TranslationClient<LyricsTranslationEvent> {
       return { hasError: false, data: { blob, fileName } };
     }
 
-    // Default: txt — one line per entry
+    // Default: txt
+    if (bilingual) {
+      const lines = resource.entries.map(
+        (e) =>
+          `${e.sourceText}\n${e.targetText || e.sourceText}`,
+      );
+      const content = `${lines.join("\n\n")}\n`;
+      const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+      const baseName = this.originalFileName.replace(/\.txt$/i, "");
+      const fileName = `${baseName}_bilingual.txt`;
+      return { hasError: false, data: { blob, fileName } };
+    }
+
     const content =
       resource.entries.map((e) => e.targetText || e.sourceText).join("\n") +
       "\n";
