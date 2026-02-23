@@ -151,7 +151,11 @@ export async function* translateLyricsEntries(params: {
       // update the displayed text.
       for (const mod of translation.modifications) {
         const idx = mod.lineNumber - 1;
-        if (idx >= 0 && idx < completedEntryMeta.length) {
+        if (
+          idx >= 0 &&
+          idx < completedEntryMeta.length &&
+          idx < completedTranslations.length
+        ) {
           const meta = completedEntryMeta[idx];
           yield {
             type: "previous-translation-modified",

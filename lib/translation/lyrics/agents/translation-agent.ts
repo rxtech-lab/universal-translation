@@ -135,6 +135,8 @@ ${params.userSuggestion}`
                 };
               }
 
+              // Intentionally mutate the shared previousTranslations array so
+              // subsequent translations see the updated text.
               const prev = params.previousTranslations[lineNumber - 1];
               prev.translated = newTranslation;
               modifications.push({ lineNumber, newTranslation, reason });
@@ -154,6 +156,8 @@ ${params.userSuggestion}`
     model,
     output: Output.object({ schema: lyricsTranslationSchema }),
     tools: modifyPreviousTranslation,
+    // Allow up to 3 steps: the model may call the modify tool once or twice,
+    // then produce its final structured output.
     stopWhen: modifyPreviousTranslation ? stepCountIs(3) : undefined,
     system: `You are a professional song lyricist who adapts songs into ${params.targetLanguage}. You don't do word-for-word translation — you write lyrics that a native ${params.targetLanguage} speaker would actually sing.
 
