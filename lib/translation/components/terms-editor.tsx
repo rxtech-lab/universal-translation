@@ -27,7 +27,8 @@ export function TermsEditor({ projectId, terms }: TermsEditorProps) {
     async (termId: string, field: "translation" | "comment", value: string) => {
       const term = terms.find((tm) => tm.id === termId);
       if (!term) return;
-      const currentValue = field === "comment" ? (term.comment ?? "") : term[field];
+      const currentValue =
+        field === "comment" ? (term.comment ?? "") : term[field];
       if (value === currentValue) return;
       await updateTerm(termId, { [field]: value });
       startTransition(() => router.refresh());
@@ -58,7 +59,9 @@ export function TermsEditor({ projectId, terms }: TermsEditorProps) {
   }, [newOriginal, newTranslation, terms, projectId, router, startTransition]);
 
   return (
-    <div className={cn("space-y-2", isPending && "opacity-50 pointer-events-none")}>
+    <div
+      className={cn("space-y-2", isPending && "opacity-50 pointer-events-none")}
+    >
       {/* Header */}
       <div className="grid grid-cols-[1fr_1fr_1fr_auto] gap-2 text-xs font-medium text-muted-foreground px-1">
         <span>{t("Original")}</span>

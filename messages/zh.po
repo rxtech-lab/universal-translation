@@ -74,6 +74,61 @@ msgstr "最近的项目"
 msgid "pFK6bJ"
 msgstr "查看全部"
 
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:217
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:236
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:316
+#: lib/translation/components/entry-row-actions.tsx:60
+#: lib/translation/lyrics/lyrics-entry-row.tsx:194
+msgid "2C42E7"
+msgstr ""
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:318
+msgid "by2lJ5"
+msgstr ""
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:375
+msgid "qvr1Bb"
+msgstr ""
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:377
+msgid "G+DatO"
+msgstr ""
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:426
+msgid "Rx9EpS"
+msgstr ""
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:454
+msgid "S/NHSE"
+msgstr ""
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:455
+msgid "wYNhGP"
+msgstr ""
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:456
+msgid "R38RUr"
+msgstr ""
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:474
+msgid "fq475d"
+msgstr ""
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:489
+#: app/[locale]/dashboard/projects/project-card.tsx:67
+msgid "fouJn6"
+msgstr "项目已重命名"
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:491
+#: app/[locale]/dashboard/projects/project-card.tsx:70
+msgid "m3LbFk"
+msgstr "重命名项目失败"
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:502
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:521
+msgid "heAhPr"
+msgstr ""
+
 #: app/[locale]/dashboard/projects/new/mode-selector.tsx:34
 #: app/[locale]/dashboard/projects/new/text-input-client.tsx:143
 msgid "1mIq6K"
@@ -94,6 +149,7 @@ msgstr "标准文档翻译"
 
 #: app/[locale]/dashboard/projects/new/mode-selector.tsx:68
 #: app/[locale]/dashboard/projects/new/text-input-client.tsx:171
+#: lib/translation/lyrics/lyrics-editor.tsx:69
 msgid "D/JyFP"
 msgstr "歌词"
 
@@ -105,6 +161,11 @@ msgstr "保留节奏与押韵"
 #: app/[locale]/dashboard/projects/project-card.tsx:167
 #: app/[locale]/dashboard/projects/project-card.tsx:194
 #: components/landing/waiting-list-button.tsx:139
+#: lib/translation/components/entry-row-actions.tsx:124
+#: lib/translation/components/translation-editor.tsx:246
+#: lib/translation/components/translation-editor.tsx:283
+#: lib/translation/lyrics/lyrics-entry-row.tsx:367
+#: lib/translation/po/po-update-dialog.tsx:349
 msgid "47FYwb"
 msgstr "取消"
 
@@ -126,7 +187,7 @@ msgstr "URL"
 
 #: app/[locale]/dashboard/projects/new/text-input-client.tsx:109
 #: app/[locale]/dashboard/projects/new/upload-client.tsx:426
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:213
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:216
 msgid "9aWdwz"
 msgstr "新建翻译项目"
 
@@ -159,24 +220,24 @@ msgid "DLuKou"
 msgstr "兼顾节奏与押韵"
 
 #: app/[locale]/dashboard/projects/new/text-input-client.tsx:183
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:150
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:153
 msgid "BEQpGU"
 msgstr "源语言"
 
 #: app/[locale]/dashboard/projects/new/text-input-client.tsx:187
 #: app/[locale]/dashboard/projects/new/text-input-client.tsx:207
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:154
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:174
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:157
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:177
 msgid "eVlu1R"
 msgstr "选择语言"
 
 #: app/[locale]/dashboard/projects/new/text-input-client.tsx:203
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:170
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:173
 msgid "NU4hHH"
 msgstr "目标语言"
 
 #: app/[locale]/dashboard/projects/new/text-input-client.tsx:235
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:202
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:205
 msgid "9cabk2"
 msgstr "创建项目"
 
@@ -201,41 +262,41 @@ msgid "jOJOQG"
 msgstr "正在解析翻译文件..."
 
 #: app/[locale]/dashboard/projects/new/upload-client.tsx:529
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:262
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:265
 msgid "XKrAeH"
 msgstr "正在创建项目..."
 
 #: app/[locale]/dashboard/projects/new/upload-client.tsx:549
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:274
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:277
 msgid "FazwRl"
 msgstr "重试"
 
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:138
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:141
 msgid "HNPgYl"
 msgstr "配置语言"
 
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:140
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:143
 msgid "mEnkEL"
 msgstr "在 {fileName} 中找到 {count} 个可翻译的句段"
 
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:195
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:198
 #: components/site-header.tsx:27
 msgid "cyR7Kh"
 msgstr "返回"
 
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:215
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:218
 msgid "g+Ihon"
 msgstr "输入 URL 以获取并翻译网页"
 
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:221
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:224
 msgid "dYPPeg"
 msgstr "网页 URL"
 
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:247
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:250
 msgid "SucWt8"
 msgstr "获取"
 
-#: app/[locale]/dashboard/projects/new/url-input-client.tsx:255
+#: app/[locale]/dashboard/projects/new/url-input-client.tsx:258
 msgid "7GJT8g"
 msgstr "正在获取网页..."
 
@@ -252,14 +313,6 @@ msgstr "管理您的翻译项目"
 msgid "B78XPL"
 msgstr "暂无项目。请上传翻译文件以开始使用。"
 
-#: app/[locale]/dashboard/projects/project-card.tsx:67
-msgid "fouJn6"
-msgstr "项目已重命名"
-
-#: app/[locale]/dashboard/projects/project-card.tsx:70
-msgid "m3LbFk"
-msgstr "重命名项目失败"
-
 #: app/[locale]/dashboard/projects/project-card.tsx:80
 msgid "34J8Gr"
 msgstr "项目已删除"
@@ -270,6 +323,7 @@ msgstr "删除项目失败"
 
 #: app/[locale]/dashboard/projects/project-card.tsx:130
 #: app/[locale]/dashboard/projects/project-card.tsx:175
+#: lib/translation/components/translation-editor.tsx:296
 msgid "iXNbPf"
 msgstr "重命名"
 
@@ -279,10 +333,12 @@ msgid "K3r6DQ"
 msgstr "删除"
 
 #: app/[locale]/dashboard/projects/project-card.tsx:150
+#: lib/translation/components/translation-editor.tsx:263
 msgid "Eer8li"
 msgstr "重命名项目"
 
 #: app/[locale]/dashboard/projects/project-card.tsx:153
+#: lib/translation/components/translation-editor.tsx:266
 msgid "D5RCKi"
 msgstr "项目名称"
 
@@ -461,6 +517,11 @@ msgid "6NYcnj"
 msgstr "拖放任何受支持格式的翻译文件 —— Xcode 目录、字幕、PO 文件或文档。"
 
 #: components/landing/how-it-works.tsx:17
+#: lib/translation/components/entry-row-actions.tsx:70
+#: lib/translation/components/entry-row-actions.tsx:132
+#: lib/translation/components/translate-dropdown.tsx:57
+#: lib/translation/lyrics/lyrics-entry-row.tsx:204
+#: lib/translation/lyrics/lyrics-entry-row.tsx:375
 msgid "wCy/Tc"
 msgstr "翻译"
 
@@ -535,3 +596,369 @@ msgstr "正在加入…"
 #: components/landing/waiting-list-button.tsx:142
 msgid "P6PLpi"
 msgstr "加入"
+
+#: lib/translation/components/edit-translate-dialog.tsx:54
+#: lib/translation/components/translate-dropdown.tsx:71
+msgid "hoSwu+"
+msgstr ""
+
+#: lib/translation/components/entry-row-actions.tsx:65
+#: lib/translation/components/entry-row-actions.tsx:132
+#: lib/translation/lyrics/lyrics-entry-row.tsx:199
+#: lib/translation/lyrics/lyrics-entry-row.tsx:375
+msgid "dFElDN"
+msgstr ""
+
+#: lib/translation/components/entry-row-actions.tsx:77
+#: lib/translation/lyrics/lyrics-entry-row.tsx:211
+msgid "KQYOy0"
+msgstr ""
+
+#: lib/translation/components/entry-row-actions.tsx:79
+msgid "yQEIYo"
+msgstr ""
+
+#: lib/translation/components/entry-row-actions.tsx:80
+msgid "4XGTby"
+msgstr ""
+
+#: lib/translation/components/entry-row-actions.tsx:95
+#: lib/translation/lyrics/lyrics-entry-row.tsx:229
+msgid "Hl39aQ"
+msgstr ""
+
+#: lib/translation/components/entry-row-actions.tsx:103
+msgid "UdNqGk"
+msgstr ""
+
+#: lib/translation/components/entry-row-actions.tsx:103
+msgid "XiLco2"
+msgstr ""
+
+#: lib/translation/components/entry-row-actions.tsx:106
+#: lib/translation/lyrics/lyrics-entry-row.tsx:349
+msgid "ogqnL7"
+msgstr ""
+
+#: lib/translation/components/entry-row-actions.tsx:118
+msgid "Y4Ppnl"
+msgstr ""
+
+#: lib/translation/components/terms-editor.tsx:64
+msgid "he9IcT"
+msgstr ""
+
+#: lib/translation/components/terms-editor.tsx:65
+#: lib/translation/components/terms-editor.tsx:110
+#: lib/translation/document/document-entry-row.tsx:117
+#: lib/translation/html/html-entry-row.tsx:119
+#: lib/translation/lyrics/lyrics-entry-row.tsx:312
+#: lib/translation/po/po-entry-row.tsx:131
+#: lib/translation/srt/srt-entry-row.tsx:119
+#: lib/translation/xcloc/xcloc-entry-row.tsx:111
+msgid "/vCXIP"
+msgstr ""
+
+#: lib/translation/components/terms-editor.tsx:66
+msgid "LgbKvU"
+msgstr ""
+
+#: lib/translation/components/terms-editor.tsx:86
+msgid "a3fWIu"
+msgstr ""
+
+#: lib/translation/components/terms-editor.tsx:104
+msgid "MlOKta"
+msgstr ""
+
+#: lib/translation/components/terms-editor.tsx:126
+msgid "F1xJu8"
+msgstr ""
+
+#: lib/translation/components/translate-dropdown.tsx:46
+msgid "q/uwLT"
+msgstr ""
+
+#: lib/translation/components/translate-dropdown.tsx:64
+msgid "qAeAY3"
+msgstr ""
+
+#: lib/translation/components/translation-editor.tsx:125
+#: lib/translation/components/translation-editor.tsx:184
+msgid "xkr+zo"
+msgstr ""
+
+#: lib/translation/components/translation-editor.tsx:137
+#: lib/translation/components/translation-editor.tsx:189
+#: lib/translation/po/po-update-dialog.tsx:358
+msgid "BWpuKl"
+msgstr ""
+
+#: lib/translation/components/translation-editor.tsx:146
+#: lib/translation/components/translation-editor.tsx:201
+#: lib/translation/components/translation-editor.tsx:252
+msgid "cqlObT"
+msgstr ""
+
+#: lib/translation/components/translation-editor.tsx:150
+#: lib/translation/components/translation-editor.tsx:194
+msgid "SVwJTM"
+msgstr ""
+
+#: lib/translation/components/translation-editor.tsx:154
+#: lib/translation/components/translation-editor.tsx:227
+msgid "jvo0vs"
+msgstr ""
+
+#: lib/translation/components/translation-editor.tsx:217
+msgid "JyIWks"
+msgstr ""
+
+#: lib/translation/components/translation-editor.tsx:238
+msgid "4aWEkl"
+msgstr ""
+
+#: lib/translation/components/translation-editor.tsx:240
+msgid "ap2ut+"
+msgstr ""
+
+#: lib/translation/components/translation-status.tsx:44
+msgid "IZFEUg"
+msgstr ""
+
+#: lib/translation/components/translation-status.tsx:49
+msgid "TiR/Hq"
+msgstr ""
+
+#: lib/translation/components/translation-status.tsx:54
+msgid "fsB/4p"
+msgstr ""
+
+#: lib/translation/components/translation-status.tsx:62
+msgid "tUlsq+"
+msgstr ""
+
+#: lib/translation/components/translation-status.tsx:70
+msgid "5elgIe"
+msgstr ""
+
+#: lib/translation/components/translation-status.tsx:88
+msgid "eRn0dn"
+msgstr ""
+
+#: lib/translation/components/translation-status.tsx:89
+msgid "VN18Wb"
+msgstr ""
+
+#: lib/translation/components/translation-status.tsx:95
+msgid "ASykzc"
+msgstr ""
+
+#: lib/translation/document/document-editor.tsx:69
+msgid "wmirkP"
+msgstr ""
+
+#: lib/translation/document/document-editor.tsx:71
+#: lib/translation/html/html-editor.tsx:164
+#: lib/translation/lyrics/lyrics-editor.tsx:71
+#: lib/translation/po/po-editor.tsx:75
+#: lib/translation/srt/srt-editor.tsx:68
+#: lib/translation/xcloc/xcloc-editor.tsx:156
+msgid "YSY/0j"
+msgstr ""
+
+#: lib/translation/document/document-editor.tsx:115
+#: lib/translation/html/html-editor.tsx:208
+#: lib/translation/lyrics/lyrics-editor.tsx:116
+msgid "Ae6AVb"
+msgstr ""
+
+#: lib/translation/document/document-entry-row.tsx:82
+#: lib/translation/html/html-entry-row.tsx:87
+#: lib/translation/lyrics/lyrics-entry-row.tsx:155
+#: lib/translation/po/po-entry-row.tsx:99
+#: lib/translation/srt/srt-entry-row.tsx:87
+#: lib/translation/xcloc/xcloc-entry-row.tsx:74
+msgid "SJzK8D"
+msgstr ""
+
+#: lib/translation/document/document-entry-row.tsx:89
+#: lib/translation/html/html-entry-row.tsx:94
+#: lib/translation/lyrics/lyrics-entry-row.tsx:162
+#: lib/translation/po/po-entry-row.tsx:106
+#: lib/translation/srt/srt-entry-row.tsx:94
+#: lib/translation/xcloc/xcloc-entry-row.tsx:81
+msgid "Kl+/5u"
+msgstr ""
+
+#: lib/translation/document/document-entry-row.tsx:104
+#: lib/translation/html/html-entry-row.tsx:109
+#: lib/translation/lyrics/lyrics-entry-row.tsx:237
+#: lib/translation/po/po-entry-row.tsx:121
+#: lib/translation/srt/srt-entry-row.tsx:109
+#: lib/translation/xcloc/xcloc-entry-row.tsx:101
+msgid "aH4De2"
+msgstr ""
+
+#: lib/translation/document/document-entry-row.tsx:130
+#: lib/translation/html/html-entry-row.tsx:131
+#: lib/translation/lyrics/lyrics-entry-row.tsx:324
+#: lib/translation/po/po-entry-row.tsx:143
+#: lib/translation/srt/srt-entry-row.tsx:131
+#: lib/translation/xcloc/xcloc-entry-row.tsx:123
+msgid "0b7YDD"
+msgstr ""
+
+#: lib/translation/html/html-editor.tsx:127
+#: lib/translation/html/html-editor.tsx:138
+msgid "m4vqJl"
+msgstr ""
+
+#: lib/translation/html/html-editor.tsx:160
+#: lib/translation/xcloc/xcloc-editor.tsx:152
+msgid "a6T0Np"
+msgstr ""
+
+#: lib/translation/html/html-editor.tsx:218
+#: lib/translation/po/po-update-dialog.tsx:261
+msgid "TJo5E6"
+msgstr ""
+
+#: lib/translation/html/html-editor.tsx:224
+msgid "E/iHax"
+msgstr ""
+
+#: lib/translation/lyrics/lyrics-entry-row.tsx:175
+msgid "aqZxEO"
+msgstr ""
+
+#: lib/translation/lyrics/lyrics-entry-row.tsx:175
+msgid "UBnPjD"
+msgstr ""
+
+#: lib/translation/lyrics/lyrics-entry-row.tsx:213
+msgid "DiLU8s"
+msgstr ""
+
+#: lib/translation/lyrics/lyrics-entry-row.tsx:214
+msgid "5Xudt+"
+msgstr ""
+
+#: lib/translation/lyrics/lyrics-entry-row.tsx:253
+msgid "WPMn4T"
+msgstr ""
+
+#: lib/translation/lyrics/lyrics-entry-row.tsx:266
+msgid "Lmi6hE"
+msgstr ""
+
+#: lib/translation/lyrics/lyrics-entry-row.tsx:346
+msgid "Um0Nm+"
+msgstr ""
+
+#: lib/translation/lyrics/lyrics-entry-row.tsx:346
+msgid "cLDCC2"
+msgstr ""
+
+#: lib/translation/po/po-editor.tsx:67
+msgid "Y1OlpD"
+msgstr ""
+
+#: lib/translation/po/po-editor.tsx:119
+msgid "2lwZNz"
+msgstr ""
+
+#: lib/translation/po/po-entry-row.tsx:164
+#: lib/translation/xcloc/xcloc-entry-row.tsx:144
+msgid "FqztZR"
+msgstr ""
+
+#: lib/translation/po/po-entry-row.tsx:171
+msgid "Gq5sk+"
+msgstr ""
+
+#: lib/translation/po/po-update-dialog.tsx:106
+msgid "EbWGMC"
+msgstr ""
+
+#: lib/translation/po/po-update-dialog.tsx:115
+msgid "X3CQNO"
+msgstr ""
+
+#: lib/translation/po/po-update-dialog.tsx:182
+msgid "Qy2ibd"
+msgstr ""
+
+#: lib/translation/po/po-update-dialog.tsx:187
+msgid "IJtHGc"
+msgstr ""
+
+#: lib/translation/po/po-update-dialog.tsx:195
+msgid "W2t7xc"
+msgstr ""
+
+#: lib/translation/po/po-update-dialog.tsx:228
+msgid "IvE1kf"
+msgstr ""
+
+#: lib/translation/po/po-update-dialog.tsx:238
+#: lib/translation/po/po-update-dialog.tsx:324
+msgid "JoZ3lc"
+msgstr ""
+
+#: lib/translation/po/po-update-dialog.tsx:245
+msgid "Ezb82t"
+msgstr ""
+
+#: lib/translation/po/po-update-dialog.tsx:264
+msgid "okWaMT"
+msgstr ""
+
+#: lib/translation/po/po-update-dialog.tsx:269
+msgid "bS10Bv"
+msgstr ""
+
+#: lib/translation/po/po-update-dialog.tsx:272
+msgid "yae7QN"
+msgstr ""
+
+#: lib/translation/po/po-update-dialog.tsx:277
+msgid "hQLBM5"
+msgstr ""
+
+#: lib/translation/po/po-update-dialog.tsx:282
+msgid "ayEdX9"
+msgstr ""
+
+#: lib/translation/po/po-update-dialog.tsx:292
+msgid "uvyL3w"
+msgstr ""
+
+#: lib/translation/po/po-update-dialog.tsx:331
+msgid "cHGvvL"
+msgstr ""
+
+#: lib/translation/po/po-update-dialog.tsx:334
+msgid "lzZjZe"
+msgstr ""
+
+#: lib/translation/srt/srt-editor.tsx:66
+msgid "QQz6fV"
+msgstr ""
+
+#: lib/translation/srt/srt-editor.tsx:112
+msgid "v337Np"
+msgstr ""
+
+#: lib/translation/xcloc/xcloc-editor.tsx:119
+#: lib/translation/xcloc/xcloc-editor.tsx:130
+msgid "c/KktL"
+msgstr ""
+
+#: lib/translation/xcloc/xcloc-editor.tsx:200
+msgid "iEWDL4"
+msgstr ""
+
+#: lib/translation/xcloc/xcloc-entry-row.tsx:151
+msgid "LPpMyQ"
+msgstr ""

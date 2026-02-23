@@ -216,10 +216,7 @@ export function TranslationEditor({
           <DialogHeader>
             <DialogTitle>{t("Terminology")}</DialogTitle>
           </DialogHeader>
-          <TermsEditor
-            projectId={projectId}
-            terms={terms}
-          />
+          <TermsEditor projectId={projectId} terms={terms} />
           <DialogFooter>
             <DialogClose asChild>
               <Button size="sm" onClick={onSave}>
