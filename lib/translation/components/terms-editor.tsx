@@ -1,89 +1,64 @@
 "use client";
 
 import { Plus, Trash2 } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { useExtracted } from "next-intl";
 import { createTerm, deleteTerm, updateTerm } from "@/app/actions/terms";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 import type { Term } from "../tools/term-tools";
 import { slugifyTermId, uniqueTermSlug } from "../tools/term-tools";
 
 interface TermsEditorProps {
   projectId: string;
   terms: Term[];
-  onTermsChange: (terms: Term[]) => void;
 }
 
-export function TermsEditor({
-  projectId,
-  terms,
-  onTermsChange,
-}: TermsEditorProps) {
+export function TermsEditor({ projectId, terms }: TermsEditorProps) {
   const t = useExtracted();
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
   const [newOriginal, setNewOriginal] = useState("");
   const [newTranslation, setNewTranslation] = useState("");
 
   const handleUpdate = useCallback(
     async (termId: string, field: "translation" | "comment", value: string) => {
-      const prev = terms;
-      onTermsChange(
-        terms.map((tm) => (tm.id === termId ? { ...tm, [field]: value } : tm)),
-      );
-      try {
-        await updateTerm(termId, { [field]: value });
-      } catch {
-        onTermsChange(prev);
-      }
+      const term = terms.find((tm) => tm.id === termId);
+      if (!term) return;
+      const currentValue = field === "comment" ? (term.comment ?? "") : term[field];
+      if (value === currentValue) return;
+      await updateTerm(termId, { [field]: value });
+      startTransition(() => router.refresh());
     },
-    [terms, onTermsChange],
+    [terms, router, startTransition],
   );
 
   const handleDelete = useCallback(
     async (termId: string) => {
-      const prev = terms;
-      onTermsChange(terms.filter((tm) => tm.id !== termId));
-      try {
-        await deleteTerm(termId);
-      } catch {
-        onTermsChange(prev);
-      }
+      await deleteTerm(termId);
+      startTransition(() => router.refresh());
     },
-    [terms, onTermsChange],
+    [router, startTransition],
   );
 
   const handleAdd = useCallback(async () => {
     if (!newOriginal.trim()) return;
     const existingSlugs = new Set(terms.map((tm) => tm.slug));
     const slug = uniqueTermSlug(slugifyTermId(newOriginal), existingSlugs);
-    const id = crypto.randomUUID();
-    const newTerm: Term = {
-      id,
+    await createTerm(projectId, {
       slug,
       originalText: newOriginal,
       translation: newTranslation,
-    };
-    const prev = terms;
-    const prevOriginal = newOriginal;
-    const prevTranslation = newTranslation;
-    onTermsChange([...terms, newTerm]);
+    });
     setNewOriginal("");
     setNewTranslation("");
-    try {
-      await createTerm(projectId, {
-        slug,
-        originalText: newOriginal,
-        translation: newTranslation,
-      });
-    } catch {
-      onTermsChange(prev);
-      setNewOriginal(prevOriginal);
-      setNewTranslation(prevTranslation);
-    }
-  }, [newOriginal, newTranslation, terms, projectId, onTermsChange]);
+    startTransition(() => router.refresh());
+  }, [newOriginal, newTranslation, terms, projectId, router, startTransition]);
 
   return (
-    <div className="space-y-2">
+    <div className={cn("space-y-2", isPending && "opacity-50 pointer-events-none")}>
       {/* Header */}
       <div className="grid grid-cols-[1fr_1fr_1fr_auto] gap-2 text-xs font-medium text-muted-foreground px-1">
         <span>{t("Original")}</span>
@@ -100,14 +75,14 @@ export function TermsEditor({
         >
           <Input value={term.originalText} readOnly className="bg-muted/50" />
           <Input
-            value={term.translation}
-            onChange={(e) =>
-              handleUpdate(term.id, "translation", e.target.value)
-            }
+            key={`${term.id}-t-${term.translation}`}
+            defaultValue={term.translation}
+            onBlur={(e) => handleUpdate(term.id, "translation", e.target.value)}
           />
           <Input
-            value={term.comment ?? ""}
-            onChange={(e) => handleUpdate(term.id, "comment", e.target.value)}
+            key={`${term.id}-c-${term.comment ?? ""}`}
+            defaultValue={term.comment ?? ""}
+            onBlur={(e) => handleUpdate(term.id, "comment", e.target.value)}
             placeholder={t("Optional comment")}
           />
           <Button

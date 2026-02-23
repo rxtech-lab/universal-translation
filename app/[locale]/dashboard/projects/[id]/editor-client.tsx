@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { useExtracted } from "next-intl";
 import { toast } from "sonner";
 import { renameProject, updateProjectContent } from "@/app/actions/projects";
@@ -63,6 +64,9 @@ export function EditorClient({
   initialTerms,
 }: EditorClientProps) {
   const t = useExtracted();
+  const router = useRouter();
+  const [, startTransition] = useTransition();
+  const terms = initialTerms ?? [];
   const [client] = useState(() => {
     if (dbProject.formatId === "lyrics") {
       const c = new LyricsClient();
@@ -158,8 +162,6 @@ export function EditorClient({
     setStatus,
     errors,
     clearErrors,
-    terms,
-    setTerms,
     streamingEntryIds,
     lyricsAnalysis,
     clearLyricsAnalysis,
@@ -167,7 +169,7 @@ export function EditorClient({
     startStream,
     cancelStream,
     markUserEdited,
-  } = useTranslationStream(initialTerms);
+  } = useTranslationStream();
 
   // Build initial lyrics analysis from persisted entry metadata, then overlay
   // any live stream data on top (stream data takes priority during translation).
@@ -331,8 +333,9 @@ export function EditorClient({
           client.updateEntry(resourceId, entryId, { targetText });
         },
         onTermsFound: (foundTerms) => {
-          setTerms(foundTerms);
-          saveProjectTerms(dbProject.id, foundTerms);
+          saveProjectTerms(dbProject.id, foundTerms).then(() => {
+            startTransition(() => router.refresh());
+          });
         },
         onComplete: () => {
           refreshFromClient();
@@ -353,7 +356,8 @@ export function EditorClient({
     startStream,
     applyStreamUpdate,
     client,
-    setTerms,
+    router,
+    startTransition,
     refreshFromClient,
     dismissTranslationToast,
     handleAgentTextDelta,
@@ -570,7 +574,6 @@ export function EditorClient({
         onExport={handleExport}
         onSave={handleSave}
         terms={terms}
-        onTermsChange={setTerms}
         onTranslationUpdated={handleTranslationUpdated}
         onClearAllTranslations={handleClearAllTranslations}
         onRename={handleRename}

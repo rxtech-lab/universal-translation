@@ -61,7 +61,6 @@ export function TranslationEditor({
   onSave,
   children,
   terms,
-  onTermsChange,
   onTranslationUpdated,
   onClearAllTranslations,
   onRename,
@@ -220,7 +219,6 @@ export function TranslationEditor({
           <TermsEditor
             projectId={projectId}
             terms={terms}
-            onTermsChange={onTermsChange}
           />
           <DialogFooter>
             <DialogClose asChild>
