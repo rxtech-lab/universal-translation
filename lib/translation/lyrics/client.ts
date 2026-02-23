@@ -8,6 +8,7 @@ import {
   serializeMd,
   serializeTxt,
 } from "../document/parser";
+import type { Term } from "../tools/term-tools";
 import type {
   OperationResult,
   TranslationEntry,
@@ -248,7 +249,7 @@ export class LyricsClient implements TranslationClient<LyricsTranslationEvent> {
     };
   }
 
-  async exportFile(): Promise<
+  async exportFile(_terms?: Term[]): Promise<
     OperationResult<{ downloadUrl?: string; blob?: Blob; fileName: string }>
   > {
     const resource = this.project.resources[0];

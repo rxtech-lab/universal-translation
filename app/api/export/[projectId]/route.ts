@@ -120,7 +120,7 @@ export async function GET(
         client.loadFromJson(content, formatData as LyricsFormatData, {
           projectId,
         });
-        exportResult = await client.exportFile();
+        exportResult = await client.exportFile(projectTerms);
         break;
       }
       default:
@@ -156,11 +156,12 @@ export async function GET(
 
   // Stream the blob content back to the client
   const stream = blob.stream();
+  const encodedFileName = encodeURIComponent(fileName);
 
   return new Response(stream, {
     headers: {
       "Content-Type": blob.type || "application/octet-stream",
-      "Content-Disposition": `attachment; filename="${encodeURIComponent(fileName)}"`,
+      "Content-Disposition": `attachment; filename="${encodedFileName}"; filename*=UTF-8''${encodedFileName}`,
     },
   });
 }
