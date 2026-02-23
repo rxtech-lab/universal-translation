@@ -155,9 +155,19 @@ export async function GET(
     );
   }
 
+  // Use project name + extension for the download filename
+  const compoundExtMatch = fileName.match(/\.(xcloc\.zip)$/i);
+  const lastDot = fileName.lastIndexOf(".");
+  const extension = compoundExtMatch
+    ? `.${compoundExtMatch[1]}`
+    : lastDot > 0
+      ? fileName.slice(lastDot)
+      : "";
+  const exportFileName = `${dbProject.name}${extension}`;
+
   // Stream the blob content back to the client
   const stream = blob.stream();
-  const encodedFileName = encodeURIComponent(fileName);
+  const encodedFileName = encodeURIComponent(exportFileName);
 
   return new Response(stream, {
     headers: {
