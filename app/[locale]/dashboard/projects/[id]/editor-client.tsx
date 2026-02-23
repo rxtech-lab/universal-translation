@@ -535,12 +535,12 @@ export function EditorClient({
           : "export";
 
         const blob = await response.blob();
-        const url2 = URL.createObjectURL(blob);
+        const objectUrl = URL.createObjectURL(blob);
         const a = document.createElement("a");
-        a.href = url2;
+        a.href = objectUrl;
         a.download = fileName;
         a.click();
-        URL.revokeObjectURL(url2);
+        URL.revokeObjectURL(objectUrl);
       } catch {
         toast.error(t("Export failed"));
       }

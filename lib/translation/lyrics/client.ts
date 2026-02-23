@@ -266,10 +266,10 @@ export class LyricsClient implements TranslationClient<LyricsTranslationEvent> {
       return { hasError: true, errorMessage: "No resource found to export" };
     }
 
-    const bilingual = this._exportMode === "bilingual";
+    const isBilingual = this._exportMode === "bilingual";
 
     if (this.subType === "md") {
-      if (bilingual) {
+      if (isBilingual) {
         const lines = resource.entries.map(
           (e) =>
             `${e.sourceText}\n${e.targetText || e.sourceText}`,
@@ -309,7 +309,7 @@ export class LyricsClient implements TranslationClient<LyricsTranslationEvent> {
     }
 
     // Default: txt
-    if (bilingual) {
+    if (isBilingual) {
       const lines = resource.entries.map(
         (e) =>
           `${e.sourceText}\n${e.targetText || e.sourceText}`,

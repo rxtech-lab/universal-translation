@@ -8,6 +8,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -33,6 +34,9 @@ export function LyricsExportDialog({
       <DialogContent data-testid="lyrics-export-dialog">
         <DialogHeader>
           <DialogTitle>{t("Export Lyrics")}</DialogTitle>
+          <DialogDescription>
+            {t("Choose how to export your lyrics translation")}
+          </DialogDescription>
         </DialogHeader>
         <div className="grid grid-cols-2 gap-3">
           <button

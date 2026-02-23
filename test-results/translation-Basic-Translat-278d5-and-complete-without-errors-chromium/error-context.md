@@ -1,0 +1,200 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e5]:
+      - list [ref=e7]:
+        - listitem [ref=e8]:
+          - link "UT Universal Translation" [ref=e9] [cursor=pointer]:
+            - /url: /en
+            - generic [ref=e10]: UT
+            - generic [ref=e11]: Universal Translation
+      - generic [ref=e13]:
+        - generic [ref=e14]: Navigation
+        - list [ref=e16]:
+          - listitem [ref=e17]:
+            - link "Dashboard" [ref=e18] [cursor=pointer]:
+              - /url: /en/dashboard
+              - img [ref=e19]
+              - generic [ref=e24]: Dashboard
+          - listitem [ref=e25]:
+            - link "Translations" [ref=e26] [cursor=pointer]:
+              - /url: /en/dashboard/projects
+              - img [ref=e27]
+              - generic [ref=e30]: Translations
+      - list [ref=e32]:
+        - listitem [ref=e33]:
+          - button "EN" [ref=e34]:
+            - img [ref=e35]
+            - text: EN
+        - listitem [ref=e38]:
+          - button "Sign out" [ref=e40]:
+            - img [ref=e41]
+            - generic [ref=e44]: Sign out
+      - button "Toggle Sidebar" [ref=e45]
+    - main [ref=e46]:
+      - generic [ref=e47]:
+        - button "Toggle Sidebar" [ref=e48]:
+          - img
+          - generic [ref=e49]: Toggle Sidebar
+        - link "Back" [ref=e50] [cursor=pointer]:
+          - /url: /en/dashboard/projects
+          - img
+          - text: Back
+      - generic [ref=e54]:
+        - generic [ref=e56]:
+          - generic [ref=e57]:
+            - generic [ref=e58]: sample
+            - button [ref=e59]:
+              - img
+            - generic [ref=e60]: Document
+            - generic [ref=e61]: en → zh-Hans
+          - generic [ref=e63]:
+            - generic [ref=e65]: Ready
+            - button "Terms (0)" [ref=e66]:
+              - img
+              - text: Terms (0)
+            - button "Translate" [ref=e67]:
+              - img
+              - text: Translate
+              - img
+            - button "Clear All" [ref=e68]:
+              - img
+              - text: Clear All
+            - button "Export" [ref=e69]:
+              - img
+              - text: Export
+            - button "Save" [ref=e70]:
+              - img
+              - text: Save
+        - generic [ref=e72]:
+          - generic [ref=e74]:
+            - generic [ref=e75]: sample.txt
+            - generic [ref=e76]: 8/8 translated
+          - generic [ref=e78]:
+            - generic [ref=e80]:
+              - generic [ref=e81]:
+                - generic [ref=e82]: "#1"
+                - generic [ref=e83]: Translated
+                - button "Retranslate" [ref=e84]:
+                  - img
+                  - text: Retranslate
+                - button [ref=e85]:
+                  - img
+              - generic [ref=e86]:
+                - text: Source
+                - generic [ref=e87]: Welcome to Universal Translation
+              - generic [ref=e88]:
+                - text: Translation
+                - button "[E2E] Welcome to Universal Translation" [ref=e89]
+            - generic [ref=e91]:
+              - generic [ref=e92]:
+                - generic [ref=e93]: "#2"
+                - generic [ref=e94]: Translated
+                - button "Retranslate" [ref=e95]:
+                  - img
+                  - text: Retranslate
+                - button [ref=e96]:
+                  - img
+              - generic [ref=e97]:
+                - text: Source
+                - generic [ref=e98]: Universal Translation is a powerful tool that helps you translate your content into multiple languages. It supports various file formats including Xcode localization catalogs, subtitle files, and text documents.
+              - generic [ref=e99]:
+                - text: Translation
+                - button "[E2E] Universal Translation is a powerful tool that helps you translate your content into multiple languages. It supports various file formats including Xcode localization catalogs, subtitle files, and text documents." [ref=e100]
+            - generic [ref=e102]:
+              - generic [ref=e103]:
+                - generic [ref=e104]: "#3"
+                - generic [ref=e105]: Translated
+                - button "Retranslate" [ref=e106]:
+                  - img
+                  - text: Retranslate
+                - button [ref=e107]:
+                  - img
+              - generic [ref=e108]:
+                - text: Source
+                - generic [ref=e109]: Getting Started
+              - generic [ref=e110]:
+                - text: Translation
+                - button "[E2E] Getting Started" [ref=e111]
+            - generic [ref=e113]:
+              - generic [ref=e114]:
+                - generic [ref=e115]: "#4"
+                - generic [ref=e116]: Translated
+                - button "Retranslate" [ref=e117]:
+                  - img
+                  - text: Retranslate
+                - button [ref=e118]:
+                  - img
+              - generic [ref=e119]:
+                - text: Source
+                - generic [ref=e120]: To begin translating, upload your file and select the source and target languages. The AI-powered translation engine will analyze your content, extract terminology, and produce high-quality translations.
+              - generic [ref=e121]:
+                - text: Translation
+                - button "[E2E] To begin translating, upload your file and select the source and target languages. The AI-powered translation engine will analyze your content, extract terminology, and produce high-quality translations." [ref=e122]
+            - generic [ref=e124]:
+              - generic [ref=e125]:
+                - generic [ref=e126]: "#5"
+                - generic [ref=e127]: Translated
+                - button "Retranslate" [ref=e128]:
+                  - img
+                  - text: Retranslate
+                - button [ref=e129]:
+                  - img
+              - generic [ref=e130]:
+                - text: Source
+                - generic [ref=e131]: Features
+              - generic [ref=e132]:
+                - text: Translation
+                - button "[E2E] Features" [ref=e133]
+            - generic [ref=e135]:
+              - generic [ref=e136]:
+                - generic [ref=e137]: "#6"
+                - generic [ref=e138]: Translated
+                - button "Retranslate" [ref=e139]:
+                  - img
+                  - text: Retranslate
+                - button [ref=e140]:
+                  - img
+              - generic [ref=e141]:
+                - text: Source
+                - generic [ref=e142]: Our platform offers batch translation, terminology management, and real-time preview. You can edit translations manually and export the results in the original format.
+              - generic [ref=e143]:
+                - text: Translation
+                - button "[E2E] Our platform offers batch translation, terminology management, and real-time preview. You can edit translations manually and export the results in the original format." [ref=e144]
+            - generic [ref=e146]:
+              - generic [ref=e147]:
+                - generic [ref=e148]: "#7"
+                - generic [ref=e149]: Translated
+                - button "Retranslate" [ref=e150]:
+                  - img
+                  - text: Retranslate
+                - button [ref=e151]:
+                  - img
+              - generic [ref=e152]:
+                - text: Source
+                - generic [ref=e153]: Contact Us
+              - generic [ref=e154]:
+                - text: Translation
+                - button "[E2E] Contact Us" [ref=e155]
+            - generic [ref=e157]:
+              - generic [ref=e158]:
+                - generic [ref=e159]: "#8"
+                - generic [ref=e160]: Translated
+                - button "Retranslate" [ref=e161]:
+                  - img
+                  - text: Retranslate
+                - button [ref=e162]:
+                  - img
+              - generic [ref=e163]:
+                - text: Source
+                - generic [ref=e164]: For questions or feedback, please visit our website or send us an email. We are always happy to help.
+              - generic [ref=e165]:
+                - text: Translation
+                - button "[E2E] For questions or feedback, please visit our website or send us an email. We are always happy to help." [ref=e166]
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e172] [cursor=pointer]:
+    - img [ref=e173]
+  - alert [ref=e176]
+```
