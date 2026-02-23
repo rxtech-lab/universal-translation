@@ -51,6 +51,19 @@ export async function* translateLyricsEntries(params: {
         }))
     : [];
 
+  // Track entry metadata alongside completedTranslations for modification events
+  const completedEntryMeta: Array<{
+    entryId: string;
+    resourceId: string;
+  }> = params.allEntries
+    ? contextEntries
+        .filter((e) => !translatingIds.has(e.id) && e.targetText?.trim())
+        .map((e) => ({
+          entryId: e.id,
+          resourceId: e.resourceId,
+        }))
+    : [];
+
   for (let i = 0; i < entries.length; i++) {
     const entry = entries[i];
     const current = i + 1;
@@ -131,6 +144,29 @@ export async function* translateLyricsEntries(params: {
       });
 
       translatedText = translation.translatedText;
+
+      // Emit events for any previous translation modifications
+      for (const mod of translation.modifications) {
+        const idx = mod.lineNumber - 1;
+        if (idx >= 0 && idx < completedEntryMeta.length) {
+          const meta = completedEntryMeta[idx];
+          yield {
+            type: "previous-translation-modified",
+            entryId: meta.entryId,
+            resourceId: meta.resourceId,
+            targetText: mod.newTranslation,
+          };
+          // Also emit entry-translated so the UI updates the entry
+          yield {
+            type: "entry-translated",
+            resourceId: meta.resourceId,
+            entryId: meta.entryId,
+            targetText: mod.newTranslation,
+            current,
+            total,
+          };
+        }
+      }
 
       // Programmatic syllable check — use rhythm agent's count as source of truth
       const syllableResult = checkSyllableMatch(
@@ -234,6 +270,11 @@ export async function* translateLyricsEntries(params: {
     completedTranslations.push({
       original: entry.sourceText,
       translated: translatedText,
+    });
+
+    completedEntryMeta.push({
+      entryId: entry.id,
+      resourceId: entry.resourceId,
     });
   }
 
