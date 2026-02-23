@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ut-config
+  namespace: universal-translation
+  labels:
+    app: universal-translation
+data:
+  IS_WAITING_LIST_ENABLE: "true"
