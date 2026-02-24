@@ -161,14 +161,8 @@ export function EditorClient({
   const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
   const [lyricsExportDialogOpen, setLyricsExportDialogOpen] = useState(false);
 
-  const {
-    project,
-    updateEntry,
-    applyStreamUpdate,
-    refreshFromClient,
-    addEntry,
-    deleteEntry,
-  } = useTranslationProject(client);
+  const { project, updateEntry, applyStreamUpdate, refreshFromClient } =
+    useTranslationProject(client);
 
   const {
     status,
@@ -332,27 +326,22 @@ export function EditorClient({
         position,
         "",
       );
-      if (!result.hasError && result.data) {
-        addEntry(resourceId, entryId, position, {
-          id: result.data.entryId,
-          sourceText: "",
-          targetText: "",
-          metadata: { paragraphIndex: Number(result.data.entryId) },
-        });
+      if (!result.hasError) {
+        refreshFromClient();
         markDirty();
       }
     },
-    [client, addEntry, markDirty],
+    [client, refreshFromClient, markDirty],
   );
 
   const handleDeleteLine = useCallback(
     (resourceId: string, entryId: string) => {
       (client as LyricsClient).deleteEntry(resourceId, entryId);
-      deleteEntry(resourceId, entryId);
       clearEntryAnalysis(entryId);
+      refreshFromClient();
       markDirty();
     },
-    [client, deleteEntry, clearEntryAnalysis, markDirty],
+    [client, clearEntryAnalysis, refreshFromClient, markDirty],
   );
 
   const handleTranslationUpdated = useCallback(
