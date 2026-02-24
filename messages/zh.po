@@ -720,15 +720,15 @@ msgstr "术语"
 
 #: lib/translation/components/translation-editor.tsx:240
 msgid "/GCoTA"
-msgstr ""
+msgstr "清除"
 
 #: lib/translation/components/translation-editor.tsx:263
 msgid "4ijCHJ"
-msgstr ""
+msgstr "清除所有术语？"
 
 #: lib/translation/components/translation-editor.tsx:265
 msgid "P4F0ma"
-msgstr ""
+msgstr "这将删除该项目的所有术语条目。此操作无法撤销。"
 
 #: lib/translation/components/translation-editor.tsx:293
 msgid "4aWEkl"
@@ -878,27 +878,27 @@ msgstr "翻译该行"
 
 #: lib/translation/lyrics/lyrics-export-dialog.tsx:36
 msgid "W+Mesu"
-msgstr ""
+msgstr "导出歌词"
 
 #: lib/translation/lyrics/lyrics-export-dialog.tsx:38
 msgid "goZSDx"
-msgstr ""
+msgstr "选择歌词翻译的导出方式"
 
 #: lib/translation/lyrics/lyrics-export-dialog.tsx:54
 msgid "s4XW4t"
-msgstr ""
+msgstr "仅翻译"
 
 #: lib/translation/lyrics/lyrics-export-dialog.tsx:57
 msgid "Z2XG8y"
-msgstr ""
+msgstr "仅导出翻译后的文本"
 
 #: lib/translation/lyrics/lyrics-export-dialog.tsx:72
 msgid "SFhWSR"
-msgstr ""
+msgstr "双语"
 
 #: lib/translation/lyrics/lyrics-export-dialog.tsx:75
 msgid "BeuRUe"
-msgstr ""
+msgstr "导出原文和翻译"
 
 #: lib/translation/po/po-editor.tsx:67
 msgid "Y1OlpD"
