@@ -32,23 +32,23 @@ test.describe("Version History", () => {
     await expect(entry0).toContainText("Hello, %s!");
     await expect(entry0).toContainText("你好，%s！");
 
-    // 4. Translate all entries (this triggers auto-save which creates a version)
+    // 4. Translate all entries
     await page.getByTestId("translate-button").first().click();
     await page.getByTestId("translate-all").first().click();
     await expect(page.getByTestId("status-idle").first()).toBeVisible({
       timeout: 30_000,
     });
 
-    // 5. Wait for auto-save to persist (debounce is 5s)
-    await page.waitForTimeout(7_000);
-
-    // 6. Verify the "About Us" entry now has a translation (was empty before)
+    // 5. Verify the "About Us" entry now has a translation (was empty before)
     const entry2 = page.getByTestId("po-entry-2");
     await expect(entry2).toContainText("[E2E]");
 
-    // 7. Click the History button — versions should now be visible
+    // 6. Click Save to persist and create a version
+    await page.getByRole("button", { name: "Save" }).first().click();
+
+    // 7. Wait for save to complete — History button should appear
     await expect(page.getByTestId("version-selector-button")).toBeVisible({
-      timeout: 10_000,
+      timeout: 15_000,
     });
 
     // 8. Reload the page to get fresh version count from server

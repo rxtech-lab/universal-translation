@@ -16,6 +16,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import type { EditorStatus } from "./types";
 
 interface ProjectVersion {
   id: string;
@@ -25,17 +26,30 @@ interface ProjectVersion {
 interface VersionSelectorProps {
   projectId: string;
   initialVersionCount?: number;
+  status: EditorStatus;
 }
 
 export function VersionSelector({
   projectId,
   initialVersionCount = 0,
+  status,
 }: VersionSelectorProps) {
   const t = useExtracted();
   const router = useRouter();
   const [versions, setVersions] = useState<ProjectVersion[]>([]);
   const [versionCount, setVersionCount] = useState(initialVersionCount);
   const [isRestoring, startRestoring] = useTransition();
+  const [prevStatusState, setPrevStatusState] = useState<
+    EditorStatus["state"]
+  >(status.state);
+
+  // Track save transitions to increment version count (each save creates a version)
+  if (status.state !== prevStatusState) {
+    if (prevStatusState === "saving" && status.state === "saved") {
+      setVersionCount((c) => c + 1);
+    }
+    setPrevStatusState(status.state);
+  }
 
   const loadVersions = useCallback(async () => {
     const result = await getProjectVersions(projectId);

@@ -162,7 +162,7 @@ export function TranslationEditor({
                 <Download className="h-3.5 w-3.5 mr-1" />
                 {t("Export")}
               </Button>
-              <VersionSelector projectId={projectId} initialVersionCount={versionCount} />
+              <VersionSelector projectId={projectId} initialVersionCount={versionCount} status={status} />
               <Button size="sm" onClick={onSave}>
                 <Save className="h-3.5 w-3.5 mr-1" />
                 {t("Save")}
