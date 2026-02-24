@@ -63,10 +63,15 @@ test.describe("Basic Translation Flow", () => {
 
     // 11. Wait for translation to complete
     //     Status goes: "Translating X/Y" -> "Ready"
+    //     Mock translations can complete almost instantly, so wait for
+    //     either "translating" or "idle" to appear (one of them must show).
     //     There are two TranslationStatus instances (desktop + mobile), target the first
-    await expect(page.getByTestId("status-translating").first()).toBeVisible({
-      timeout: 5_000,
-    });
+    await expect(
+      page
+        .getByTestId("status-translating")
+        .first()
+        .or(page.getByTestId("status-idle").first()),
+    ).toBeVisible({ timeout: 30_000 });
     await expect(page.getByTestId("status-idle").first()).toBeVisible({
       timeout: 30_000,
     });

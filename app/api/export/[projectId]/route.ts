@@ -10,6 +10,7 @@ import {
 import { HtmlClient, type HtmlFormatData } from "@/lib/translation/html/client";
 import {
   LyricsClient,
+  type LyricsExportMode,
   type LyricsFormatData,
 } from "@/lib/translation/lyrics/client";
 import { PoClient, type PoFormatData } from "@/lib/translation/po/client";
@@ -22,7 +23,7 @@ import {
 } from "@/lib/translation/xcloc/client";
 
 export async function GET(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ projectId: string }> },
 ) {
   const session = await auth();
@@ -121,6 +122,11 @@ export async function GET(
         client.loadFromJson(content, formatData as LyricsFormatData, {
           projectId,
         });
+        const url = new URL(request.url);
+        const mode = url.searchParams.get("mode");
+        if (mode === "bilingual" || mode === "translation-only") {
+          client.setExportMode(mode as LyricsExportMode);
+        }
         exportResult = await client.exportFile(projectTerms);
         break;
       }
