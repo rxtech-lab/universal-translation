@@ -305,6 +305,45 @@ export function EditorClient({
     [updateEntry, markUserEdited, clearEntryAnalysis, client, markDirty],
   );
 
+  const handleSourceUpdate = useCallback(
+    (resourceId: string, entryId: string, sourceText: string) => {
+      (client as LyricsClient).updateEntrySource(
+        resourceId,
+        entryId,
+        sourceText,
+      );
+      refreshFromClient();
+      markDirty();
+    },
+    [client, refreshFromClient, markDirty],
+  );
+
+  const handleAddLine = useCallback(
+    (resourceId: string, entryId: string, position: "before" | "after") => {
+      const result = (client as LyricsClient).addEntry(
+        resourceId,
+        entryId,
+        position,
+        "",
+      );
+      if (!result.hasError) {
+        refreshFromClient();
+        markDirty();
+      }
+    },
+    [client, refreshFromClient, markDirty],
+  );
+
+  const handleDeleteLine = useCallback(
+    (resourceId: string, entryId: string) => {
+      (client as LyricsClient).deleteEntry(resourceId, entryId);
+      clearEntryAnalysis(entryId);
+      refreshFromClient();
+      markDirty();
+    },
+    [client, clearEntryAnalysis, refreshFromClient, markDirty],
+  );
+
   const handleTranslationUpdated = useCallback(
     (resourceId: string, entryId: string, targetText: string) => {
       client.updateEntry(resourceId, entryId, { targetText });
@@ -630,6 +669,9 @@ export function EditorClient({
             project={project}
             onEntryUpdate={handleEntryUpdate}
             onTranslateLine={handleTranslateLine}
+            onSourceUpdate={handleSourceUpdate}
+            onAddLine={handleAddLine}
+            onDeleteLine={handleDeleteLine}
             streamingEntryIds={streamingEntryIds}
             terms={terms}
             lyricsAnalysis={mergedLyricsAnalysis}

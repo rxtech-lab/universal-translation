@@ -11,6 +11,18 @@ type Action =
       resourceId: string;
       entryId: string;
       update: Partial<Pick<TranslationEntry, "targetText" | "comment">>;
+    }
+  | {
+      type: "ADD_ENTRY";
+      resourceId: string;
+      referenceEntryId: string;
+      position: "before" | "after";
+      entry: TranslationEntry;
+    }
+  | {
+      type: "DELETE_ENTRY";
+      resourceId: string;
+      entryId: string;
     };
 
 function projectReducer(
@@ -31,6 +43,35 @@ function projectReducer(
                 entries: r.entries.map((e) =>
                   e.id !== action.entryId ? e : { ...e, ...action.update },
                 ),
+              },
+        ),
+      };
+    case "ADD_ENTRY": {
+      return {
+        ...state,
+        resources: state.resources.map((r) => {
+          if (r.id !== action.resourceId) return r;
+          const refIndex = r.entries.findIndex(
+            (e) => e.id === action.referenceEntryId,
+          );
+          if (refIndex === -1) return r;
+          const insertIndex =
+            action.position === "before" ? refIndex : refIndex + 1;
+          const newEntries = [...r.entries];
+          newEntries.splice(insertIndex, 0, action.entry);
+          return { ...r, entries: newEntries };
+        }),
+      };
+    }
+    case "DELETE_ENTRY":
+      return {
+        ...state,
+        resources: state.resources.map((r) =>
+          r.id !== action.resourceId
+            ? r
+            : {
+                ...r,
+                entries: r.entries.filter((e) => e.id !== action.entryId),
               },
         ),
       };
@@ -76,5 +117,39 @@ export function useTranslationProject(client: TranslationClient) {
     });
   }, []);
 
-  return { project, updateEntry, applyStreamUpdate, refreshFromClient };
+  /** Add a new entry before or after a reference entry (React state only). */
+  const addEntry = useCallback(
+    (
+      resourceId: string,
+      referenceEntryId: string,
+      position: "before" | "after",
+      entry: TranslationEntry,
+    ) => {
+      dispatch({
+        type: "ADD_ENTRY",
+        resourceId,
+        referenceEntryId,
+        position,
+        entry,
+      });
+    },
+    [],
+  );
+
+  /** Delete an entry (React state only). */
+  const deleteEntry = useCallback(
+    (resourceId: string, entryId: string) => {
+      dispatch({ type: "DELETE_ENTRY", resourceId, entryId });
+    },
+    [],
+  );
+
+  return {
+    project,
+    updateEntry,
+    applyStreamUpdate,
+    refreshFromClient,
+    addEntry,
+    deleteEntry,
+  };
 }
