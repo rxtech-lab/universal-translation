@@ -60,6 +60,12 @@ export async function POST(
         );
 
         for (let i = 0; i < body.entries.length; i++) {
+          if (request.signal.aborted) break;
+
+          // Delay between entries so e2e stop tests can click the stop button
+          await new Promise((resolve) => setTimeout(resolve, 500));
+          if (request.signal.aborted) break;
+
           const entry = body.entries[i];
           const mockTranslation = `[E2E] ${entry.sourceText}`;
 
@@ -130,6 +136,7 @@ export async function POST(
               targetLanguage: body.targetLanguage,
               projectId,
               userSuggestion: body.suggestion,
+              signal: request.signal,
             })
           : translateEntries({
               entries: body.entries,
@@ -149,6 +156,8 @@ export async function POST(
             });
 
         for await (const event of events) {
+          if (request.signal.aborted) break;
+
           // Apply each translation to in-memory project content
           if (
             event.type === "entry-translated" ||

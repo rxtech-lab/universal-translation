@@ -25,6 +25,8 @@ export async function* translateLyricsEntries(params: {
   projectId: string;
   model?: string;
   userSuggestion?: string;
+  /** Abort signal to stop the translation loop when the client disconnects. */
+  signal?: AbortSignal;
 }): AsyncGenerator<LyricsTranslationEvent> {
   const { entries, sourceLanguage, targetLanguage } = params;
   const total = entries.length;
@@ -68,6 +70,8 @@ export async function* translateLyricsEntries(params: {
     : [];
 
   for (let i = 0; i < entries.length; i++) {
+    if (params.signal?.aborted) return;
+
     const entry = entries[i];
     const current = i + 1;
 
@@ -120,6 +124,8 @@ export async function* translateLyricsEntries(params: {
     let acceptedModifications: PreviousTranslationModification[] = [];
 
     for (let attempt = 1; attempt <= LYRICS_MAX_RETRIES; attempt++) {
+      if (params.signal?.aborted) return;
+
       yield {
         type: "line-translation-attempt",
         entryId: entry.id,
