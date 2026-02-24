@@ -151,7 +151,12 @@ export function TranslationEditor({
                 <Trash2 className="h-3.5 w-3.5 mr-1" />
                 {t("Clear All")}
               </Button>
-              <Button variant="outline" size="sm" onClick={onExport}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={onExport}
+                data-testid="export-button"
+              >
                 <Download className="h-3.5 w-3.5 mr-1" />
                 {t("Export")}
               </Button>
