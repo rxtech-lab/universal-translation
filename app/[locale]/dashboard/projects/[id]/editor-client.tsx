@@ -63,11 +63,13 @@ interface EditorClientProps {
     formatData: unknown;
   };
   initialTerms?: Term[];
+  versionCount?: number;
 }
 
 export function EditorClient({
   project: dbProject,
   initialTerms,
+  versionCount,
 }: EditorClientProps) {
   const t = useExtracted();
   const router = useRouter();
@@ -663,6 +665,7 @@ export function EditorClient({
             ? () => setUpdateDialogOpen(true)
             : undefined
         }
+        versionCount={versionCount}
       >
         {dbProject.formatId === "lyrics" ? (
           <LyricsEditor

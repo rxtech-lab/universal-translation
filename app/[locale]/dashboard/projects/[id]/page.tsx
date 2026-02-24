@@ -1,8 +1,8 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
-import { projects, terms } from "@/lib/db/schema";
+import { projectVersions, projects, terms } from "@/lib/db/schema";
 import { EditorClient } from "./editor-client";
 
 export default async function ProjectPage({
@@ -15,7 +15,7 @@ export default async function ProjectPage({
 
   const { id } = await params;
 
-  const [[project], projectTerms] = await Promise.all([
+  const [[project], projectTerms, [versionCountResult]] = await Promise.all([
     db
       .select()
       .from(projects)
@@ -30,6 +30,10 @@ export default async function ProjectPage({
       })
       .from(terms)
       .where(eq(terms.projectId, id)),
+    db
+      .select({ count: sql<number>`count(*)` })
+      .from(projectVersions)
+      .where(eq(projectVersions.projectId, id)),
   ]);
 
   if (!project) redirect("/dashboard");
@@ -48,6 +52,7 @@ export default async function ProjectPage({
           formatData: project.formatData,
         }}
         initialTerms={projectTerms}
+        versionCount={versionCountResult?.count ?? 0}
       />
     </div>
   );

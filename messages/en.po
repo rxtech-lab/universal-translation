@@ -162,9 +162,9 @@ msgstr "Rhythm & rhyme preserving"
 #: app/[locale]/dashboard/projects/project-card.tsx:194
 #: components/landing/waiting-list-button.tsx:139
 #: lib/translation/components/entry-row-actions.tsx:125
-#: lib/translation/components/translation-editor.tsx:276
-#: lib/translation/components/translation-editor.tsx:306
-#: lib/translation/components/translation-editor.tsx:343
+#: lib/translation/components/translation-editor.tsx:278
+#: lib/translation/components/translation-editor.tsx:308
+#: lib/translation/components/translation-editor.tsx:345
 #: lib/translation/lyrics/lyrics-entry-row.tsx:458
 #: lib/translation/lyrics/lyrics-export-dialog.tsx:78
 #: lib/translation/po/po-update-dialog.tsx:349
@@ -325,7 +325,7 @@ msgstr "Failed to delete project"
 
 #: app/[locale]/dashboard/projects/project-card.tsx:130
 #: app/[locale]/dashboard/projects/project-card.tsx:175
-#: lib/translation/components/translation-editor.tsx:356
+#: lib/translation/components/translation-editor.tsx:358
 msgid "iXNbPf"
 msgstr "Rename"
 
@@ -335,12 +335,12 @@ msgid "K3r6DQ"
 msgstr "Delete"
 
 #: app/[locale]/dashboard/projects/project-card.tsx:150
-#: lib/translation/components/translation-editor.tsx:323
+#: lib/translation/components/translation-editor.tsx:325
 msgid "Eer8li"
 msgstr "Rename Project"
 
 #: app/[locale]/dashboard/projects/project-card.tsx:153
-#: lib/translation/components/translation-editor.tsx:326
+#: lib/translation/components/translation-editor.tsx:328
 msgid "D5RCKi"
 msgstr "Project name"
 
@@ -685,56 +685,56 @@ msgstr "Stop"
 msgid "qAeAY3"
 msgstr "Translate All"
 
-#: lib/translation/components/translation-editor.tsx:131
-#: lib/translation/components/translation-editor.tsx:195
+#: lib/translation/components/translation-editor.tsx:132
+#: lib/translation/components/translation-editor.tsx:197
 msgid "xkr+zo"
 msgstr "Terms"
 
-#: lib/translation/components/translation-editor.tsx:143
-#: lib/translation/components/translation-editor.tsx:200
+#: lib/translation/components/translation-editor.tsx:144
+#: lib/translation/components/translation-editor.tsx:202
 #: lib/translation/po/po-update-dialog.tsx:358
 msgid "BWpuKl"
 msgstr "Update"
 
-#: lib/translation/components/translation-editor.tsx:152
-#: lib/translation/components/translation-editor.tsx:212
-#: lib/translation/components/translation-editor.tsx:288
-#: lib/translation/components/translation-editor.tsx:312
+#: lib/translation/components/translation-editor.tsx:153
+#: lib/translation/components/translation-editor.tsx:214
+#: lib/translation/components/translation-editor.tsx:290
+#: lib/translation/components/translation-editor.tsx:314
 msgid "cqlObT"
 msgstr "Clear All"
 
-#: lib/translation/components/translation-editor.tsx:161
-#: lib/translation/components/translation-editor.tsx:205
+#: lib/translation/components/translation-editor.tsx:162
+#: lib/translation/components/translation-editor.tsx:207
 #: lib/translation/lyrics/lyrics-export-dialog.tsx:86
 msgid "SVwJTM"
 msgstr "Export"
 
-#: lib/translation/components/translation-editor.tsx:165
-#: lib/translation/components/translation-editor.tsx:254
+#: lib/translation/components/translation-editor.tsx:167
+#: lib/translation/components/translation-editor.tsx:256
 msgid "jvo0vs"
 msgstr "Save"
 
-#: lib/translation/components/translation-editor.tsx:231
+#: lib/translation/components/translation-editor.tsx:233
 msgid "JyIWks"
 msgstr "Terminology"
 
-#: lib/translation/components/translation-editor.tsx:245
+#: lib/translation/components/translation-editor.tsx:247
 msgid "/GCoTA"
 msgstr "Clear"
 
-#: lib/translation/components/translation-editor.tsx:268
+#: lib/translation/components/translation-editor.tsx:270
 msgid "4ijCHJ"
 msgstr "Clear all terms?"
 
-#: lib/translation/components/translation-editor.tsx:270
+#: lib/translation/components/translation-editor.tsx:272
 msgid "P4F0ma"
 msgstr "This will remove all terminology entries for this project. This action cannot be undone."
 
-#: lib/translation/components/translation-editor.tsx:298
+#: lib/translation/components/translation-editor.tsx:300
 msgid "4aWEkl"
 msgstr "Clear all translations?"
 
-#: lib/translation/components/translation-editor.tsx:300
+#: lib/translation/components/translation-editor.tsx:302
 msgid "ap2ut+"
 msgstr "This will remove all translated text. This action cannot be undone."
 
@@ -769,6 +769,18 @@ msgstr "{count} errors"
 #: lib/translation/components/translation-status.tsx:95
 msgid "ASykzc"
 msgstr "Translation Errors"
+
+#: lib/translation/components/version-selector.tsx:49
+msgid "eBOgRU"
+msgstr "Version restored"
+
+#: lib/translation/components/version-selector.tsx:52
+msgid "pz9eEL"
+msgstr "Failed to restore version"
+
+#: lib/translation/components/version-selector.tsx:71
+msgid "djJp6c"
+msgstr "History"
 
 #: lib/translation/document/document-editor.tsx:69
 msgid "wmirkP"

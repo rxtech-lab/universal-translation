@@ -33,4 +33,5 @@ export interface TranslationEditorProps {
   onClearAllTranslations: () => void;
   onRename?: (newName: string) => void;
   onUpdatePo?: () => void;
+  versionCount?: number;
 }

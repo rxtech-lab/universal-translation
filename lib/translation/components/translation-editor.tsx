@@ -47,6 +47,7 @@ import { TermsEditor } from "./terms-editor";
 import { TranslateDropdown } from "./translate-dropdown";
 import { TranslationStatus } from "./translation-status";
 import type { TranslationEditorProps } from "./types";
+import { VersionSelector } from "./version-selector";
 
 export function TranslationEditor({
   projectId,
@@ -67,6 +68,7 @@ export function TranslationEditor({
   onClearAllTranslations,
   onRename,
   onUpdatePo,
+  versionCount,
 }: TranslationEditorProps) {
   const t = useExtracted();
   const router = useRouter();
@@ -160,6 +162,7 @@ export function TranslationEditor({
                 <Download className="h-3.5 w-3.5 mr-1" />
                 {t("Export")}
               </Button>
+              <VersionSelector projectId={projectId} initialVersionCount={versionCount} />
               <Button size="sm" onClick={onSave}>
                 <Save className="h-3.5 w-3.5 mr-1" />
                 {t("Save")}

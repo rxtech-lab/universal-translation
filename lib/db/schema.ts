@@ -25,6 +25,16 @@ export const projects = sqliteTable("projects", {
   updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
 });
 
+export const projectVersions = sqliteTable("project_versions", {
+  id: text("id").primaryKey(),
+  projectId: text("project_id")
+    .notNull()
+    .references(() => projects.id, { onDelete: "cascade" }),
+  content: text("content", { mode: "json" }),
+  formatData: text("format_data", { mode: "json" }),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
+});
+
 export const terms = sqliteTable("terms", {
   id: text("id").primaryKey(),
   slug: text("slug").notNull(),
