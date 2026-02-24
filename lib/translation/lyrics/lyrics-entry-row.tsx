@@ -1,6 +1,13 @@
 "use client";
 
-import { Languages, LoaderCircle, RefreshCw, Trash2 } from "lucide-react";
+import {
+  Languages,
+  LoaderCircle,
+  MoreHorizontal,
+  Plus,
+  RefreshCw,
+  Trash2,
+} from "lucide-react";
 import type React from "react";
 import { memo, useCallback, useRef, useState } from "react";
 import { useExtracted } from "next-intl";
@@ -15,6 +22,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Tooltip,
@@ -32,6 +46,9 @@ interface LyricsEntryRowProps {
   resourceId: string;
   onUpdate: (update: { targetText?: string; comment?: string }) => void;
   onTranslateLine: (suggestion?: string) => void;
+  onSourceUpdate: (sourceText: string) => void;
+  onAddLine: (position: "before" | "after") => void;
+  onDeleteLine: () => void;
   isStreaming: boolean;
   terms: Term[];
   analysis?: LyricsAnalysis;
@@ -100,6 +117,9 @@ export const LyricsEntryRow = memo(function LyricsEntryRow({
   entry,
   onUpdate,
   onTranslateLine,
+  onSourceUpdate,
+  onAddLine,
+  onDeleteLine,
   isStreaming,
   terms,
   analysis,
@@ -107,9 +127,11 @@ export const LyricsEntryRow = memo(function LyricsEntryRow({
   const t = useExtracted();
   const isTranslated = entry.targetText.trim() !== "";
   const [editing, setEditing] = useState(false);
+  const [editingSource, setEditingSource] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [suggestion, setSuggestion] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const sourceTextareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleTargetChange = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -118,13 +140,29 @@ export const LyricsEntryRow = memo(function LyricsEntryRow({
     [onUpdate],
   );
 
+  const handleSourceChange = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      onSourceUpdate(e.target.value);
+    },
+    [onSourceUpdate],
+  );
+
   const handleDisplayClick = useCallback(() => {
     setEditing(true);
     requestAnimationFrame(() => textareaRef.current?.focus());
   }, []);
 
+  const handleSourceDisplayClick = useCallback(() => {
+    setEditingSource(true);
+    requestAnimationFrame(() => sourceTextareaRef.current?.focus());
+  }, []);
+
   const handleBlur = useCallback(() => {
     setEditing(false);
+  }, []);
+
+  const handleSourceBlur = useCallback(() => {
+    setEditingSource(false);
   }, []);
 
   const lineIndex = (entry.metadata as { paragraphIndex?: number } | undefined)
@@ -229,19 +267,72 @@ export const LyricsEntryRow = memo(function LyricsEntryRow({
             <TooltipContent>{t("Clear translation")}</TooltipContent>
           </Tooltip>
         )}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              className="h-4 w-4 text-muted-foreground"
+              data-testid="lyrics-line-menu"
+            >
+              <MoreHorizontal className="h-3 w-3" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem
+              onClick={() => onAddLine("before")}
+              data-testid="add-line-before"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              {t("Add line before")}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => onAddLine("after")}
+              data-testid="add-line-after"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              {t("Add line after")}
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              variant="destructive"
+              onClick={onDeleteLine}
+              data-testid="delete-line"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+              {t("Delete line")}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
-      {/* Source text with highlighted rhyme words */}
+      {/* Source text — click-to-edit */}
       <div className="mb-2">
         <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">
           {t("Source")}
         </span>
-        <div className="mt-1 text-xs bg-muted/50 px-2.5 py-1.5 border whitespace-pre-wrap">
-          <HighlightedSource
-            text={entry.sourceText}
-            rhymeWords={hasRhyme ? analysis?.rhymeWords : undefined}
+        {editingSource ? (
+          <Textarea
+            ref={sourceTextareaRef}
+            value={entry.sourceText}
+            onChange={handleSourceChange}
+            onBlur={handleSourceBlur}
+            className="mt-1 min-h-10 text-xs"
+            data-testid="lyrics-source-input"
           />
-        </div>
+        ) : (
+          <button
+            type="button"
+            onClick={handleSourceDisplayClick}
+            className="mt-1 text-xs bg-muted/50 px-2.5 py-1.5 border whitespace-pre-wrap cursor-text w-full text-left"
+            data-testid="lyrics-source-display"
+          >
+            <HighlightedSource
+              text={entry.sourceText}
+              rhymeWords={hasRhyme ? analysis?.rhymeWords : undefined}
+            />
+          </button>
+        )}
       </div>
 
       {/* Analysis bar */}

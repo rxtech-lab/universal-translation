@@ -161,8 +161,14 @@ export function EditorClient({
   const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
   const [lyricsExportDialogOpen, setLyricsExportDialogOpen] = useState(false);
 
-  const { project, updateEntry, applyStreamUpdate, refreshFromClient } =
-    useTranslationProject(client);
+  const {
+    project,
+    updateEntry,
+    applyStreamUpdate,
+    refreshFromClient,
+    addEntry,
+    deleteEntry,
+  } = useTranslationProject(client);
 
   const {
     status,
@@ -303,6 +309,50 @@ export function EditorClient({
       markDirty();
     },
     [updateEntry, markUserEdited, clearEntryAnalysis, client, markDirty],
+  );
+
+  const handleSourceUpdate = useCallback(
+    (resourceId: string, entryId: string, sourceText: string) => {
+      (client as LyricsClient).updateEntrySource(
+        resourceId,
+        entryId,
+        sourceText,
+      );
+      refreshFromClient();
+      markDirty();
+    },
+    [client, refreshFromClient, markDirty],
+  );
+
+  const handleAddLine = useCallback(
+    (resourceId: string, entryId: string, position: "before" | "after") => {
+      const result = (client as LyricsClient).addEntry(
+        resourceId,
+        entryId,
+        position,
+        "",
+      );
+      if (!result.hasError && result.data) {
+        addEntry(resourceId, entryId, position, {
+          id: result.data.entryId,
+          sourceText: "",
+          targetText: "",
+          metadata: { paragraphIndex: Number(result.data.entryId) },
+        });
+        markDirty();
+      }
+    },
+    [client, addEntry, markDirty],
+  );
+
+  const handleDeleteLine = useCallback(
+    (resourceId: string, entryId: string) => {
+      (client as LyricsClient).deleteEntry(resourceId, entryId);
+      deleteEntry(resourceId, entryId);
+      clearEntryAnalysis(entryId);
+      markDirty();
+    },
+    [client, deleteEntry, clearEntryAnalysis, markDirty],
   );
 
   const handleTranslationUpdated = useCallback(
@@ -630,6 +680,9 @@ export function EditorClient({
             project={project}
             onEntryUpdate={handleEntryUpdate}
             onTranslateLine={handleTranslateLine}
+            onSourceUpdate={handleSourceUpdate}
+            onAddLine={handleAddLine}
+            onDeleteLine={handleDeleteLine}
             streamingEntryIds={streamingEntryIds}
             terms={terms}
             lyricsAnalysis={mergedLyricsAnalysis}

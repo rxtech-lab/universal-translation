@@ -22,6 +22,17 @@ interface LyricsEditorProps {
     entryId: string,
     suggestion?: string,
   ) => void;
+  onSourceUpdate: (
+    resourceId: string,
+    entryId: string,
+    sourceText: string,
+  ) => void;
+  onAddLine: (
+    resourceId: string,
+    entryId: string,
+    position: "before" | "after",
+  ) => void;
+  onDeleteLine: (resourceId: string, entryId: string) => void;
   streamingEntryIds: Set<string>;
   terms: Term[];
   lyricsAnalysis: Map<string, LyricsAnalysis>;
@@ -31,6 +42,9 @@ export function LyricsEditor({
   project,
   onEntryUpdate,
   onTranslateLine,
+  onSourceUpdate,
+  onAddLine,
+  onDeleteLine,
   streamingEntryIds,
   terms,
   lyricsAnalysis,
@@ -101,6 +115,13 @@ export function LyricsEditor({
                     onTranslateLine={(suggestion) =>
                       onTranslateLine(resourceId, entry.id, suggestion)
                     }
+                    onSourceUpdate={(sourceText) =>
+                      onSourceUpdate(resourceId, entry.id, sourceText)
+                    }
+                    onAddLine={(position) =>
+                      onAddLine(resourceId, entry.id, position)
+                    }
+                    onDeleteLine={() => onDeleteLine(resourceId, entry.id)}
                     isStreaming={streamingEntryIds.has(
                       `${resourceId}:${entry.id}`,
                     )}

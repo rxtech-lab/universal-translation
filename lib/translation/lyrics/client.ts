@@ -190,6 +190,93 @@ export class LyricsClient implements TranslationClient<LyricsTranslationEvent> {
     return { hasError: false, data: undefined };
   }
 
+  /**
+   * Update the source text of a lyrics entry.
+   */
+  updateEntrySource(
+    resourceId: string,
+    entryId: string,
+    sourceText: string,
+  ): OperationResult {
+    const resource = this.project.resources.find((r) => r.id === resourceId);
+    if (!resource) {
+      return {
+        hasError: true,
+        errorMessage: `Resource not found: ${resourceId}`,
+      };
+    }
+
+    const entry = resource.entries.find((e) => e.id === entryId);
+    if (!entry) {
+      return { hasError: true, errorMessage: `Entry not found: ${entryId}` };
+    }
+
+    entry.sourceText = sourceText;
+    return { hasError: false, data: undefined };
+  }
+
+  /**
+   * Add a new lyrics entry before or after a given entry.
+   */
+  addEntry(
+    resourceId: string,
+    referenceEntryId: string,
+    position: "before" | "after",
+    sourceText: string,
+  ): OperationResult<{ entryId: string }> {
+    const resource = this.project.resources.find((r) => r.id === resourceId);
+    if (!resource) {
+      return {
+        hasError: true,
+        errorMessage: `Resource not found: ${resourceId}`,
+      };
+    }
+
+    const refIndex = resource.entries.findIndex(
+      (e) => e.id === referenceEntryId,
+    );
+    if (refIndex === -1) {
+      return {
+        hasError: true,
+        errorMessage: `Entry not found: ${referenceEntryId}`,
+      };
+    }
+
+    const newId = String(Date.now());
+    const newEntry: TranslationEntry = {
+      id: newId,
+      sourceText,
+      targetText: "",
+      metadata: { paragraphIndex: Number(newId) },
+    };
+
+    const insertIndex = position === "before" ? refIndex : refIndex + 1;
+    resource.entries.splice(insertIndex, 0, newEntry);
+
+    return { hasError: false, data: { entryId: newId } };
+  }
+
+  /**
+   * Delete a lyrics entry.
+   */
+  deleteEntry(resourceId: string, entryId: string): OperationResult {
+    const resource = this.project.resources.find((r) => r.id === resourceId);
+    if (!resource) {
+      return {
+        hasError: true,
+        errorMessage: `Resource not found: ${resourceId}`,
+      };
+    }
+
+    const index = resource.entries.findIndex((e) => e.id === entryId);
+    if (index === -1) {
+      return { hasError: true, errorMessage: `Entry not found: ${entryId}` };
+    }
+
+    resource.entries.splice(index, 1);
+    return { hasError: false, data: undefined };
+  }
+
   updateEntries(
     updates: Array<{
       resourceId: string;
