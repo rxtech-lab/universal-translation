@@ -48,6 +48,7 @@ export class LyricsClient implements TranslationClient<LyricsTranslationEvent> {
   private projectId: string | null = null;
   private rawMetadata?: string;
   private _exportMode: LyricsExportMode = "translation-only";
+  private nextEntryId = 1;
 
   setExportMode(mode: LyricsExportMode): void {
     this._exportMode = mode;
@@ -242,12 +243,17 @@ export class LyricsClient implements TranslationClient<LyricsTranslationEvent> {
       };
     }
 
-    const newId = String(Date.now());
+    const newId = String(this.nextEntryId++);
+    // Derive paragraph index from neighboring entries
+    const refEntry = resource.entries[refIndex];
+    const refParagraphIndex =
+      (refEntry.metadata as { paragraphIndex?: number } | undefined)
+        ?.paragraphIndex ?? refIndex + 1;
     const newEntry: TranslationEntry = {
       id: newId,
       sourceText,
       targetText: "",
-      metadata: { paragraphIndex: Number(newId) },
+      metadata: { paragraphIndex: refParagraphIndex },
     };
 
     const insertIndex = position === "before" ? refIndex : refIndex + 1;
@@ -328,6 +334,15 @@ export class LyricsClient implements TranslationClient<LyricsTranslationEvent> {
     this.targetLanguage = formatData.targetLanguage;
     this.rawMetadata = formatData.rawMetadata;
     this.projectId = opts?.projectId ?? null;
+    // Initialize nextEntryId beyond all existing IDs
+    let maxId = 0;
+    for (const r of content.resources) {
+      for (const e of r.entries) {
+        const n = Number(e.id);
+        if (!Number.isNaN(n) && n >= maxId) maxId = n;
+      }
+    }
+    this.nextEntryId = maxId + 1;
     return { hasError: false, data: undefined };
   }
 
@@ -465,6 +480,9 @@ export class LyricsClient implements TranslationClient<LyricsTranslationEvent> {
         kind: p.kind,
       },
     }));
+
+    // Initialize nextEntryId beyond all existing IDs
+    this.nextEntryId = this.paragraphs.length + 1;
 
     const resource: TranslationResource = {
       id: "lyrics-main",

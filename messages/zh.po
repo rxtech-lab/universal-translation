@@ -862,15 +862,15 @@ msgstr "翻译此行（可提供指导）"
 
 #: lib/translation/lyrics/lyrics-entry-row.tsx:287
 msgid "RTFn77"
-msgstr ""
+msgstr "在前方添加行"
 
 #: lib/translation/lyrics/lyrics-entry-row.tsx:294
 msgid "8QwL0b"
-msgstr ""
+msgstr "在后方添加行"
 
 #: lib/translation/lyrics/lyrics-entry-row.tsx:303
 msgid "ZoRixY"
-msgstr ""
+msgstr "删除行"
 
 #: lib/translation/lyrics/lyrics-entry-row.tsx:344
 msgid "WPMn4T"
