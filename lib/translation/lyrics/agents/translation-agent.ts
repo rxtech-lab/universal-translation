@@ -103,6 +103,7 @@ ${params.userSuggestion}`
   const modifyToolSchema = z.object({
     lineNumber: z
       .number()
+      .int()
       .min(1)
       .describe(
         "The 1-based line number of the previous translation to modify.",
@@ -152,6 +153,13 @@ ${params.userSuggestion}`
         }
       : undefined;
 
+  const toolsPromptSection = modifyPreviousTranslation
+    ? `
+
+## Tools
+You have a tool to modify previously translated lines. Use it ONLY when translating the current line reveals that an earlier line's translation should be adjusted for better rhyme consistency or overall coherence. Do not modify previous lines unnecessarily.`
+    : "";
+
   const result = await generateText({
     model,
     output: Output.object({ schema: lyricsTranslationSchema }),
@@ -167,10 +175,7 @@ ${params.userSuggestion}`
 3. **Emotional fidelity** — Capture the feeling and intent, not a literal dictionary translation.
 4. **Rhyme consistency** — If this line rhymes with other lines in the original, your translation must rhyme with those lines' translations too. But NEVER reuse the same ending word/character as a previous line — use a DIFFERENT word that rhymes.
 5. **Rhythm** — Your translation MUST have exactly ${params.rhythm.syllableCount} syllables to fit the original melody. For Chinese/Japanese/Korean, each character = 1 syllable, so count your characters carefully.
-6. **Grammar** — The translated line must be grammatically correct and natural.
-
-## Tools
-You have a tool to modify previously translated lines. Use it ONLY when translating the current line reveals that an earlier line's translation should be adjusted for better rhyme consistency or overall coherence. Do not modify previous lines unnecessarily.`,
+6. **Grammar** — The translated line must be grammatically correct and natural.${toolsPromptSection}`,
     prompt: `Translate this lyrics line: "${params.line}"
 
 Source language: ${params.sourceLanguage}

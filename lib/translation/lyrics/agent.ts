@@ -2,7 +2,10 @@ import type { EntryWithResource } from "../tools/context-tools";
 import { analyzeRhythm } from "./agents/rhythm-agent";
 import { analyzeRhyme } from "./agents/rhyme-agent";
 import { reviewTranslation } from "./agents/review-agent";
-import { translateLyricsLine } from "./agents/translation-agent";
+import {
+  type PreviousTranslationModification,
+  translateLyricsLine,
+} from "./agents/translation-agent";
 import { checkSyllableMatch } from "./checker/syllable-check";
 import { LYRICS_MAX_RETRIES } from "./config";
 import type { LyricsTranslationEvent } from "./events";
@@ -114,6 +117,7 @@ export async function* translateLyricsEntries(params: {
     let translatedText = "";
     let passed = false;
     let lastFeedback: string | undefined;
+    let acceptedModifications: PreviousTranslationModification[] = [];
 
     for (let attempt = 1; attempt <= LYRICS_MAX_RETRIES; attempt++) {
       yield {
@@ -128,6 +132,12 @@ export async function* translateLyricsEntries(params: {
         batchIndex: 0,
         text: `Translating line ${current}/${total} (attempt ${attempt}/${LYRICS_MAX_RETRIES})...`,
       };
+
+      // Snapshot previousTranslations before this attempt so we can roll back
+      // modifications from rejected attempts.
+      const prevSnapshot = completedTranslations.map((t) => ({
+        ...t,
+      }));
 
       // Translate
       const translation = await translateLyricsLine({
@@ -144,27 +154,6 @@ export async function* translateLyricsEntries(params: {
       });
 
       translatedText = translation.translatedText;
-
-      // Emit events for any previous translation modifications.
-      // The previous-translation-modified event is also handled by the API route
-      // (same as entry-translated) to persist the change, and by the UI to
-      // update the displayed text.
-      for (const mod of translation.modifications) {
-        const idx = mod.lineNumber - 1;
-        if (
-          idx >= 0 &&
-          idx < completedEntryMeta.length &&
-          idx < completedTranslations.length
-        ) {
-          const meta = completedEntryMeta[idx];
-          yield {
-            type: "previous-translation-modified",
-            entryId: meta.entryId,
-            resourceId: meta.resourceId,
-            targetText: mod.newTranslation,
-          };
-        }
-      }
 
       // Programmatic syllable check — use rhythm agent's count as source of truth
       const syllableResult = checkSyllableMatch(
@@ -185,6 +174,10 @@ export async function* translateLyricsEntries(params: {
           passed: false,
           feedback: lastFeedback,
         };
+        // Roll back any modifications from this rejected attempt
+        for (let j = 0; j < completedTranslations.length; j++) {
+          completedTranslations[j] = prevSnapshot[j];
+        }
         continue;
       }
 
@@ -217,6 +210,7 @@ export async function* translateLyricsEntries(params: {
 
       if (review.passed) {
         passed = true;
+        acceptedModifications = translation.modifications;
         console.log(
           `[lyrics] Line ${current} attempt ${attempt} PASSED review`,
         );
@@ -234,10 +228,35 @@ export async function* translateLyricsEntries(params: {
       // Use suggested revision if available and this is the last attempt
       if (attempt >= LYRICS_MAX_RETRIES && review.suggestedRevision) {
         translatedText = review.suggestedRevision;
+        acceptedModifications = translation.modifications;
         break;
       }
 
+      // Roll back any modifications from this rejected attempt
+      for (let j = 0; j < completedTranslations.length; j++) {
+        completedTranslations[j] = prevSnapshot[j];
+      }
+
       lastFeedback = review.feedback;
+    }
+
+    // Emit accepted modification events after the retry loop.
+    // Only modifications from the accepted attempt are emitted.
+    for (const mod of acceptedModifications) {
+      const idx = mod.lineNumber - 1;
+      if (
+        idx >= 0 &&
+        idx < completedEntryMeta.length &&
+        idx < completedTranslations.length
+      ) {
+        const meta = completedEntryMeta[idx];
+        yield {
+          type: "previous-translation-modified",
+          entryId: meta.entryId,
+          resourceId: meta.resourceId,
+          targetText: mod.newTranslation,
+        };
+      }
     }
 
     // Emit final translation for this line
