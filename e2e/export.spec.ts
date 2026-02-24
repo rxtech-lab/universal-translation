@@ -8,30 +8,33 @@ test.describe("Export Filename", () => {
     // 1. Navigate to the new project page
     await page.goto("/dashboard/projects/new");
 
-    // 2. Upload sample.txt
+    // 2. Wait for the upload UI to be interactive (hydrated)
+    await expect(page.getByTestId("tab-upload")).toBeVisible();
+
+    // 3. Upload sample.txt
     const fileInput = page.getByTestId("upload-file-input");
     await fileInput.setInputFiles(
       path.resolve(__dirname, "../test-assets/sample.txt"),
     );
 
-    // 3. Handle mode selection
+    // 4. Handle mode selection
     await expect(page.getByTestId("mode-universal")).toBeVisible({
       timeout: 10_000,
     });
     await page.getByTestId("mode-universal").click();
     await page.getByTestId("mode-continue").click();
 
-    // 4. Handle language selection
+    // 5. Handle language selection
     await expect(page.getByTestId("target-language-trigger")).toBeVisible({
       timeout: 10_000,
     });
     await page.getByTestId("target-language-trigger").click();
     await page.getByRole("option", { name: "Chinese (Simplified)" }).click();
 
-    // 5. Create project (project name will be "sample" — derived from filename)
+    // 6. Create project (project name will be "sample" — derived from filename)
     await page.getByTestId("create-project-button").click();
 
-    // 6. Wait for editor
+    // 7. Wait for editor
     await expect(page).toHaveURL(/\/dashboard\/projects\/[a-f0-9-]+/, {
       timeout: 15_000,
     });
@@ -39,19 +42,19 @@ test.describe("Export Filename", () => {
       timeout: 10_000,
     });
 
-    // 7. Translate all entries
+    // 8. Translate all entries
     await page.getByTestId("translate-button").first().click();
     await page.getByTestId("translate-all").first().click();
     await expect(page.getByTestId("status-idle").first()).toBeVisible({
       timeout: 30_000,
     });
 
-    // 8. Click Export and capture the download
+    // 9. Click Export and capture the download
     const downloadPromise = page.waitForEvent("download");
     await page.getByTestId("export-button").click();
     const download = await downloadPromise;
 
-    // 9. Verify the filename uses the project name ("sample") + extension
+    // 10. Verify the filename uses the project name ("sample") + extension
     expect(download.suggestedFilename()).toBe("sample.txt");
   });
 
@@ -60,6 +63,7 @@ test.describe("Export Filename", () => {
   }) => {
     // 1. Upload test.po and create project
     await page.goto("/dashboard/projects/new");
+    await expect(page.getByTestId("tab-upload")).toBeVisible();
     const fileInput = page.getByTestId("upload-file-input");
     await fileInput.setInputFiles(
       path.resolve(__dirname, "../test-assets/test.po"),

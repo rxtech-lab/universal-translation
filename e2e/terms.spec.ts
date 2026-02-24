@@ -6,6 +6,7 @@ async function createProjectAndOpenEditor(
   page: import("@playwright/test").Page,
 ) {
   await page.goto("/dashboard/projects/new");
+  await expect(page.getByTestId("tab-upload")).toBeVisible();
   const fileInput = page.getByTestId("upload-file-input");
   await fileInput.setInputFiles(
     path.resolve(__dirname, "../test-assets/sample.txt"),
