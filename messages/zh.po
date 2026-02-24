@@ -74,58 +74,58 @@ msgstr "最近项目"
 msgid "pFK6bJ"
 msgstr "查看全部"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:221
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:240
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:323
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:224
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:243
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:326
 #: lib/translation/components/entry-row-actions.tsx:61
 #: lib/translation/lyrics/lyrics-entry-row.tsx:194
 msgid "2C42E7"
 msgstr "翻译中..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:325
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:328
 msgid "by2lJ5"
 msgstr "正在开始翻译..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:382
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:385
 msgid "qvr1Bb"
 msgstr "正在翻译行..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:384
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:387
 msgid "G+DatO"
 msgstr "正在翻译第 {id} 行..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:440
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:443
 msgid "Rx9EpS"
 msgstr "翻译已停止"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:468
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:471
 msgid "S/NHSE"
 msgstr "正在清除翻译..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:469
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:472
 msgid "wYNhGP"
 msgstr "所有翻译已清除"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:470
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:473
 msgid "R38RUr"
 msgstr "清除翻译失败"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:490
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:493
 msgid "fq475d"
 msgstr "已更新：保留 {preserved} 个，新增 {added} 个，移除 {removed} 个"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:505
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:508
 #: app/[locale]/dashboard/projects/project-card.tsx:67
 msgid "fouJn6"
 msgstr "项目已重命名"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:507
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:510
 #: app/[locale]/dashboard/projects/project-card.tsx:70
 msgid "m3LbFk"
 msgstr "重命名项目失败"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:518
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:537
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:526
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:545
 msgid "heAhPr"
 msgstr "导出失败"
 
@@ -166,6 +166,7 @@ msgstr "保留节奏与韵律"
 #: lib/translation/components/translation-editor.tsx:306
 #: lib/translation/components/translation-editor.tsx:343
 #: lib/translation/lyrics/lyrics-entry-row.tsx:367
+#: lib/translation/lyrics/lyrics-export-dialog.tsx:78
 #: lib/translation/po/po-update-dialog.tsx:349
 msgid "47FYwb"
 msgstr "取消"
@@ -704,6 +705,7 @@ msgstr "清除全部"
 
 #: lib/translation/components/translation-editor.tsx:161
 #: lib/translation/components/translation-editor.tsx:205
+#: lib/translation/lyrics/lyrics-export-dialog.tsx:86
 msgid "SVwJTM"
 msgstr "导出"
 
@@ -718,15 +720,15 @@ msgstr "术语"
 
 #: lib/translation/components/translation-editor.tsx:245
 msgid "/GCoTA"
-msgstr ""
+msgstr "清除"
 
 #: lib/translation/components/translation-editor.tsx:268
 msgid "4ijCHJ"
-msgstr ""
+msgstr "清除所有术语？"
 
 #: lib/translation/components/translation-editor.tsx:270
 msgid "P4F0ma"
-msgstr ""
+msgstr "这将删除该项目的所有术语条目。此操作无法撤销。"
 
 #: lib/translation/components/translation-editor.tsx:298
 msgid "4aWEkl"
@@ -873,6 +875,30 @@ msgstr "重新翻译该行"
 #: lib/translation/lyrics/lyrics-entry-row.tsx:346
 msgid "cLDCC2"
 msgstr "翻译该行"
+
+#: lib/translation/lyrics/lyrics-export-dialog.tsx:36
+msgid "W+Mesu"
+msgstr "导出歌词"
+
+#: lib/translation/lyrics/lyrics-export-dialog.tsx:38
+msgid "goZSDx"
+msgstr "选择歌词翻译的导出方式"
+
+#: lib/translation/lyrics/lyrics-export-dialog.tsx:53
+msgid "s4XW4t"
+msgstr "仅翻译"
+
+#: lib/translation/lyrics/lyrics-export-dialog.tsx:55
+msgid "Z2XG8y"
+msgstr "仅导出翻译后的文本"
+
+#: lib/translation/lyrics/lyrics-export-dialog.tsx:69
+msgid "SFhWSR"
+msgstr "双语"
+
+#: lib/translation/lyrics/lyrics-export-dialog.tsx:71
+msgid "BeuRUe"
+msgstr "导出原文和翻译"
 
 #: lib/translation/po/po-editor.tsx:67
 msgid "Y1OlpD"

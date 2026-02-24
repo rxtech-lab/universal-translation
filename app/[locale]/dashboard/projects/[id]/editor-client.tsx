@@ -26,9 +26,11 @@ import { HtmlClient, type HtmlFormatData } from "@/lib/translation/html/client";
 import { HtmlEditor } from "@/lib/translation/html/html-editor";
 import {
   LyricsClient,
+  type LyricsExportMode,
   type LyricsFormatData,
 } from "@/lib/translation/lyrics/client";
 import { LyricsEditor } from "@/lib/translation/lyrics/lyrics-editor";
+import { LyricsExportDialog } from "@/lib/translation/lyrics/lyrics-export-dialog";
 import { PoClient, type PoFormatData } from "@/lib/translation/po/client";
 import { PoEditor } from "@/lib/translation/po/po-editor";
 import { PoUpdateDialog } from "@/lib/translation/po/po-update-dialog";
@@ -157,6 +159,7 @@ export function EditorClient({
 
   const [projectName, setProjectName] = useState(dbProject.name);
   const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
+  const [lyricsExportDialogOpen, setLyricsExportDialogOpen] = useState(false);
 
   const { project, updateEntry, applyStreamUpdate, refreshFromClient } =
     useTranslationProject(client);
@@ -510,33 +513,56 @@ export function EditorClient({
     [dbProject.id, t],
   );
 
-  const handleExport = useCallback(async () => {
-    try {
-      const response = await fetch(`/api/export/${dbProject.id}`);
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => null);
-        toast.error(errorData?.error ?? t("Export failed"));
-        return;
+  const doExport = useCallback(
+    async (mode?: LyricsExportMode) => {
+      try {
+        const url =
+          dbProject.formatId === "lyrics" && mode
+            ? `/api/export/${dbProject.id}?mode=${mode}`
+            : `/api/export/${dbProject.id}`;
+        const response = await fetch(url);
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => null);
+          toast.error(errorData?.error ?? t("Export failed"));
+          return;
+        }
+
+        const contentDisposition = response.headers.get("Content-Disposition");
+        const fileName = contentDisposition
+          ? decodeURIComponent(
+              contentDisposition.match(/filename="?([^"]+)"?/)?.[1] ?? "export",
+            )
+          : "export";
+
+        const blob = await response.blob();
+        const objectUrl = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = objectUrl;
+        a.download = fileName;
+        a.click();
+        URL.revokeObjectURL(objectUrl);
+      } catch {
+        toast.error(t("Export failed"));
       }
+    },
+    [dbProject.id, dbProject.formatId, t],
+  );
 
-      const contentDisposition = response.headers.get("Content-Disposition");
-      const fileName = contentDisposition
-        ? decodeURIComponent(
-            contentDisposition.match(/filename="?([^"]+)"?/)?.[1] ?? "export",
-          )
-        : "export";
-
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = fileName;
-      a.click();
-      URL.revokeObjectURL(url);
-    } catch {
-      toast.error(t("Export failed"));
+  const handleExport = useCallback(() => {
+    if (dbProject.formatId === "lyrics") {
+      setLyricsExportDialogOpen(true);
+    } else {
+      doExport();
     }
-  }, [dbProject.id, t]);
+  }, [dbProject.formatId, doExport]);
+
+  const handleLyricsExportConfirm = useCallback(
+    (mode: LyricsExportMode) => {
+      setLyricsExportDialogOpen(false);
+      doExport(mode);
+    },
+    [doExport],
+  );
 
   const handleSave = useCallback(async () => {
     setStatus((prev) =>
@@ -660,6 +686,13 @@ export function EditorClient({
           }
           currentDocument={(client as PoClient).getFormatData().document}
           onConfirm={handleUpdatePo}
+        />
+      )}
+      {dbProject.formatId === "lyrics" && (
+        <LyricsExportDialog
+          open={lyricsExportDialogOpen}
+          onOpenChange={setLyricsExportDialogOpen}
+          onConfirm={handleLyricsExportConfirm}
         />
       )}
     </>

@@ -74,58 +74,58 @@ msgstr "Recent Projects"
 msgid "pFK6bJ"
 msgstr "View all"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:221
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:240
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:323
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:224
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:243
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:326
 #: lib/translation/components/entry-row-actions.tsx:61
 #: lib/translation/lyrics/lyrics-entry-row.tsx:194
 msgid "2C42E7"
 msgstr "Translating..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:325
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:328
 msgid "by2lJ5"
 msgstr "Starting translation..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:382
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:385
 msgid "qvr1Bb"
 msgstr "Translating line..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:384
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:387
 msgid "G+DatO"
 msgstr "Translating line #{id}..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:440
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:443
 msgid "Rx9EpS"
 msgstr "Translation stopped"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:468
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:471
 msgid "S/NHSE"
 msgstr "Clearing translations..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:469
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:472
 msgid "wYNhGP"
 msgstr "All translations cleared"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:470
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:473
 msgid "R38RUr"
 msgstr "Failed to clear translations"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:490
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:493
 msgid "fq475d"
 msgstr "Updated: {preserved} preserved, {added} new, {removed} removed"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:505
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:508
 #: app/[locale]/dashboard/projects/project-card.tsx:67
 msgid "fouJn6"
 msgstr "Project renamed"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:507
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:510
 #: app/[locale]/dashboard/projects/project-card.tsx:70
 msgid "m3LbFk"
 msgstr "Failed to rename project"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:518
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:537
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:526
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:545
 msgid "heAhPr"
 msgstr "Export failed"
 
@@ -166,6 +166,7 @@ msgstr "Rhythm & rhyme preserving"
 #: lib/translation/components/translation-editor.tsx:306
 #: lib/translation/components/translation-editor.tsx:343
 #: lib/translation/lyrics/lyrics-entry-row.tsx:367
+#: lib/translation/lyrics/lyrics-export-dialog.tsx:78
 #: lib/translation/po/po-update-dialog.tsx:349
 msgid "47FYwb"
 msgstr "Cancel"
@@ -704,6 +705,7 @@ msgstr "Clear All"
 
 #: lib/translation/components/translation-editor.tsx:161
 #: lib/translation/components/translation-editor.tsx:205
+#: lib/translation/lyrics/lyrics-export-dialog.tsx:86
 msgid "SVwJTM"
 msgstr "Export"
 
@@ -873,6 +875,30 @@ msgstr "Retranslate Line"
 #: lib/translation/lyrics/lyrics-entry-row.tsx:346
 msgid "cLDCC2"
 msgstr "Translate Line"
+
+#: lib/translation/lyrics/lyrics-export-dialog.tsx:36
+msgid "W+Mesu"
+msgstr "Export Lyrics"
+
+#: lib/translation/lyrics/lyrics-export-dialog.tsx:38
+msgid "goZSDx"
+msgstr "Choose how to export your lyrics translation"
+
+#: lib/translation/lyrics/lyrics-export-dialog.tsx:53
+msgid "s4XW4t"
+msgstr "Translation Only"
+
+#: lib/translation/lyrics/lyrics-export-dialog.tsx:55
+msgid "Z2XG8y"
+msgstr "Export only the translated text"
+
+#: lib/translation/lyrics/lyrics-export-dialog.tsx:69
+msgid "SFhWSR"
+msgstr "Bilingual"
+
+#: lib/translation/lyrics/lyrics-export-dialog.tsx:71
+msgid "BeuRUe"
+msgstr "Export original text with translation"
 
 #: lib/translation/po/po-editor.tsx:67
 msgid "Y1OlpD"
