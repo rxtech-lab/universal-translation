@@ -14,6 +14,8 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { EditorStatus } from "./types";
@@ -27,6 +29,27 @@ interface VersionSelectorProps {
   projectId: string;
   initialVersionCount?: number;
   status: EditorStatus;
+}
+
+function groupVersionsByDate(versions: ProjectVersion[]) {
+  const groups: { label: string; versions: ProjectVersion[] }[] = [];
+  let currentLabel = "";
+
+  for (const version of versions) {
+    const date = new Date(version.createdAt);
+    const label = date.toLocaleDateString(undefined, {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+    if (label !== currentLabel) {
+      currentLabel = label;
+      groups.push({ label, versions: [] });
+    }
+    groups[groups.length - 1].versions.push(version);
+  }
+
+  return groups;
 }
 
 export function VersionSelector({
@@ -43,10 +66,13 @@ export function VersionSelector({
     EditorStatus["state"]
   >(status.state);
 
-  // Track save transitions to increment version count (each save creates a version)
+  // Refresh version count from server after a save completes
   if (status.state !== prevStatusState) {
     if (prevStatusState === "saving" && status.state === "saved") {
-      setVersionCount((c) => c + 1);
+      getProjectVersions(projectId).then((result) => {
+        setVersionCount(result.length);
+        setVersions(result);
+      });
     }
     setPrevStatusState(status.state);
   }
@@ -74,6 +100,9 @@ export function VersionSelector({
 
   if (versionCount === 0) return null;
 
+  const grouped = groupVersionsByDate(versions);
+  let globalIndex = 0;
+
   return (
     <DropdownMenu onOpenChange={(open) => open && loadVersions()}>
       <DropdownMenuTrigger asChild>
@@ -92,14 +121,25 @@ export function VersionSelector({
         className="max-h-60 overflow-y-auto"
         data-testid="version-selector-menu"
       >
-        {versions.map((version, index) => (
-          <DropdownMenuItem
-            key={version.id}
-            onClick={() => handleRestore(version.id)}
-            data-testid={`version-item-${index}`}
-          >
-            {new Date(version.createdAt).toLocaleString()}
-          </DropdownMenuItem>
+        {grouped.map((group, groupIdx) => (
+          <div key={group.label}>
+            {groupIdx > 0 && <DropdownMenuSeparator />}
+            <DropdownMenuLabel className="text-xs text-muted-foreground">
+              {group.label}
+            </DropdownMenuLabel>
+            {group.versions.map((version) => {
+              const idx = globalIndex++;
+              return (
+                <DropdownMenuItem
+                  key={version.id}
+                  onClick={() => handleRestore(version.id)}
+                  data-testid={`version-item-${idx}`}
+                >
+                  {new Date(version.createdAt).toLocaleTimeString()}
+                </DropdownMenuItem>
+              );
+            })}
+          </div>
         ))}
       </DropdownMenuContent>
     </DropdownMenu>

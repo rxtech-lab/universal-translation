@@ -770,15 +770,15 @@ msgstr "{count} errors"
 msgid "ASykzc"
 msgstr "Translation Errors"
 
-#: lib/translation/components/version-selector.tsx:51
+#: lib/translation/components/version-selector.tsx:91
 msgid "eBOgRU"
 msgstr "Version restored"
 
-#: lib/translation/components/version-selector.tsx:54
+#: lib/translation/components/version-selector.tsx:94
 msgid "pz9eEL"
 msgstr "Failed to restore version"
 
-#: lib/translation/components/version-selector.tsx:73
+#: lib/translation/components/version-selector.tsx:116
 msgid "djJp6c"
 msgstr "History"
 

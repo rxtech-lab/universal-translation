@@ -770,15 +770,15 @@ msgstr "{count} 个错误"
 msgid "ASykzc"
 msgstr "翻译错误"
 
-#: lib/translation/components/version-selector.tsx:51
+#: lib/translation/components/version-selector.tsx:91
 msgid "eBOgRU"
 msgstr "版本已恢复"
 
-#: lib/translation/components/version-selector.tsx:54
+#: lib/translation/components/version-selector.tsx:94
 msgid "pz9eEL"
 msgstr "恢复版本失败"
 
-#: lib/translation/components/version-selector.tsx:73
+#: lib/translation/components/version-selector.tsx:116
 msgid "djJp6c"
 msgstr "历史记录"
 

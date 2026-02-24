@@ -82,6 +82,23 @@ export async function updateProjectContent(
     .from(projects)
     .where(and(eq(projects.id, projectId), eq(projects.userId, userId)));
 
+  // Check if content actually changed compared to the latest version
+  const [latestVersion] = await db
+    .select({ content: projectVersions.content })
+    .from(projectVersions)
+    .where(eq(projectVersions.projectId, projectId))
+    .orderBy(desc(projectVersions.createdAt))
+    .limit(1);
+
+  const contentStr = JSON.stringify(content);
+  const latestContentStr = latestVersion
+    ? JSON.stringify(latestVersion.content)
+    : null;
+
+  if (contentStr === latestContentStr) {
+    return; // Nothing changed, skip version creation
+  }
+
   // Create a new version snapshot
   await db.insert(projectVersions).values({
     id: crypto.randomUUID(),
