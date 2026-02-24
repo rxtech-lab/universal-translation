@@ -15,7 +15,7 @@ export default async function ProjectPage({
 
   const { id } = await params;
 
-  const [[project], projectTerms, [versionCountResult]] = await Promise.all([
+  const [[project], projectTerms] = await Promise.all([
     db
       .select()
       .from(projects)
@@ -30,13 +30,20 @@ export default async function ProjectPage({
       })
       .from(terms)
       .where(eq(terms.projectId, id)),
-    db
-      .select({ count: sql<number>`count(*)` })
-      .from(projectVersions)
-      .where(eq(projectVersions.projectId, id)),
   ]);
 
   if (!project) redirect("/dashboard");
+
+  let versionCount = 0;
+  try {
+    const [versionCountResult] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(projectVersions)
+      .where(eq(projectVersions.projectId, id));
+    versionCount = versionCountResult?.count ?? 0;
+  } catch {
+    // Table may not exist if migration hasn't been applied yet
+  }
 
   return (
     <div className="flex flex-1 flex-col p-4">
@@ -52,7 +59,7 @@ export default async function ProjectPage({
           formatData: project.formatData,
         }}
         initialTerms={projectTerms}
-        versionCount={versionCountResult?.count ?? 0}
+        versionCount={versionCount}
       />
     </div>
   );

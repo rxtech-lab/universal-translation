@@ -83,30 +83,34 @@ export async function updateProjectContent(
     .where(and(eq(projects.id, projectId), eq(projects.userId, userId)));
 
   // Create a new version snapshot
-  await db.insert(projectVersions).values({
-    id: crypto.randomUUID(),
-    projectId,
-    content,
-    formatData: project?.formatData ?? null,
-    createdAt: now,
-  });
+  try {
+    await db.insert(projectVersions).values({
+      id: crypto.randomUUID(),
+      projectId,
+      content,
+      formatData: project?.formatData ?? null,
+      createdAt: now,
+    });
 
-  // Prune old versions beyond the retention limit
-  const recentVersionIds = db
-    .select({ id: projectVersions.id })
-    .from(projectVersions)
-    .where(eq(projectVersions.projectId, projectId))
-    .orderBy(desc(projectVersions.createdAt))
-    .limit(MAX_VERSIONS_PER_PROJECT);
+    // Prune old versions beyond the retention limit
+    const recentVersionIds = db
+      .select({ id: projectVersions.id })
+      .from(projectVersions)
+      .where(eq(projectVersions.projectId, projectId))
+      .orderBy(desc(projectVersions.createdAt))
+      .limit(MAX_VERSIONS_PER_PROJECT);
 
-  await db
-    .delete(projectVersions)
-    .where(
-      and(
-        eq(projectVersions.projectId, projectId),
-        notInArray(projectVersions.id, recentVersionIds),
-      ),
-    );
+    await db
+      .delete(projectVersions)
+      .where(
+        and(
+          eq(projectVersions.projectId, projectId),
+          notInArray(projectVersions.id, recentVersionIds),
+        ),
+      );
+  } catch {
+    // Table may not exist if migration hasn't been applied yet
+  }
 }
 
 export async function updateProjectStatus(projectId: string, status: string) {
@@ -174,14 +178,19 @@ export async function deleteProject(projectId: string) {
 export async function getProjectVersions(projectId: string) {
   await requireUserId();
 
-  return db
-    .select({
-      id: projectVersions.id,
-      createdAt: projectVersions.createdAt,
-    })
-    .from(projectVersions)
-    .where(eq(projectVersions.projectId, projectId))
-    .orderBy(desc(projectVersions.createdAt));
+  try {
+    return await db
+      .select({
+        id: projectVersions.id,
+        createdAt: projectVersions.createdAt,
+      })
+      .from(projectVersions)
+      .where(eq(projectVersions.projectId, projectId))
+      .orderBy(desc(projectVersions.createdAt));
+  } catch {
+    // Table may not exist if migration hasn't been applied yet
+    return [];
+  }
 }
 
 export async function restoreProjectVersion(
