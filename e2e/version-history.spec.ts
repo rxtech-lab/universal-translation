@@ -27,29 +27,30 @@ test.describe("Version History", () => {
       timeout: 10_000,
     });
 
-    // 3. Verify initial state — entry 0 has existing translation
+    // 3. Verify initial state — entry 0 has existing translation, entry 2 is empty
     const entry0 = page.getByTestId("po-entry-0");
     await expect(entry0).toContainText("Hello, %s!");
     await expect(entry0).toContainText("你好，%s！");
 
-    // 4. Translate all entries
+    // 4. First save — creates version 1 (before translation, entry 2 has no [E2E])
+    await page.getByRole("button", { name: "Save" }).first().click();
+    await expect(page.getByTestId("version-selector-button")).toBeVisible({
+      timeout: 15_000,
+    });
+
+    // 5. Translate all entries
     await page.getByTestId("translate-button").first().click();
     await page.getByTestId("translate-all").first().click();
     await expect(page.getByTestId("status-idle").first()).toBeVisible({
       timeout: 30_000,
     });
 
-    // 5. Verify the "About Us" entry now has a translation (was empty before)
+    // 6. Verify the "About Us" entry now has a translation
     const entry2 = page.getByTestId("po-entry-2");
     await expect(entry2).toContainText("[E2E]");
 
-    // 6. Click Save to persist and create a version
+    // 7. Second save — creates version 2 (after translation, entry 2 has [E2E])
     await page.getByRole("button", { name: "Save" }).first().click();
-
-    // 7. Wait for save to complete — History button should appear
-    await expect(page.getByTestId("version-selector-button")).toBeVisible({
-      timeout: 15_000,
-    });
 
     // 8. Reload the page to get fresh version count from server
     const currentUrl = page.url();
@@ -58,25 +59,44 @@ test.describe("Version History", () => {
       timeout: 10_000,
     });
 
-    // 9. The History button should show version count
-    const historyButton = page.getByTestId("version-selector-button");
-    await expect(historyButton).toBeVisible({ timeout: 10_000 });
+    // 9. Verify current state still has [E2E] translation
+    await expect(page.getByTestId("po-entry-2")).toContainText("[E2E]");
 
     // 10. Open version dropdown
+    const historyButton = page.getByTestId("version-selector-button");
+    await expect(historyButton).toBeVisible({ timeout: 10_000 });
     await historyButton.click();
 
     // 11. Verify versions exist in the dropdown
     const versionMenu = page.getByTestId("version-selector-menu");
     await expect(versionMenu).toBeVisible();
 
-    // 12. Click the first (latest) version to restore it
-    const firstVersion = page.getByTestId("version-item-0");
-    await expect(firstVersion).toBeVisible();
-    await firstVersion.click();
+    // 12. Click the second (older) version to preview it — this is before translation
+    const olderVersion = page.getByTestId("version-item-1");
+    await expect(olderVersion).toBeVisible();
+    await olderVersion.click();
 
-    // 13. Wait for page to refresh after restore
+    // 13. URL should contain ?version= and preview banner should appear
+    await expect(page).toHaveURL(/\?version=/, { timeout: 10_000 });
+    await expect(page.getByTestId("version-preview-banner")).toBeVisible({
+      timeout: 10_000,
+    });
+
+    // 14. Verify content changed — entry 2 should NOT have [E2E] in the older version
+    await expect(page.getByTestId("po-entry-2")).not.toContainText("[E2E]", {
+      timeout: 5_000,
+    });
+
+    // 15. Click "Apply this version" to restore the older version
+    await page.getByTestId("apply-version-button").click();
+
+    // 16. URL should no longer contain ?version= after applying
+    await expect(page).not.toHaveURL(/\?version=/, { timeout: 10_000 });
     await expect(page.getByTestId("translation-editor")).toBeVisible({
       timeout: 10_000,
     });
+
+    // 17. Verify the older version is now the current content (no [E2E])
+    await expect(page.getByTestId("po-entry-2")).not.toContainText("[E2E]");
   });
 });

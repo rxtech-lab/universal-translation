@@ -44,9 +44,9 @@ test.describe("Lyrics Stop Translation", () => {
     await page.getByTestId("translate-all").first().click();
 
     // 8. Wait for the stop button to appear (translation has started)
-    await expect(
-      page.getByTestId("translate-stop-button").first(),
-    ).toBeVisible({ timeout: 10_000 });
+    await expect(page.getByTestId("translate-stop-button").first()).toBeVisible(
+      { timeout: 10_000 },
+    );
 
     // 9. Click Stop
     await page.getByTestId("translate-stop-button").first().click();

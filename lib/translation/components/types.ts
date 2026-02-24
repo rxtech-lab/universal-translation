@@ -34,4 +34,8 @@ export interface TranslationEditorProps {
   onRename?: (newName: string) => void;
   onUpdatePo?: () => void;
   versionCount?: number;
+  isReadOnly?: boolean;
+  previewVersion?: { id: string; createdAt: Date } | null;
+  onApplyVersion?: () => void;
+  selectedVersionId?: string | null;
 }

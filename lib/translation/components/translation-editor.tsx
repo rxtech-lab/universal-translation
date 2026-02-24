@@ -6,6 +6,7 @@ import {
   MoreHorizontal,
   Pencil,
   RefreshCw,
+  RotateCcw,
   Save,
   Trash2,
 } from "lucide-react";
@@ -69,6 +70,10 @@ export function TranslationEditor({
   onRename,
   onUpdatePo,
   versionCount,
+  isReadOnly,
+  previewVersion,
+  onApplyVersion,
+  selectedVersionId,
 }: TranslationEditorProps) {
   const t = useExtracted();
   const router = useRouter();
@@ -79,6 +84,12 @@ export function TranslationEditor({
   const [clearTermsAlertOpen, setClearTermsAlertOpen] = useState(false);
   const [renameDialogOpen, setRenameDialogOpen] = useState(false);
   const [editName, setEditName] = useState(projectName);
+
+  const handleBackToCurrent = () => {
+    const url = new URL(window.location.href);
+    url.searchParams.delete("version");
+    router.push(url.pathname);
+  };
 
   return (
     <div
@@ -117,109 +128,186 @@ export function TranslationEditor({
           <CardAction>
             {/* Desktop actions */}
             <div className="hidden md:flex items-center gap-2">
-              <TranslationStatus
-                status={status}
-                errors={errors}
-                onClearErrors={onClearErrors}
-              />
-              <Separator orientation="vertical" className="h-4" />
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setTermsDialogOpen(true)}
-                data-testid="terms-button"
-              >
-                <BookOpen className="h-3.5 w-3.5 mr-1" />
-                {t("Terms")} ({terms.length})
-              </Button>
-              <TranslateDropdown
-                projectId={projectId}
-                isTranslating={isTranslating}
-                onTranslate={onTranslate}
-                onStopTranslation={onStopTranslation ?? (() => {})}
-                onTranslationUpdated={onTranslationUpdated}
-              />
-              {onUpdatePo && (
-                <Button variant="outline" size="sm" onClick={onUpdatePo}>
-                  <RefreshCw className="h-3.5 w-3.5 mr-1" />
-                  {t("Update")}
-                </Button>
+              {isReadOnly ? (
+                <>
+                  <VersionSelector
+                    projectId={projectId}
+                    initialVersionCount={versionCount}
+                    status={status}
+                    selectedVersionId={selectedVersionId}
+                  />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleBackToCurrent}
+                  >
+                    <RotateCcw className="h-3.5 w-3.5 mr-1" />
+                    {t("Back to current")}
+                  </Button>
+                  <Button
+                    size="sm"
+                    onClick={onApplyVersion}
+                    data-testid="apply-version-button"
+                  >
+                    {t("Apply this version")}
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <TranslationStatus
+                    status={status}
+                    errors={errors}
+                    onClearErrors={onClearErrors}
+                  />
+                  <Separator orientation="vertical" className="h-4" />
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setTermsDialogOpen(true)}
+                    data-testid="terms-button"
+                  >
+                    <BookOpen className="h-3.5 w-3.5 mr-1" />
+                    {t("Terms")} ({terms.length})
+                  </Button>
+                  <TranslateDropdown
+                    projectId={projectId}
+                    isTranslating={isTranslating}
+                    onTranslate={onTranslate}
+                    onStopTranslation={onStopTranslation ?? (() => {})}
+                    onTranslationUpdated={onTranslationUpdated}
+                  />
+                  {onUpdatePo && (
+                    <Button variant="outline" size="sm" onClick={onUpdatePo}>
+                      <RefreshCw className="h-3.5 w-3.5 mr-1" />
+                      {t("Update")}
+                    </Button>
+                  )}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setClearAlertOpen(true)}
+                  >
+                    <Trash2 className="h-3.5 w-3.5 mr-1" />
+                    {t("Clear All")}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={onExport}
+                    data-testid="export-button"
+                  >
+                    <Download className="h-3.5 w-3.5 mr-1" />
+                    {t("Export")}
+                  </Button>
+                  <VersionSelector
+                    projectId={projectId}
+                    initialVersionCount={versionCount}
+                    status={status}
+                    selectedVersionId={selectedVersionId}
+                  />
+                  <Button size="sm" onClick={onSave}>
+                    <Save className="h-3.5 w-3.5 mr-1" />
+                    {t("Save")}
+                  </Button>
+                </>
               )}
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setClearAlertOpen(true)}
-              >
-                <Trash2 className="h-3.5 w-3.5 mr-1" />
-                {t("Clear All")}
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={onExport}
-                data-testid="export-button"
-              >
-                <Download className="h-3.5 w-3.5 mr-1" />
-                {t("Export")}
-              </Button>
-              <VersionSelector projectId={projectId} initialVersionCount={versionCount} status={status} />
-              <Button size="sm" onClick={onSave}>
-                <Save className="h-3.5 w-3.5 mr-1" />
-                {t("Save")}
-              </Button>
             </div>
 
             {/* Mobile actions */}
             <div className="flex md:hidden items-center gap-1.5">
-              <TranslationStatus
-                status={status}
-                errors={errors}
-                onClearErrors={onClearErrors}
-              />
-              <TranslateDropdown
-                projectId={projectId}
-                isTranslating={isTranslating}
-                onTranslate={onTranslate}
-                onStopTranslation={onStopTranslation ?? (() => {})}
-                onTranslationUpdated={onTranslationUpdated}
-              />
-              <Button size="icon-sm" onClick={onSave}>
-                <Save className="h-3.5 w-3.5" />
-              </Button>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="icon-sm">
-                    <MoreHorizontal className="h-3.5 w-3.5" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => setTermsDialogOpen(true)}>
-                    <BookOpen className="h-3.5 w-3.5" />
-                    {t("Terms")} ({terms.length})
-                  </DropdownMenuItem>
-                  {onUpdatePo && (
-                    <DropdownMenuItem onClick={onUpdatePo}>
-                      <RefreshCw className="h-3.5 w-3.5" />
-                      {t("Update")}
-                    </DropdownMenuItem>
-                  )}
-                  <DropdownMenuItem onClick={onExport}>
-                    <Download className="h-3.5 w-3.5" />
-                    {t("Export")}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    variant="destructive"
-                    onClick={() => setClearAlertOpen(true)}
+              {isReadOnly ? (
+                <>
+                  <VersionSelector
+                    projectId={projectId}
+                    initialVersionCount={versionCount}
+                    status={status}
+                    selectedVersionId={selectedVersionId}
+                  />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleBackToCurrent}
                   >
-                    <Trash2 className="h-3.5 w-3.5" />
-                    {t("Clear All")}
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                    <RotateCcw className="h-3.5 w-3.5 mr-1" />
+                    {t("Back")}
+                  </Button>
+                  <Button
+                    size="sm"
+                    onClick={onApplyVersion}
+                    data-testid="apply-version-button-mobile"
+                  >
+                    {t("Apply")}
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <TranslationStatus
+                    status={status}
+                    errors={errors}
+                    onClearErrors={onClearErrors}
+                  />
+                  <TranslateDropdown
+                    projectId={projectId}
+                    isTranslating={isTranslating}
+                    onTranslate={onTranslate}
+                    onStopTranslation={onStopTranslation ?? (() => {})}
+                    onTranslationUpdated={onTranslationUpdated}
+                  />
+                  <Button size="icon-sm" onClick={onSave}>
+                    <Save className="h-3.5 w-3.5" />
+                  </Button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" size="icon-sm">
+                        <MoreHorizontal className="h-3.5 w-3.5" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem
+                        onClick={() => setTermsDialogOpen(true)}
+                      >
+                        <BookOpen className="h-3.5 w-3.5" />
+                        {t("Terms")} ({terms.length})
+                      </DropdownMenuItem>
+                      {onUpdatePo && (
+                        <DropdownMenuItem onClick={onUpdatePo}>
+                          <RefreshCw className="h-3.5 w-3.5" />
+                          {t("Update")}
+                        </DropdownMenuItem>
+                      )}
+                      <DropdownMenuItem onClick={onExport}>
+                        <Download className="h-3.5 w-3.5" />
+                        {t("Export")}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        variant="destructive"
+                        onClick={() => setClearAlertOpen(true)}
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                        {t("Clear All")}
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </>
+              )}
             </div>
           </CardAction>
         </CardHeader>
       </Card>
+
+      {/* Version preview banner */}
+      {isReadOnly && previewVersion && (
+        <div
+          className="flex items-center justify-between gap-2 px-4 py-2 bg-muted border text-sm"
+          data-testid="version-preview-banner"
+        >
+          <span className="text-muted-foreground">
+            {t("Previewing version from {date}", {
+              date: new Date(previewVersion.createdAt).toLocaleString(),
+            })}
+          </span>
+        </div>
+      )}
 
       {/* Format-specific editor */}
       <div className="flex-1 min-h-0">{children}</div>
