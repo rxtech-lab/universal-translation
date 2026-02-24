@@ -1,11 +1,13 @@
 "use server";
 
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, notInArray } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { projectVersions, projects } from "@/lib/db/schema";
 import type { TranslationProject } from "@/lib/translation/types";
+
+const MAX_VERSIONS_PER_PROJECT = 50;
 
 async function requireUserId(): Promise<string> {
   const session = await auth();
@@ -88,6 +90,23 @@ export async function updateProjectContent(
     formatData: project?.formatData ?? null,
     createdAt: now,
   });
+
+  // Prune old versions beyond the retention limit
+  const recentVersionIds = db
+    .select({ id: projectVersions.id })
+    .from(projectVersions)
+    .where(eq(projectVersions.projectId, projectId))
+    .orderBy(desc(projectVersions.createdAt))
+    .limit(MAX_VERSIONS_PER_PROJECT);
+
+  await db
+    .delete(projectVersions)
+    .where(
+      and(
+        eq(projectVersions.projectId, projectId),
+        notInArray(projectVersions.id, recentVersionIds),
+      ),
+    );
 }
 
 export async function updateProjectStatus(projectId: string, status: string) {
