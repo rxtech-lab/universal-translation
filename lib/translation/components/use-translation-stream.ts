@@ -181,6 +181,15 @@ export function useTranslationStream() {
                     ? { ...prev, current: event.current }
                     : prev,
                 );
+              } else if (event.type === "previous-translation-modified") {
+                const key = `${event.resourceId}:${event.entryId}`;
+                if (!userEditedIdsRef.current.has(key)) {
+                  params.onEntryTranslated(
+                    event.resourceId,
+                    event.entryId,
+                    event.targetText,
+                  );
+                }
               } else if (event.type === "terminology-found") {
                 params.onTermsFound?.(event.terms);
               } else if (event.type === "complete") {

@@ -1,4 +1,4 @@
-import { createGateway, generateText, Output } from "ai";
+import { createGateway, generateText, Output, stepCountIs, tool } from "ai";
 import { z } from "zod";
 import { DEFAULT_MODEL } from "../config";
 import type { RhythmAnalysis } from "./rhythm-agent";
@@ -14,6 +14,12 @@ export const lyricsTranslationSchema = z.object({
 });
 
 export type LyricsTranslationResult = z.infer<typeof lyricsTranslationSchema>;
+
+export interface PreviousTranslationModification {
+  lineNumber: number;
+  newTranslation: string;
+  reason: string;
+}
 
 function createModel(modelId?: string) {
   const gateway = createGateway({
@@ -36,8 +42,13 @@ export async function translateLyricsLine(params: {
   previousFeedback?: string;
   userSuggestion?: string;
   model?: string;
-}): Promise<LyricsTranslationResult> {
+}): Promise<
+  LyricsTranslationResult & {
+    modifications: PreviousTranslationModification[];
+  }
+> {
   const model = createModel(params.model);
+  const modifications: PreviousTranslationModification[] = [];
 
   // Build rhyme target context — show which specific translations this line must rhyme with
   const rhymeTargets: string[] = [];
@@ -89,9 +100,73 @@ The user has provided the following guidance for this specific line. Prioritize 
 ${params.userSuggestion}`
     : "";
 
+  const modifyToolSchema = z.object({
+    lineNumber: z
+      .number()
+      .int()
+      .min(1)
+      .describe(
+        "The 1-based line number of the previous translation to modify.",
+      ),
+    newTranslation: z
+      .string()
+      .describe("The new translation text for the previous line."),
+    reason: z
+      .string()
+      .describe(
+        "Brief explanation of why this modification improves the overall translation.",
+      ),
+  });
+
+  const modifyPreviousTranslation =
+    params.previousTranslations.length > 0
+      ? {
+          modifyPreviousTranslation: tool({
+            description:
+              "Modify a previously translated lyrics line to improve rhyme consistency, rhythm, or overall coherence with the current translation. Use this when translating a new line reveals that an earlier line could be improved.",
+            inputSchema: modifyToolSchema,
+            execute: async ({ lineNumber, newTranslation, reason }) => {
+              if (
+                lineNumber < 1 ||
+                lineNumber > params.previousTranslations.length
+              ) {
+                return {
+                  success: false,
+                  error: `Invalid line number ${lineNumber}. Must be between 1 and ${params.previousTranslations.length}.`,
+                };
+              }
+
+              // Intentionally mutate the shared previousTranslations array so
+              // subsequent translations see the updated text.
+              const prev = params.previousTranslations[lineNumber - 1];
+              prev.translated = newTranslation;
+              modifications.push({ lineNumber, newTranslation, reason });
+
+              return {
+                success: true,
+                lineNumber,
+                original: prev.original,
+                newTranslation,
+              };
+            },
+          }),
+        }
+      : undefined;
+
+  const toolsPromptSection = modifyPreviousTranslation
+    ? `
+
+## Tools
+You have a tool to modify previously translated lines. Use it ONLY when translating the current line reveals that an earlier line's translation should be adjusted for better rhyme consistency or overall coherence. Do not modify previous lines unnecessarily.`
+    : "";
+
   const result = await generateText({
     model,
     output: Output.object({ schema: lyricsTranslationSchema }),
+    tools: modifyPreviousTranslation,
+    // Allow up to 3 steps: the model may call the modify tool once or twice,
+    // then produce its final structured output.
+    stopWhen: modifyPreviousTranslation ? stepCountIs(3) : undefined,
     system: `You are a professional song lyricist who adapts songs into ${params.targetLanguage}. You don't do word-for-word translation — you write lyrics that a native ${params.targetLanguage} speaker would actually sing.
 
 ## Translation Principles (in priority order)
@@ -100,7 +175,7 @@ ${params.userSuggestion}`
 3. **Emotional fidelity** — Capture the feeling and intent, not a literal dictionary translation.
 4. **Rhyme consistency** — If this line rhymes with other lines in the original, your translation must rhyme with those lines' translations too. But NEVER reuse the same ending word/character as a previous line — use a DIFFERENT word that rhymes.
 5. **Rhythm** — Your translation MUST have exactly ${params.rhythm.syllableCount} syllables to fit the original melody. For Chinese/Japanese/Korean, each character = 1 syllable, so count your characters carefully.
-6. **Grammar** — The translated line must be grammatically correct and natural.`,
+6. **Grammar** — The translated line must be grammatically correct and natural.${toolsPromptSection}`,
     prompt: `Translate this lyrics line: "${params.line}"
 
 Source language: ${params.sourceLanguage}
@@ -120,5 +195,5 @@ ${userSuggestionContext}
 Produce a translation that sounds like it was originally written in ${params.targetLanguage}.`,
   });
 
-  return result.output!;
+  return { ...result.output!, modifications };
 }

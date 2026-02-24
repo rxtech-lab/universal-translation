@@ -62,4 +62,10 @@ export type LyricsTranslationEvent =
       passed: boolean;
       feedback: string;
     }
-  | { type: "line-complete"; entryId: string; current: number; total: number };
+  | { type: "line-complete"; entryId: string; current: number; total: number }
+  | {
+      type: "previous-translation-modified";
+      entryId: string;
+      resourceId: string;
+      targetText: string;
+    };
