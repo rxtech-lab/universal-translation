@@ -75,7 +75,7 @@ const nextAuth = NextAuth({
           ...token,
           accessToken: account.access_token,
           refreshToken: account.refresh_token,
-          expiresAt: account.expires_at,
+          exp: account.expires_at,
           // Store the real user ID from OIDC provider (not NextAuth's internal sub)
           userId: profile?.sub,
         };
@@ -83,8 +83,8 @@ const nextAuth = NextAuth({
 
       // Token still valid - return as is
       if (
-        token.expiresAt &&
-        Date.now() < (token.expiresAt as number) * 1000 - 60000 // Refresh 1 minute before expiry
+        token.exp &&
+        Date.now() < (token.exp as number) * 1000 - 60000 // Refresh 1 minute before expiry
       ) {
         return token;
       }
