@@ -50,9 +50,7 @@ export function LyricsExportDialog({
             data-testid="export-translation-only"
           >
             <FileText className="h-5 w-5 mb-2 text-muted-foreground" />
-            <div className="font-medium text-sm">
-              {t("Translation Only")}
-            </div>
+            <div className="font-medium text-sm">{t("Translation Only")}</div>
             <div className="text-xs text-muted-foreground mt-1">
               {t("Export only the translated text")}
             </div>
@@ -68,9 +66,7 @@ export function LyricsExportDialog({
             data-testid="export-bilingual"
           >
             <Languages className="h-5 w-5 mb-2 text-muted-foreground" />
-            <div className="font-medium text-sm">
-              {t("Bilingual")}
-            </div>
+            <div className="font-medium text-sm">{t("Bilingual")}</div>
             <div className="text-xs text-muted-foreground mt-1">
               {t("Export original text with translation")}
             </div>

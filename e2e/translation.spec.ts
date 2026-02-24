@@ -90,6 +90,7 @@ test.describe("Single Line Retranslation", () => {
   }) => {
     // 1. Upload test.po and create project
     await page.goto("/dashboard/projects/new");
+    await expect(page.getByTestId("tab-upload")).toBeVisible();
     const fileInput = page.getByTestId("upload-file-input");
     await fileInput.setInputFiles(
       path.resolve(__dirname, "../test-assets/test.po"),
@@ -141,6 +142,7 @@ test.describe("PO Update Flow", () => {
   test("should update PO file and preserve translations", async ({ page }) => {
     // 1. Navigate to new project page
     await page.goto("/dashboard/projects/new");
+    await expect(page.getByTestId("tab-upload")).toBeVisible();
 
     // 2. Upload test.po
     const fileInput = page.getByTestId("upload-file-input");
@@ -201,6 +203,7 @@ test.describe("PO Update Flow", () => {
     // 1. Upload test.po and create project
     // test.po already has translations: "Hello, %s!"→"你好，%s！", "Settings"→"设置", etc.
     await page.goto("/dashboard/projects/new");
+    await expect(page.getByTestId("tab-upload")).toBeVisible();
     const fileInput = page.getByTestId("upload-file-input");
     await fileInput.setInputFiles(
       path.resolve(__dirname, "../test-assets/test.po"),

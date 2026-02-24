@@ -7,6 +7,7 @@ test.describe("Lyrics Export Options", () => {
   }) => {
     // 1. Navigate to new project page
     await page.goto("/dashboard/projects/new");
+    await expect(page.getByTestId("tab-upload")).toBeVisible();
 
     // 2. Upload the sample-lyrics.txt file
     const fileInput = page.getByTestId("upload-file-input");
@@ -47,7 +48,10 @@ test.describe("Lyrics Export Options", () => {
     });
 
     // 8. Click Export — should show lyrics export dialog
-    await page.getByRole("button", { name: /export/i }).first().click();
+    await page
+      .getByRole("button", { name: /export/i })
+      .first()
+      .click();
     await expect(page.getByTestId("lyrics-export-dialog")).toBeVisible({
       timeout: 5_000,
     });
@@ -64,11 +68,14 @@ test.describe("Lyrics Export Options", () => {
       page.waitForEvent("download"),
       page.getByTestId("export-confirm").click(),
     ]);
-    expect(download1.suggestedFilename()).toContain("zh-Hans");
-    expect(download1.suggestedFilename()).not.toContain("bilingual");
+    // Project name is "sample-lyrics" (derived from filename), so export is "sample-lyrics.txt"
+    expect(download1.suggestedFilename()).toBe("sample-lyrics.txt");
 
     // 11. Click Export again and select "Bilingual"
-    await page.getByRole("button", { name: /export/i }).first().click();
+    await page
+      .getByRole("button", { name: /export/i })
+      .first()
+      .click();
     await expect(page.getByTestId("lyrics-export-dialog")).toBeVisible({
       timeout: 5_000,
     });
@@ -78,6 +85,7 @@ test.describe("Lyrics Export Options", () => {
       page.waitForEvent("download"),
       page.getByTestId("export-confirm").click(),
     ]);
-    expect(download2.suggestedFilename()).toContain("bilingual");
+    // Bilingual export preserves the _bilingual suffix
+    expect(download2.suggestedFilename()).toBe("sample-lyrics_bilingual.txt");
   });
 });

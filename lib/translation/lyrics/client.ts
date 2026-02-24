@@ -271,17 +271,13 @@ export class LyricsClient implements TranslationClient<LyricsTranslationEvent> {
     if (this.subType === "md") {
       if (isBilingual) {
         const lines = resource.entries.map(
-          (e) =>
-            `${e.sourceText}\n${e.targetText || e.sourceText}`,
+          (e) => `${e.sourceText}\n${e.targetText || e.sourceText}`,
         );
         const content = `${lines.join("\n\n")}\n`;
         const blob = new Blob([content], {
           type: "text/markdown;charset=utf-8",
         });
-        const baseName = this.originalFileName.replace(
-          /\.(md|markdown)$/i,
-          "",
-        );
+        const baseName = this.originalFileName.replace(/\.(md|markdown)$/i, "");
         const fileName = `${baseName}_bilingual.md`;
         return { hasError: false, data: { blob, fileName } };
       }
@@ -311,8 +307,7 @@ export class LyricsClient implements TranslationClient<LyricsTranslationEvent> {
     // Default: txt
     if (isBilingual) {
       const lines = resource.entries.map(
-        (e) =>
-          `${e.sourceText}\n${e.targetText || e.sourceText}`,
+        (e) => `${e.sourceText}\n${e.targetText || e.sourceText}`,
       );
       const content = `${lines.join("\n\n")}\n`;
       const blob = new Blob([content], { type: "text/plain;charset=utf-8" });

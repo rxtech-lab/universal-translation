@@ -161,9 +161,21 @@ export async function GET(
     );
   }
 
+  // Use project name + extension for the download filename
+  const compoundExtMatch = fileName.match(/\.(xcloc\.zip)$/i);
+  const lastDot = fileName.lastIndexOf(".");
+  const extension = compoundExtMatch
+    ? `.${compoundExtMatch[1]}`
+    : lastDot > 0
+      ? fileName.slice(lastDot)
+      : "";
+  // Preserve _bilingual suffix for lyrics exports so users can distinguish files
+  const bilingualSuffix = fileName.includes("_bilingual") ? "_bilingual" : "";
+  const exportFileName = `${dbProject.name}${bilingualSuffix}${extension}`;
+
   // Stream the blob content back to the client
   const stream = blob.stream();
-  const encodedFileName = encodeURIComponent(fileName);
+  const encodedFileName = encodeURIComponent(exportFileName);
 
   return new Response(stream, {
     headers: {
