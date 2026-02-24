@@ -137,12 +137,9 @@ export function useTranslationProject(client: TranslationClient) {
   );
 
   /** Delete an entry (React state only). */
-  const deleteEntry = useCallback(
-    (resourceId: string, entryId: string) => {
-      dispatch({ type: "DELETE_ENTRY", resourceId, entryId });
-    },
-    [],
-  );
+  const deleteEntry = useCallback((resourceId: string, entryId: string) => {
+    dispatch({ type: "DELETE_ENTRY", resourceId, entryId });
+  }, []);
 
   return {
     project,

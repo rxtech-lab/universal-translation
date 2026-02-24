@@ -6,6 +6,7 @@ import { useExtracted } from "next-intl";
 import { toast } from "sonner";
 import {
   renameProject,
+  restoreProjectVersion,
   updateProjectContent,
   updateProjectFormatData,
 } from "@/app/actions/projects";
@@ -63,15 +64,20 @@ interface EditorClientProps {
     formatData: unknown;
   };
   initialTerms?: Term[];
+  versionCount?: number;
+  previewVersion?: { id: string; createdAt: Date } | null;
 }
 
 export function EditorClient({
   project: dbProject,
   initialTerms,
+  versionCount,
+  previewVersion,
 }: EditorClientProps) {
   const t = useExtracted();
   const router = useRouter();
   const [, startTransition] = useTransition();
+  const isPreview = !!previewVersion;
   const terms = initialTerms ?? [];
   const [client] = useState(() => {
     if (dbProject.formatId === "lyrics") {
@@ -257,7 +263,7 @@ export function EditorClient({
     [],
   );
 
-  const { markDirty } = useAutoSave({
+  const { markDirty: rawMarkDirty } = useAutoSave({
     onSave: async () => {
       setStatus((prev) =>
         prev.state === "translating" ? prev : { state: "saving" },
@@ -274,6 +280,9 @@ export function EditorClient({
     },
     debounceMs: 5000,
   });
+
+  // Disable auto-save in preview mode
+  const markDirty = isPreview ? () => {} : rawMarkDirty;
 
   const handleEntryUpdate = useCallback(
     (
@@ -615,13 +624,33 @@ export function EditorClient({
           : { state: "error", message: result.errorMessage },
       );
     } else {
+      // Also persist content to DB (creates a version snapshot)
+      await Promise.all([
+        updateProjectContent(dbProject.id, client.getProject()),
+        updateProjectFormatData(dbProject.id, client.getFormatData()),
+      ]);
       setStatus((prev) =>
         prev.state === "translating"
           ? prev
           : { state: "saved", at: new Date() },
       );
+      // Refresh server data so version count updates
+      startTransition(() => router.refresh());
     }
-  }, [client, setStatus]);
+  }, [client, dbProject.id, setStatus, router]);
+
+  const handleApplyVersion = useCallback(async () => {
+    if (!previewVersion) return;
+    try {
+      await restoreProjectVersion(dbProject.id, previewVersion.id);
+      toast.success(t("Version restored"));
+      const url = new URL(window.location.href);
+      url.searchParams.delete("version");
+      router.push(url.pathname);
+    } catch {
+      toast.error(t("Failed to restore version"));
+    }
+  }, [dbProject.id, previewVersion, router, t]);
 
   const formatDisplayName =
     dbProject.formatId === "xcloc"
@@ -663,6 +692,11 @@ export function EditorClient({
             ? () => setUpdateDialogOpen(true)
             : undefined
         }
+        versionCount={versionCount}
+        isReadOnly={isPreview}
+        previewVersion={previewVersion}
+        onApplyVersion={handleApplyVersion}
+        selectedVersionId={previewVersion?.id ?? null}
       >
         {dbProject.formatId === "lyrics" ? (
           <LyricsEditor

@@ -76,58 +76,66 @@ msgstr "查看全部"
 
 #: app/[locale]/dashboard/projects/[id]/editor-client.tsx:230
 #: app/[locale]/dashboard/projects/[id]/editor-client.tsx:249
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:376
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:374
 #: lib/translation/components/entry-row-actions.tsx:61
 #: lib/translation/lyrics/lyrics-entry-row.tsx:232
 msgid "2C42E7"
 msgstr "翻译中..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:378
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:376
 msgid "by2lJ5"
 msgstr "正在开始翻译..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:435
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:433
 msgid "qvr1Bb"
 msgstr "正在翻译行..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:437
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:435
 msgid "G+DatO"
 msgstr "正在翻译第 {id} 行..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:493
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:491
 msgid "Rx9EpS"
 msgstr "翻译已停止"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:521
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:519
 msgid "S/NHSE"
 msgstr "正在清除翻译..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:522
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:520
 msgid "wYNhGP"
 msgstr "所有翻译已清除"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:523
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:521
 msgid "R38RUr"
 msgstr "清除翻译失败"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:543
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:541
 msgid "fq475d"
 msgstr "已更新：保留 {preserved} 个，新增 {added} 个，移除 {removed} 个"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:558
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:556
 #: app/[locale]/dashboard/projects/project-card.tsx:67
 msgid "fouJn6"
 msgstr "项目已重命名"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:560
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:558
 #: app/[locale]/dashboard/projects/project-card.tsx:70
 msgid "m3LbFk"
 msgstr "重命名项目失败"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:576
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:595
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:574
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:593
 msgid "heAhPr"
 msgstr "导出失败"
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:646
+msgid "eBOgRU"
+msgstr "版本已恢复"
+
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:651
+msgid "pz9eEL"
+msgstr "恢复版本失败"
 
 #: app/[locale]/dashboard/projects/new/mode-selector.tsx:34
 #: app/[locale]/dashboard/projects/new/text-input-client.tsx:143
@@ -162,9 +170,9 @@ msgstr "保留节奏与韵律"
 #: app/[locale]/dashboard/projects/project-card.tsx:194
 #: components/landing/waiting-list-button.tsx:139
 #: lib/translation/components/entry-row-actions.tsx:125
-#: lib/translation/components/translation-editor.tsx:276
-#: lib/translation/components/translation-editor.tsx:306
-#: lib/translation/components/translation-editor.tsx:343
+#: lib/translation/components/translation-editor.tsx:334
+#: lib/translation/components/translation-editor.tsx:364
+#: lib/translation/components/translation-editor.tsx:401
 #: lib/translation/lyrics/lyrics-entry-row.tsx:458
 #: lib/translation/lyrics/lyrics-export-dialog.tsx:78
 #: lib/translation/po/po-update-dialog.tsx:349
@@ -283,6 +291,7 @@ msgstr "在 {fileName} 中找到 {count} 个可翻译句段"
 
 #: app/[locale]/dashboard/projects/new/url-input-client.tsx:198
 #: components/site-header.tsx:27
+#: lib/translation/components/translation-editor.tsx:205
 msgid "cyR7Kh"
 msgstr "返回"
 
@@ -325,7 +334,7 @@ msgstr "删除项目失败"
 
 #: app/[locale]/dashboard/projects/project-card.tsx:130
 #: app/[locale]/dashboard/projects/project-card.tsx:175
-#: lib/translation/components/translation-editor.tsx:356
+#: lib/translation/components/translation-editor.tsx:414
 msgid "iXNbPf"
 msgstr "重命名"
 
@@ -335,12 +344,12 @@ msgid "K3r6DQ"
 msgstr "删除"
 
 #: app/[locale]/dashboard/projects/project-card.tsx:150
-#: lib/translation/components/translation-editor.tsx:323
+#: lib/translation/components/translation-editor.tsx:381
 msgid "Eer8li"
 msgstr "重命名项目"
 
 #: app/[locale]/dashboard/projects/project-card.tsx:153
-#: lib/translation/components/translation-editor.tsx:326
+#: lib/translation/components/translation-editor.tsx:384
 msgid "D5RCKi"
 msgstr "项目名称"
 
@@ -685,56 +694,72 @@ msgstr "停止"
 msgid "qAeAY3"
 msgstr "翻译全部"
 
-#: lib/translation/components/translation-editor.tsx:131
-#: lib/translation/components/translation-editor.tsx:195
+#: lib/translation/components/translation-editor.tsx:136
+msgid "snb1ZU"
+msgstr "返回当前版本"
+
+#: lib/translation/components/translation-editor.tsx:139
+msgid "hddP1y"
+msgstr "应用此版本"
+
+#: lib/translation/components/translation-editor.tsx:157
+#: lib/translation/components/translation-editor.tsx:237
 msgid "xkr+zo"
 msgstr "术语"
 
-#: lib/translation/components/translation-editor.tsx:143
-#: lib/translation/components/translation-editor.tsx:200
+#: lib/translation/components/translation-editor.tsx:169
+#: lib/translation/components/translation-editor.tsx:242
 #: lib/translation/po/po-update-dialog.tsx:358
 msgid "BWpuKl"
 msgstr "更新"
 
-#: lib/translation/components/translation-editor.tsx:152
-#: lib/translation/components/translation-editor.tsx:212
-#: lib/translation/components/translation-editor.tsx:288
-#: lib/translation/components/translation-editor.tsx:312
+#: lib/translation/components/translation-editor.tsx:178
+#: lib/translation/components/translation-editor.tsx:254
+#: lib/translation/components/translation-editor.tsx:346
+#: lib/translation/components/translation-editor.tsx:370
 msgid "cqlObT"
 msgstr "清除全部"
 
-#: lib/translation/components/translation-editor.tsx:161
-#: lib/translation/components/translation-editor.tsx:205
+#: lib/translation/components/translation-editor.tsx:187
+#: lib/translation/components/translation-editor.tsx:247
 #: lib/translation/lyrics/lyrics-export-dialog.tsx:86
 msgid "SVwJTM"
 msgstr "导出"
 
-#: lib/translation/components/translation-editor.tsx:165
-#: lib/translation/components/translation-editor.tsx:254
+#: lib/translation/components/translation-editor.tsx:192
+#: lib/translation/components/translation-editor.tsx:312
 msgid "jvo0vs"
 msgstr "保存"
 
-#: lib/translation/components/translation-editor.tsx:231
+#: lib/translation/components/translation-editor.tsx:208
+msgid "EWw/tK"
+msgstr "应用"
+
+#: lib/translation/components/translation-editor.tsx:272
+msgid "P3vhLF"
+msgstr "正在预览 {date} 的版本"
+
+#: lib/translation/components/translation-editor.tsx:289
 msgid "JyIWks"
 msgstr "术语"
 
-#: lib/translation/components/translation-editor.tsx:245
+#: lib/translation/components/translation-editor.tsx:303
 msgid "/GCoTA"
 msgstr "清除"
 
-#: lib/translation/components/translation-editor.tsx:268
+#: lib/translation/components/translation-editor.tsx:326
 msgid "4ijCHJ"
 msgstr "清除所有术语？"
 
-#: lib/translation/components/translation-editor.tsx:270
+#: lib/translation/components/translation-editor.tsx:328
 msgid "P4F0ma"
 msgstr "这将删除该项目的所有术语条目。此操作无法撤销。"
 
-#: lib/translation/components/translation-editor.tsx:298
+#: lib/translation/components/translation-editor.tsx:356
 msgid "4aWEkl"
 msgstr "清除所有翻译？"
 
-#: lib/translation/components/translation-editor.tsx:300
+#: lib/translation/components/translation-editor.tsx:358
 msgid "ap2ut+"
 msgstr "这将删除所有已翻译的文本。此操作无法撤销。"
 
@@ -769,6 +794,14 @@ msgstr "{count} 个错误"
 #: lib/translation/components/translation-status.tsx:95
 msgid "ASykzc"
 msgstr "翻译错误"
+
+#: lib/translation/components/version-selector.tsx:112
+msgid "djJp6c"
+msgstr "历史记录"
+
+#: lib/translation/components/version-selector.tsx:147
+msgid "fF376U"
+msgstr "当前"
 
 #: lib/translation/document/document-editor.tsx:69
 msgid "wmirkP"
@@ -862,11 +895,11 @@ msgstr "翻译此行（可提供指导）"
 
 #: lib/translation/lyrics/lyrics-entry-row.tsx:287
 msgid "RTFn77"
-msgstr "在前方添加行"
+msgstr "在上方添加行"
 
 #: lib/translation/lyrics/lyrics-entry-row.tsx:294
 msgid "8QwL0b"
-msgstr "在后方添加行"
+msgstr "在下方添加行"
 
 #: lib/translation/lyrics/lyrics-entry-row.tsx:303
 msgid "ZoRixY"

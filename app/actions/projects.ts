@@ -1,11 +1,13 @@
 "use server";
 
-import { and, eq } from "drizzle-orm";
+import { and, desc, eq, notInArray } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
-import { projects } from "@/lib/db/schema";
+import { projectVersions, projects } from "@/lib/db/schema";
 import type { TranslationProject } from "@/lib/translation/types";
+
+const MAX_VERSIONS_PER_PROJECT = 50;
 
 async function requireUserId(): Promise<string> {
   const session = await auth();
@@ -66,11 +68,62 @@ export async function updateProjectContent(
   content: TranslationProject,
 ) {
   const userId = await requireUserId();
+  const now = new Date();
 
+  // Update the current project content
   await db
     .update(projects)
-    .set({ content, updatedAt: new Date() })
+    .set({ content, updatedAt: now })
     .where(and(eq(projects.id, projectId), eq(projects.userId, userId)));
+
+  // Fetch the current formatData to snapshot it in the version
+  const [project] = await db
+    .select({ formatData: projects.formatData })
+    .from(projects)
+    .where(and(eq(projects.id, projectId), eq(projects.userId, userId)));
+
+  // Check if content actually changed compared to the latest version
+  const [latestVersion] = await db
+    .select({ content: projectVersions.content })
+    .from(projectVersions)
+    .where(eq(projectVersions.projectId, projectId))
+    .orderBy(desc(projectVersions.createdAt))
+    .limit(1);
+
+  const contentStr = JSON.stringify(content);
+  const latestContentStr = latestVersion
+    ? JSON.stringify(latestVersion.content)
+    : null;
+
+  if (contentStr === latestContentStr) {
+    return; // Nothing changed, skip version creation
+  }
+
+  // Create a new version snapshot
+  await db.insert(projectVersions).values({
+    id: crypto.randomUUID(),
+    projectId,
+    content,
+    formatData: project?.formatData ?? null,
+    createdAt: now,
+  });
+
+  // Prune old versions beyond the retention limit
+  const recentVersionIds = db
+    .select({ id: projectVersions.id })
+    .from(projectVersions)
+    .where(eq(projectVersions.projectId, projectId))
+    .orderBy(desc(projectVersions.createdAt))
+    .limit(MAX_VERSIONS_PER_PROJECT);
+
+  await db
+    .delete(projectVersions)
+    .where(
+      and(
+        eq(projectVersions.projectId, projectId),
+        notInArray(projectVersions.id, recentVersionIds),
+      ),
+    );
 }
 
 export async function updateProjectStatus(projectId: string, status: string) {
@@ -133,4 +186,47 @@ export async function deleteProject(projectId: string) {
   }
 
   revalidatePath("/dashboard/projects");
+}
+
+export async function getProjectVersions(projectId: string) {
+  await requireUserId();
+
+  return db
+    .select({
+      id: projectVersions.id,
+      createdAt: projectVersions.createdAt,
+    })
+    .from(projectVersions)
+    .where(eq(projectVersions.projectId, projectId))
+    .orderBy(desc(projectVersions.createdAt));
+}
+
+export async function restoreProjectVersion(
+  projectId: string,
+  versionId: string,
+) {
+  const userId = await requireUserId();
+
+  const [version] = await db
+    .select()
+    .from(projectVersions)
+    .where(
+      and(
+        eq(projectVersions.id, versionId),
+        eq(projectVersions.projectId, projectId),
+      ),
+    );
+
+  if (!version) throw new Error("Version not found");
+
+  await db
+    .update(projects)
+    .set({
+      content: version.content,
+      formatData: version.formatData,
+      updatedAt: new Date(),
+    })
+    .where(and(eq(projects.id, projectId), eq(projects.userId, userId)));
+
+  revalidatePath(`/dashboard/projects/${projectId}`);
 }
