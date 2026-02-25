@@ -17,6 +17,7 @@ import { PoClient, type PoFormatData } from "@/lib/translation/po/client";
 import { SrtClient, type SrtFormatData } from "@/lib/translation/srt/client";
 import type { Term } from "@/lib/translation/tools/term-tools";
 import type { TranslationProject } from "@/lib/translation/types";
+import { VttClient, type VttFormatData } from "@/lib/translation/vtt/client";
 import {
   XclocClient,
   type XclocFormatData,
@@ -76,6 +77,15 @@ export async function GET(
       case "srt": {
         const client = new SrtClient();
         client.loadFromJson(content, formatData as SrtFormatData, {
+          blobUrl: dbProject.blobUrl ?? undefined,
+          projectId,
+        });
+        exportResult = await client.exportFile(projectTerms);
+        break;
+      }
+      case "vtt": {
+        const client = new VttClient();
+        client.loadFromJson(content, formatData as VttFormatData, {
           blobUrl: dbProject.blobUrl ?? undefined,
           projectId,
         });

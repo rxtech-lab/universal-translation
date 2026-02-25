@@ -37,6 +37,7 @@ import { PoEditor } from "@/lib/translation/po/po-editor";
 import { PoUpdateDialog } from "@/lib/translation/po/po-update-dialog";
 import { SrtClient, type SrtFormatData } from "@/lib/translation/srt/client";
 import { SrtEditor } from "@/lib/translation/srt/srt-editor";
+import { VttClient, type VttFormatData } from "@/lib/translation/vtt/client";
 import type { Term } from "@/lib/translation/tools/term-tools";
 import type { TranslationProject } from "@/lib/translation/types";
 import {
@@ -128,6 +129,20 @@ export function EditorClient({
         c.loadFromJson(
           dbProject.content as TranslationProject,
           dbProject.formatData as unknown as SrtFormatData,
+          {
+            blobUrl: dbProject.blobUrl ?? undefined,
+            projectId: dbProject.id,
+          },
+        );
+      }
+      return c;
+    }
+    if (dbProject.formatId === "vtt") {
+      const c = new VttClient();
+      if (dbProject.content && dbProject.formatData) {
+        c.loadFromJson(
+          dbProject.content as TranslationProject,
+          dbProject.formatData as unknown as VttFormatData,
           {
             blobUrl: dbProject.blobUrl ?? undefined,
             projectId: dbProject.id,
@@ -657,7 +672,9 @@ export function EditorClient({
       ? "Xcode Localization Catalog"
       : dbProject.formatId === "srt"
         ? "SubRip Subtitles"
-        : dbProject.formatId === "po"
+        : dbProject.formatId === "vtt"
+          ? "WebVTT Subtitles"
+          : dbProject.formatId === "po"
           ? "Gettext PO"
           : dbProject.formatId === "document"
             ? "Document"
@@ -726,7 +743,7 @@ export function EditorClient({
             streamingEntryIds={streamingEntryIds}
             terms={terms}
           />
-        ) : dbProject.formatId === "srt" ? (
+        ) : dbProject.formatId === "srt" || dbProject.formatId === "vtt" ? (
           <SrtEditor
             project={project}
             onEntryUpdate={handleEntryUpdate}
