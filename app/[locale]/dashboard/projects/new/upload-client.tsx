@@ -99,7 +99,7 @@ export function UploadClient() {
           setState({
             step: "error",
             message:
-              "Unsupported file format. Supported: .xcloc (as .zip), .srt, .po, .txt, .md, .docx, .html",
+              "Unsupported file format. Supported: .xcloc (as .zip), .srt, .vtt, .po, .txt, .md, .docx, .html",
           });
           return;
         }
@@ -169,6 +169,7 @@ export function UploadClient() {
         // Single-file formats need language selection before project creation
         if (
           formatId === "srt" ||
+          formatId === "vtt" ||
           formatId === "po" ||
           formatId === "document" ||
           formatId === "html"
@@ -246,7 +247,7 @@ export function UploadClient() {
         setState({ step: "creating" });
         const projectId = await createProjectFromParsed({
           name: fileName.replace(
-            /\.(srt|po|txt|md|markdown|docx|html|htm)$/i,
+            /\.(srt|vtt|po|txt|md|markdown|docx|html|htm)$/i,
             "",
           ),
           formatId,
@@ -455,7 +456,7 @@ export function UploadClient() {
           <input
             ref={inputRef}
             type="file"
-            accept=".zip,.xcloc,.srt,.po,.txt,.md,.markdown,.docx,.html,.htm"
+            accept=".zip,.xcloc,.srt,.vtt,.po,.txt,.md,.markdown,.docx,.html,.htm"
             onChange={handleFileSelect}
             className="hidden"
             data-testid="upload-file-input"
@@ -470,7 +471,7 @@ export function UploadClient() {
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
                   {t(
-                    "Supports .xcloc (as .zip), .srt, .po, .txt, .md, .docx, and .html",
+                    "Supports .xcloc (as .zip), .srt, .vtt, .po, .txt, .md, .docx, and .html",
                   )}
                 </p>
               </div>
@@ -482,6 +483,10 @@ export function UploadClient() {
                 <Badge variant="outline">
                   <FileText className="h-3 w-3 mr-1" />
                   .srt
+                </Badge>
+                <Badge variant="outline">
+                  <FileText className="h-3 w-3 mr-1" />
+                  .vtt
                 </Badge>
                 <Badge variant="outline">
                   <FileText className="h-3 w-3 mr-1" />

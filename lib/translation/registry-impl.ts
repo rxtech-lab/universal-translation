@@ -80,5 +80,8 @@ export async function createDefaultRegistry(): Promise<TranslationClientRegistry
   const { htmlDescriptor } = await import("./html/descriptor");
   registry.register(htmlDescriptor);
 
+  const { vttDescriptor } = await import("./vtt/descriptor");
+  registry.register(vttDescriptor);
+
   return registry;
 }

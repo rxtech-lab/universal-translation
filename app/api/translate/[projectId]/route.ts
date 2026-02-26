@@ -144,7 +144,7 @@ export async function POST(
               targetLanguage: body.targetLanguage,
               projectId,
               formatContext:
-                dbProject.formatId === "srt"
+                dbProject.formatId === "srt" || dbProject.formatId === "vtt"
                   ? "subtitle"
                   : dbProject.formatId === "po"
                     ? "po-localization"
