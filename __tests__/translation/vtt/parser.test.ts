@@ -183,6 +183,17 @@ Short format`;
     const { cues } = parseVtt("WEBVTT");
     expect(cues).toHaveLength(0);
   });
+
+  it("handles leading whitespace on timestamp lines", () => {
+    const input = `WEBVTT
+
+  00:00:01.000 --> 00:00:04.000
+Hello with indented timestamp`;
+
+    const { cues } = parseVtt(input);
+    expect(cues).toHaveLength(1);
+    expect(cues[0].text).toBe("Hello with indented timestamp");
+  });
 });
 
 describe("serializeVtt", () => {

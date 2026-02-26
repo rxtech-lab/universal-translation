@@ -45,7 +45,7 @@ export function formatTimestampRange(cue: VttCue): string {
 }
 
 const TIMESTAMP_RE =
-  /^(\d{2}:\d{2}:\d{2}\.\d{3}|\d{2}:\d{2}\.\d{3})\s*-->\s*(\d{2}:\d{2}:\d{2}\.\d{3}|\d{2}:\d{2}\.\d{3})/;
+  /^\s*(\d{2}:\d{2}:\d{2}\.\d{3}|\d{2}:\d{2}\.\d{3})\s*-->\s*(\d{2}:\d{2}:\d{2}\.\d{3}|\d{2}:\d{2}\.\d{3})/;
 
 /**
  * Parse WebVTT text into an array of cues.
@@ -152,7 +152,9 @@ export function parseVtt(text: string): { header: string; cues: VttCue[] } {
 
 /**
  * Serialize an array of cues back into WebVTT format.
- * Uses the original timestamp strings for lossless round-tripping.
+ * Uses the original timestamp strings to preserve timing precision.
+ * Note: BOM, CRLF line endings, and extraneous whitespace are normalised
+ * during parsing, so the output may differ from the original file bytes.
  */
 export function serializeVtt(header: string, cues: VttCue[]): string {
   const parts = [header];

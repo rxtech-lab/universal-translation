@@ -22,9 +22,11 @@ export const vttDescriptor: TranslationFormatDescriptor = {
       return { score: 0, reason: "File extension is not .vtt" };
     }
 
-    // Peek at content to validate WebVTT structure
+    // Peek at content to validate WebVTT structure (first line must start with WEBVTT)
     const text = await payload.file.slice(0, 500).text();
-    const hasWebVttHeader = /^WEBVTT/m.test(text.replace(/^\uFEFF/, ""));
+    const hasWebVttHeader = /^WEBVTT/i.test(
+      text.replace(/^\uFEFF/, "").replace(/\r\n/g, "\n").trimStart(),
+    );
 
     if (hasWebVttHeader) {
       return {
