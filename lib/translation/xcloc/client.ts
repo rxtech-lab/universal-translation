@@ -22,6 +22,13 @@ export interface XclocFormatData {
   originalFileName: string;
 }
 
+export interface XclocUpdateStats {
+  added: number;
+  removed: number;
+  preserved: number;
+  total: number;
+}
+
 export class XclocClient implements TranslationClient<XclocTranslationEvent> {
   private xliffDoc: XliffDocument = { version: "1.2", files: [] };
   private contentsJson: XclocContentsJson | null = null;
@@ -202,6 +209,148 @@ export class XclocClient implements TranslationClient<XclocTranslationEvent> {
     this.blobUrl = opts?.blobUrl ?? null;
     this.projectId = opts?.projectId ?? null;
     return { hasError: false, data: undefined };
+  }
+
+  /**
+   * Merge a new xcloc archive into this project, preserving existing translations
+   * for entries whose IDs match. New entries are added with empty translations,
+   * and stale entries are removed.
+   */
+  updateFromXcloc(
+    payload: UploadPayload,
+  ): OperationResult<XclocUpdateStats> {
+    if (payload.kind !== "archive") {
+      return {
+        hasError: true,
+        errorMessage: "XCLOC requires an archive upload",
+      };
+    }
+
+    const files = payload.tree.files.filter(
+      (f) => !f.path.includes("__MACOSX"),
+    );
+
+    // Find contents.json
+    const contentsFile = files.find((f) => f.path.endsWith("contents.json"));
+    if (!contentsFile) {
+      return {
+        hasError: true,
+        errorMessage: "No contents.json found in xcloc bundle",
+      };
+    }
+
+    const contentsResult = parseContentsJson(contentsFile.content);
+    if (contentsResult.hasError) {
+      return {
+        hasError: true,
+        errorMessage: contentsResult.errorMessage,
+      };
+    }
+
+    // Find XLIFF file in Localized Contents/
+    const xliffFile = files.find(
+      (f) =>
+        f.path.includes("Localized Contents/") && f.path.endsWith(".xliff"),
+    );
+    if (!xliffFile) {
+      return {
+        hasError: true,
+        errorMessage: "No XLIFF file found in Localized Contents/ directory",
+      };
+    }
+
+    const xliffXml = new TextDecoder().decode(xliffFile.content);
+    const newXliffDoc = parseXliff(xliffXml);
+
+    // Build a map of old translations: composite key (fileOriginal + "\x00" + entryId) -> targetText
+    const oldTranslations = new Map<string, string>();
+    for (const resource of this.project.resources) {
+      for (const entry of resource.entries) {
+        if (entry.targetText.trim()) {
+          oldTranslations.set(`${resource.id}\x00${entry.id}`, entry.targetText);
+        }
+      }
+    }
+    const oldKeyCount = this.project.resources.reduce(
+      (sum, r) => sum + r.entries.length,
+      0,
+    );
+
+    // Build new resources from the new XLIFF, preserving translations where IDs match
+    let preserved = 0;
+    const newResources: TranslationResource[] = newXliffDoc.files.map(
+      (file) => ({
+        id: file.original,
+        label: file.original.split("/").pop() ?? file.original,
+        sourceLanguage: file.sourceLanguage,
+        targetLanguage: file.targetLanguage,
+        entries: file.transUnits.map((tu) => {
+          const key = `${file.original}\x00${tu.id}`;
+          const existingTarget = oldTranslations.get(key);
+          if (existingTarget) preserved++;
+          return {
+            id: tu.id,
+            sourceText: tu.source,
+            targetText: existingTarget ?? tu.target ?? "",
+            comment: tu.note,
+            metadata: {
+              fileOriginal: file.original,
+            },
+          };
+        }),
+      }),
+    );
+
+    const newKeyCount = newResources.reduce(
+      (sum, r) => sum + r.entries.length,
+      0,
+    );
+
+    // Build new key set to compute removed count
+    const newKeys = new Set<string>();
+    for (const resource of newResources) {
+      for (const entry of resource.entries) {
+        newKeys.add(`${resource.id}\x00${entry.id}`);
+      }
+    }
+    const removedCount = this.project.resources.reduce((sum, r) => {
+      return sum + r.entries.filter((e) => !newKeys.has(`${r.id}\x00${e.id}`)).length;
+    }, 0);
+    const added = newKeyCount - (oldKeyCount - removedCount);
+
+    // Also sync translations back into the new XLIFF doc
+    for (const file of newXliffDoc.files) {
+      for (const tu of file.transUnits) {
+        const key = `${file.original}\x00${tu.id}`;
+        const existingTarget = oldTranslations.get(key);
+        if (existingTarget) {
+          tu.target = existingTarget;
+        }
+      }
+    }
+
+    // Replace internal state
+    this.xliffDoc = newXliffDoc;
+    this.contentsJson = contentsResult.data;
+    this.xliffPath = xliffFile.path;
+    this.originalFileName = payload.originalFileName;
+    this.originalTree = payload.tree;
+    this.project = {
+      ...this.project,
+      resources: newResources,
+      sourceLanguage: contentsResult.data.developmentRegion,
+      targetLanguages: [contentsResult.data.targetLocale],
+    };
+
+    return {
+      hasError: false,
+      data: {
+        added,
+        removed: removedCount,
+        preserved,
+        total: newKeyCount,
+      },
+    };
   }
 
   /** Get the format-specific data needed for DB persistence. */
