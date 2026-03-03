@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="240" viewBox="0 0 900 240">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#16213e"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#db2777"/>
+      <stop offset="50%" stop-color="#ec4899"/>
+      <stop offset="100%" stop-color="#f472b6"/>
+    </linearGradient>
+    <linearGradient id="iconGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#db2777"/>
+      <stop offset="50%" stop-color="#ec4899"/>
+      <stop offset="100%" stop-color="#f472b6"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="240" rx="16" fill="url(#bgGrad)"/>
+
+  <!-- Decorative circles -->
+  <circle cx="820" cy="30" r="80" fill="none" stroke="rgba(236,72,153,0.08)" stroke-width="1.5"/>
+  <circle cx="820" cy="30" r="120" fill="none" stroke="rgba(236,72,153,0.05)" stroke-width="1.5"/>
+  <circle cx="80" cy="210" r="60" fill="none" stroke="rgba(236,72,153,0.06)" stroke-width="1.5"/>
+  <circle cx="80" cy="210" r="100" fill="none" stroke="rgba(236,72,153,0.04)" stroke-width="1.5"/>
+
+  <!-- Accent line -->
+  <rect x="60" y="200" width="780" height="2" rx="1" fill="url(#accentGrad)" opacity="0.3"/>
+
+  <!-- App icon -->
+  <rect x="60" y="68" width="88" height="88" rx="20" fill="url(#iconGrad)"/>
+  <circle cx="64" cy="72" r="28" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+  <circle cx="144" cy="152" r="22" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+  <text x="104" y="134" text-anchor="middle" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="58" font-weight="800" fill="white" letter-spacing="-2">T</text>
+
+  <!-- Title -->
+  <text x="172" y="110" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="38" font-weight="800" fill="white" letter-spacing="-1">Universal Translation</text>
+
+  <!-- Accent underline for title -->
+  <rect x="172" y="118" width="340" height="3" rx="1.5" fill="url(#accentGrad)" opacity="0.8"/>
+
+  <!-- Subtitle -->
+  <text x="172" y="150" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="16" font-weight="400" fill="rgba(255,255,255,0.65)">AI-powered software localization for every format</text>
+
+  <!-- Format badges -->
+  <!-- .xcloc -->
+  <rect x="172" y="172" width="68" height="26" rx="6" fill="rgba(219,39,119,0.18)" stroke="rgba(219,39,119,0.4)" stroke-width="1"/>
+  <text x="206" y="190" text-anchor="middle" font-family="Inter, system-ui, -apple-system, monospace" font-size="12" font-weight="600" fill="#f472b6">.xcloc</text>
+
+  <!-- .po -->
+  <rect x="248" y="172" width="48" height="26" rx="6" fill="rgba(219,39,119,0.18)" stroke="rgba(219,39,119,0.4)" stroke-width="1"/>
+  <text x="272" y="190" text-anchor="middle" font-family="Inter, system-ui, -apple-system, monospace" font-size="12" font-weight="600" fill="#f472b6">.po</text>
+
+  <!-- .srt -->
+  <rect x="304" y="172" width="48" height="26" rx="6" fill="rgba(219,39,119,0.18)" stroke="rgba(219,39,119,0.4)" stroke-width="1"/>
+  <text x="328" y="190" text-anchor="middle" font-family="Inter, system-ui, -apple-system, monospace" font-size="12" font-weight="600" fill="#f472b6">.srt</text>
+
+  <!-- .vtt -->
+  <rect x="360" y="172" width="48" height="26" rx="6" fill="rgba(219,39,119,0.18)" stroke="rgba(219,39,119,0.4)" stroke-width="1"/>
+  <text x="384" y="190" text-anchor="middle" font-family="Inter, system-ui, -apple-system, monospace" font-size="12" font-weight="600" fill="#f472b6">.vtt</text>
+
+  <!-- .md -->
+  <rect x="416" y="172" width="48" height="26" rx="6" fill="rgba(219,39,119,0.18)" stroke="rgba(219,39,119,0.4)" stroke-width="1"/>
+  <text x="440" y="190" text-anchor="middle" font-family="Inter, system-ui, -apple-system, monospace" font-size="12" font-weight="600" fill="#f472b6">.md</text>
+
+  <!-- .docx -->
+  <rect x="472" y="172" width="58" height="26" rx="6" fill="rgba(219,39,119,0.18)" stroke="rgba(219,39,119,0.4)" stroke-width="1"/>
+  <text x="501" y="190" text-anchor="middle" font-family="Inter, system-ui, -apple-system, monospace" font-size="12" font-weight="600" fill="#f472b6">.docx</text>
+
+  <!-- .html -->
+  <rect x="538" y="172" width="54" height="26" rx="6" fill="rgba(219,39,119,0.18)" stroke="rgba(219,39,119,0.4)" stroke-width="1"/>
+  <text x="565" y="190" text-anchor="middle" font-family="Inter, system-ui, -apple-system, monospace" font-size="12" font-weight="600" fill="#f472b6">.html</text>
+
+  <!-- Tech stack labels on right side -->
+  <text x="720" y="96" text-anchor="middle" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="11" font-weight="500" fill="rgba(255,255,255,0.4)">BUILT WITH</text>
+  <text x="720" y="118" text-anchor="middle" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="15" font-weight="700" fill="rgba(255,255,255,0.85)">Next.js 16</text>
+  <text x="720" y="140" text-anchor="middle" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="15" font-weight="700" fill="rgba(255,255,255,0.85)">Vercel AI SDK</text>
+  <text x="720" y="162" text-anchor="middle" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="15" font-weight="700" fill="rgba(255,255,255,0.85)">Drizzle + Turso</text>
+
+  <!-- Divider line between content and tech stack -->
+  <line x1="650" y1="80" x2="650" y2="180" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+</svg>
