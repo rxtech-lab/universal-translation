@@ -145,7 +145,7 @@ export function XclocUpdateDialog({
         setPayload(result.data);
         setDiffStats(stats);
       } catch {
-        setParseError(t("Failed to read the file."));
+        setParseError(t("Failed to read the file. Please ensure it is a valid xcloc archive."));
       } finally {
         setLoading(false);
       }

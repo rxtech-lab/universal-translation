@@ -971,7 +971,6 @@ msgid "EbWGMC"
 msgstr "在选定的文件中未找到可翻译的条目。"
 
 #: lib/translation/po/po-update-dialog.tsx:115
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:148
 msgid "X3CQNO"
 msgstr "读取文件失败。"
 
@@ -1067,6 +1066,10 @@ msgstr "所选文件不是有效的 xcloc 归档。"
 #: lib/translation/xcloc/xcloc-update-dialog.tsx:138
 msgid "0ysE8I"
 msgstr "无法解析 xcloc 包。请确保其中包含有效的 contents.json 和 XLIFF 文件。"
+
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:148
+msgid "qygJrQ"
+msgstr "读取文件失败。请确保它是有效的 xcloc 归档。"
 
 #: lib/translation/xcloc/xcloc-update-dialog.tsx:190
 msgid "ll+9qp"

@@ -971,7 +971,6 @@ msgid "EbWGMC"
 msgstr "No translatable entries found in the selected file."
 
 #: lib/translation/po/po-update-dialog.tsx:115
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:148
 msgid "X3CQNO"
 msgstr "Failed to read the file."
 
@@ -1067,6 +1066,10 @@ msgstr "The selected file is not a valid xcloc archive."
 #: lib/translation/xcloc/xcloc-update-dialog.tsx:138
 msgid "0ysE8I"
 msgstr "Could not parse the xcloc bundle. Ensure it contains a valid contents.json and XLIFF file."
+
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:148
+msgid "qygJrQ"
+msgstr "Failed to read the file. Please ensure it is a valid xcloc archive."
 
 #: lib/translation/xcloc/xcloc-update-dialog.tsx:190
 msgid "ll+9qp"
