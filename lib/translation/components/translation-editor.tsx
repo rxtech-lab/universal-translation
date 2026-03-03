@@ -68,7 +68,7 @@ export function TranslationEditor({
   onTranslationUpdated,
   onClearAllTranslations,
   onRename,
-  onUpdatePo,
+  onUpdate,
   versionCount,
   isReadOnly,
   previewVersion,
@@ -176,8 +176,8 @@ export function TranslationEditor({
                     onStopTranslation={onStopTranslation ?? (() => {})}
                     onTranslationUpdated={onTranslationUpdated}
                   />
-                  {onUpdatePo && (
-                    <Button variant="outline" size="sm" onClick={onUpdatePo}>
+                  {onUpdate && (
+                    <Button variant="outline" size="sm" onClick={onUpdate}>
                       <RefreshCw className="h-3.5 w-3.5 mr-1" />
                       {t("Update")}
                     </Button>
@@ -269,8 +269,8 @@ export function TranslationEditor({
                         <BookOpen className="h-3.5 w-3.5" />
                         {t("Terms")} ({terms.length})
                       </DropdownMenuItem>
-                      {onUpdatePo && (
-                        <DropdownMenuItem onClick={onUpdatePo}>
+                      {onUpdate && (
+                        <DropdownMenuItem onClick={onUpdate}>
                           <RefreshCw className="h-3.5 w-3.5" />
                           {t("Update")}
                         </DropdownMenuItem>

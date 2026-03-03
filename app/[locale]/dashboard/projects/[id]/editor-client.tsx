@@ -39,12 +39,13 @@ import { SrtClient, type SrtFormatData } from "@/lib/translation/srt/client";
 import { SrtEditor } from "@/lib/translation/srt/srt-editor";
 import { VttClient, type VttFormatData } from "@/lib/translation/vtt/client";
 import type { Term } from "@/lib/translation/tools/term-tools";
-import type { TranslationProject } from "@/lib/translation/types";
+import type { TranslationProject, UploadPayload } from "@/lib/translation/types";
 import {
   XclocClient,
   type XclocFormatData,
 } from "@/lib/translation/xcloc/client";
 import { XclocEditor } from "@/lib/translation/xcloc/xcloc-editor";
+import { XclocUpdateDialog } from "@/lib/translation/xcloc/xcloc-update-dialog";
 
 const TOOL_DISPLAY_NAMES: Record<string, string> = {
   lookupPrevLines: "Looking up previous entries",
@@ -563,6 +564,28 @@ export function EditorClient({
     [client, refreshFromClient, markDirty, dbProject.id, t],
   );
 
+  const handleUpdateXcloc = useCallback(
+    async (payload: UploadPayload) => {
+      const result = (client as XclocClient).updateFromXcloc(payload);
+      if (result.hasError) {
+        toast.error(result.errorMessage);
+        return;
+      }
+      refreshFromClient();
+      markDirty();
+      await updateProjectFormatData(dbProject.id, client.getFormatData());
+      setUpdateDialogOpen(false);
+      toast.success(
+        t("Updated: {preserved} preserved, {added} new, {removed} removed", {
+          preserved: String(result.data.preserved),
+          added: String(result.data.added),
+          removed: String(result.data.removed),
+        }),
+      );
+    },
+    [client, refreshFromClient, markDirty, dbProject.id, t],
+  );
+
   const handleRename = useCallback(
     async (newName: string) => {
       try {
@@ -704,8 +727,8 @@ export function EditorClient({
         onTranslationUpdated={handleTranslationUpdated}
         onClearAllTranslations={handleClearAllTranslations}
         onRename={handleRename}
-        onUpdatePo={
-          dbProject.formatId === "po"
+        onUpdate={
+          dbProject.formatId === "po" || dbProject.formatId === "xcloc"
             ? () => setUpdateDialogOpen(true)
             : undefined
         }
@@ -779,6 +802,14 @@ export function EditorClient({
           }
           currentDocument={(client as PoClient).getFormatData().document}
           onConfirm={handleUpdatePo}
+        />
+      )}
+      {dbProject.formatId === "xcloc" && (
+        <XclocUpdateDialog
+          open={updateDialogOpen}
+          onOpenChange={setUpdateDialogOpen}
+          currentProject={client.getProject()}
+          onConfirm={handleUpdateXcloc}
         />
       )}
       {dbProject.formatId === "lyrics" && (

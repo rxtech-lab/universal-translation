@@ -274,4 +274,142 @@ describe("XclocClient", () => {
       expect(totalEntries).toBe(246);
     });
   });
+
+  describe("updateFromXcloc", () => {
+    function loadUpdatedPayload(): UploadPayload {
+      const zipPath = resolve(
+        __dirname,
+        "../../../test-assets/zh-Hans-updated.xcloc.zip",
+      );
+      const zipBuffer = new Uint8Array(readFileSync(zipPath));
+      const entries = unzipSync(zipBuffer);
+
+      const files: VirtualFile[] = [];
+      for (const [path, content] of Object.entries(entries)) {
+        if (path.endsWith("/")) continue;
+        files.push({ path, content });
+      }
+
+      return {
+        kind: "archive",
+        tree: { files },
+        originalFileName: "zh-Hans-updated.xcloc.zip",
+      };
+    }
+
+    it("merges new entries and preserves translations", async () => {
+      const client = new XclocClient();
+      await client.load(loadTestPayload());
+
+      // Translate some entries first
+      const resourceId = "ArgoTradingSwift/Localizable.xcstrings";
+      client.updateEntry(resourceId, "All", { targetText: "全部" });
+      client.updateEntry(resourceId, "Cancel", { targetText: "取消" });
+      client.updateEntry(resourceId, "Back", { targetText: "返回" });
+
+      // Update with new xcloc (removes All, Back; adds New Feature, Dashboard Settings)
+      const result = client.updateFromXcloc(loadUpdatedPayload());
+      expect(result.hasError).toBe(false);
+      if (result.hasError) return;
+
+      // Verify stats
+      expect(result.data.removed).toBe(3); // ArgoTrading, All, Back
+      expect(result.data.added).toBe(2); // New Feature, Dashboard Settings
+      expect(result.data.total).toBe(245);
+
+      // Verify preserved translation for Cancel
+      const resource = client.getResource(resourceId)!;
+      const cancelEntry = resource.entries.find((e) => e.id === "Cancel");
+      expect(cancelEntry?.targetText).toBe("取消");
+
+      // Verify removed entries no longer exist
+      expect(resource.entries.find((e) => e.id === "All")).toBeUndefined();
+      expect(resource.entries.find((e) => e.id === "Back")).toBeUndefined();
+
+      // Verify new entries added
+      const newFeature = resource.entries.find(
+        (e) => e.id === "New Feature",
+      );
+      expect(newFeature).toBeDefined();
+      expect(newFeature?.targetText).toBe("");
+      expect(newFeature?.comment).toBe("A newly added feature label");
+
+      const dashSettings = resource.entries.find(
+        (e) => e.id === "Dashboard Settings",
+      );
+      expect(dashSettings).toBeDefined();
+      expect(dashSettings?.targetText).toBe("");
+    });
+
+    it("preserves translations for entries in InfoPlist resource too", async () => {
+      const client = new XclocClient();
+      await client.load(loadTestPayload());
+
+      const infoResourceId = "ArgoTradingSwift/InfoPlist.xcstrings";
+      client.updateEntry(infoResourceId, "Argo Trading App", {
+        targetText: "Argo 交易应用",
+      });
+
+      const result = client.updateFromXcloc(loadUpdatedPayload());
+      expect(result.hasError).toBe(false);
+
+      const resource = client.getResource(infoResourceId)!;
+      const entry = resource.entries.find(
+        (e) => e.id === "Argo Trading App",
+      );
+      expect(entry?.targetText).toBe("Argo 交易应用");
+
+      // ArgoTrading was removed in updated version
+      expect(
+        resource.entries.find((e) => e.id === "ArgoTrading"),
+      ).toBeUndefined();
+    });
+
+    it("syncs xliff doc for export after update", async () => {
+      const client = new XclocClient();
+      await client.load(loadTestPayload());
+
+      const resourceId = "ArgoTradingSwift/Localizable.xcstrings";
+      client.updateEntry(resourceId, "Cancel", { targetText: "取消" });
+
+      const result = client.updateFromXcloc(loadUpdatedPayload());
+      expect(result.hasError).toBe(false);
+
+      // Export and verify the XLIFF contains preserved translation
+      const exportResult = await client.exportFile();
+      expect(exportResult.hasError).toBe(false);
+      if (exportResult.hasError) return;
+
+      const zipBuffer = new Uint8Array(
+        await exportResult.data.blob?.arrayBuffer(),
+      );
+      const entries = unzipSync(zipBuffer);
+      const xliffContent =
+        entries["zh-Hans.xcloc/Localized Contents/zh-Hans.xliff"];
+      const xliffXml = new TextDecoder().decode(xliffContent);
+
+      const doc = parseXliff(xliffXml);
+      const localizable = doc.files.find(
+        (f) => f.original === "ArgoTradingSwift/Localizable.xcstrings",
+      )!;
+      const cancelUnit = localizable.transUnits.find(
+        (t) => t.id === "Cancel",
+      )!;
+      expect(cancelUnit.target).toBe("取消");
+
+      // New entries should exist in exported XLIFF
+      expect(
+        localizable.transUnits.find((t) => t.id === "New Feature"),
+      ).toBeDefined();
+    });
+
+    it("rejects non-archive payloads", () => {
+      const client = new XclocClient();
+      const result = client.updateFromXcloc({
+        kind: "single-file",
+        file: new File([""], "test.txt"),
+      });
+      expect(result.hasError).toBe(true);
+    });
+  });
 });

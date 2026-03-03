@@ -32,7 +32,7 @@ export interface TranslationEditorProps {
   ) => void;
   onClearAllTranslations: () => void;
   onRename?: (newName: string) => void;
-  onUpdatePo?: () => void;
+  onUpdate?: () => void;
   versionCount?: number;
   isReadOnly?: boolean;
   previewVersion?: { id: string; createdAt: Date } | null;
