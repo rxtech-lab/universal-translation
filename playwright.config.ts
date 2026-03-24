@@ -28,7 +28,7 @@ export default defineConfig({
     },
     {
       command: "bun run worker:dev",
-      url: "http://localhost:3000/api/health",
+      url: "http://localhost:8081/healthz",
       reuseExistingServer: !process.env.CI,
       env: {
         IS_E2E: "true",

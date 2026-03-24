@@ -81,7 +81,9 @@ async function saveProjectContent(
       content,
       updatedAt: new Date(),
       ...(options?.status ? { status: options.status } : {}),
-      ...(options?.metadata !== undefined ? { metadata: options.metadata } : {}),
+      ...(options?.metadata !== undefined
+        ? { metadata: options.metadata }
+        : {}),
     })
     .where(and(eq(projects.id, projectId), eq(projects.userId, userId)));
 }
@@ -202,7 +204,9 @@ async function runTranslateTask(
       metadata: projects.metadata,
     })
     .from(projects)
-    .where(and(eq(projects.id, task.projectId), eq(projects.userId, task.userId)));
+    .where(
+      and(eq(projects.id, task.projectId), eq(projects.userId, task.userId)),
+    );
 
   if (!dbProject?.content) {
     logWorker("translate_project_missing", taskDetails(task));
@@ -258,7 +262,10 @@ async function runTranslateTask(
 
     for (let i = 0; i < task.payload.entries.length; i += 1) {
       if (await isRunCancelled(task.runId)) {
-        logWorker("translate_cancelled", `${taskDetails(task)} at=${i}/${task.payload.entries.length}`);
+        logWorker(
+          "translate_cancelled",
+          `${taskDetails(task)} at=${i}/${task.payload.entries.length}`,
+        );
         projectMetadata = withTranslationRun(projectMetadata, null);
         await updateProjectStatus(
           task.projectId,
@@ -312,15 +319,10 @@ async function runTranslateTask(
       });
     }
 
-    await saveProjectContent(
-      task.projectId,
-      task.userId,
-      projectContent,
-      {
-        status: "completed",
-        metadata: withTranslationRun(projectMetadata, null),
-      },
-    );
+    await saveProjectContent(task.projectId, task.userId, projectContent, {
+      status: "completed",
+      metadata: withTranslationRun(projectMetadata, null),
+    });
     logWorker("translate_saved_completed", taskDetails(task));
     await emit("translation-event", {
       type: "batch-complete",
@@ -333,7 +335,10 @@ async function runTranslateTask(
 
   const allLyricsEntries = isLyrics
     ? projectContent.resources.flatMap((resource) =>
-        resource.entries.map((entry) => ({ ...entry, resourceId: resource.id })),
+        resource.entries.map((entry) => ({
+          ...entry,
+          resourceId: resource.id,
+        })),
       )
     : undefined;
 
@@ -489,7 +494,9 @@ async function runChatTask(
       targetLanguage: projects.targetLanguage,
     })
     .from(projects)
-    .where(and(eq(projects.id, task.projectId), eq(projects.userId, task.userId)));
+    .where(
+      and(eq(projects.id, task.projectId), eq(projects.userId, task.userId)),
+    );
 
   if (!dbProject?.content) {
     logWorker("chat_project_missing", taskDetails(task));
@@ -503,7 +510,9 @@ async function runChatTask(
   const sourceLanguage =
     projectContent.sourceLanguage ?? dbProject.sourceLanguage ?? "en";
   const targetLanguage =
-    projectContent.targetLanguages?.[0] ?? dbProject.targetLanguage ?? "zh-Hans";
+    projectContent.targetLanguages?.[0] ??
+    dbProject.targetLanguage ??
+    "zh-Hans";
 
   const resourceSummaries = projectContent.resources
     .map((resource) => {
@@ -682,7 +691,10 @@ Always explain what you're doing and confirm changes with the user.`,
             };
           });
 
-          const totalEntries = resources.reduce((sum, item) => sum + item.total, 0);
+          const totalEntries = resources.reduce(
+            (sum, item) => sum + item.total,
+            0,
+          );
           const totalTranslated = resources.reduce(
             (sum, item) => sum + item.translated,
             0,
@@ -711,10 +723,7 @@ Always explain what you're doing and confirm changes with the user.`,
 
   for await (const chunk of result.toUIMessageStream()) {
     await renewActiveRun(task.projectId, task.runId);
-    logWorker(
-      "chat_chunk",
-      `${taskDetails(task)} chunkType=${chunk.type}`,
-    );
+    logWorker("chat_chunk", `${taskDetails(task)} chunkType=${chunk.type}`);
     await emit("chat-ui-chunk", chunk);
   }
 

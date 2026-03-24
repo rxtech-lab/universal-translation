@@ -1,11 +1,7 @@
 import type { UIMessageChunk } from "ai";
 import type { EntryWithResource } from "@/lib/translation/tools/context-tools";
-import type {
-  LyricsTranslationEvent,
-} from "@/lib/translation/lyrics/events";
-import type {
-  XclocTranslationEvent,
-} from "@/lib/translation/xcloc/events";
+import type { LyricsTranslationEvent } from "@/lib/translation/lyrics/events";
+import type { XclocTranslationEvent } from "@/lib/translation/xcloc/events";
 
 export const TRANSLATION_TASK_QUEUE =
   process.env.TRANSLATION_TASK_QUEUE ?? "translation-tasks";
@@ -79,8 +75,6 @@ export function isTranslationTerminalEvent(event: TranslationWorkerEvent) {
 
 export function isChatTerminalChunk(chunk: UIMessageChunk) {
   return (
-    chunk.type === "finish" ||
-    chunk.type === "abort" ||
-    chunk.type === "error"
+    chunk.type === "finish" || chunk.type === "abort" || chunk.type === "error"
   );
 }

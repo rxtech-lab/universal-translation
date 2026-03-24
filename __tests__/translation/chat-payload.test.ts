@@ -9,6 +9,8 @@ describe("getChatPayload", () => {
   });
 
   test("throws when messages are missing", () => {
-    expect(() => getChatPayload({ nope: true })).toThrow("Invalid chat payload");
+    expect(() => getChatPayload({ nope: true })).toThrow(
+      "Invalid chat payload",
+    );
   });
 });

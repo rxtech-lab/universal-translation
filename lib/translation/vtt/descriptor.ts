@@ -25,7 +25,10 @@ export const vttDescriptor: TranslationFormatDescriptor = {
     // Peek at content to validate WebVTT structure (first line must start with WEBVTT)
     const text = await payload.file.slice(0, 500).text();
     const hasWebVttHeader = /^WEBVTT/i.test(
-      text.replace(/^\uFEFF/, "").replace(/\r\n/g, "\n").trimStart(),
+      text
+        .replace(/^\uFEFF/, "")
+        .replace(/\r\n/g, "\n")
+        .trimStart(),
     );
 
     if (hasWebVttHeader) {

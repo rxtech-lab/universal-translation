@@ -74,67 +74,67 @@ msgstr "最近项目"
 msgid "pFK6bJ"
 msgstr "查看全部"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:261
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:280
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:405
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:264
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:283
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:408
 #: lib/translation/components/entry-row-actions.tsx:61
 #: lib/translation/lyrics/lyrics-entry-row.tsx:232
 msgid "2C42E7"
 msgstr "翻译中..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:407
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:410
 msgid "by2lJ5"
 msgstr "正在开始翻译..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:464
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:467
 msgid "qvr1Bb"
 msgstr "正在翻译行..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:466
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:469
 msgid "G+DatO"
 msgstr "正在翻译第 {id} 行..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:522
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:525
 msgid "Rx9EpS"
 msgstr "翻译已停止"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:635
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:638
 msgid "S/NHSE"
 msgstr "正在清除翻译..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:636
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:639
 msgid "wYNhGP"
 msgstr "所有翻译已清除"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:637
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:640
 msgid "R38RUr"
 msgstr "清除翻译失败"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:657
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:679
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:660
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:682
 msgid "fq475d"
 msgstr "已更新：保留 {preserved} 个，新增 {added} 个，移除 {removed} 个"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:694
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:697
 #: app/[locale]/dashboard/projects/project-card.tsx:67
 msgid "fouJn6"
 msgstr "项目已重命名"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:696
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:699
 #: app/[locale]/dashboard/projects/project-card.tsx:70
 msgid "m3LbFk"
 msgstr "重命名项目失败"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:712
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:731
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:715
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:734
 msgid "heAhPr"
 msgstr "导出失败"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:784
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:787
 msgid "eBOgRU"
 msgstr "版本已恢复"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:789
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:792
 msgid "pz9eEL"
 msgstr "恢复版本失败"
 
@@ -177,7 +177,7 @@ msgstr "保留节奏与韵律"
 #: lib/translation/lyrics/lyrics-entry-row.tsx:458
 #: lib/translation/lyrics/lyrics-export-dialog.tsx:78
 #: lib/translation/po/po-update-dialog.tsx:349
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:305
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:315
 msgid "47FYwb"
 msgstr "取消"
 
@@ -712,7 +712,7 @@ msgstr "术语"
 #: lib/translation/components/translation-editor.tsx:182
 #: lib/translation/components/translation-editor.tsx:275
 #: lib/translation/po/po-update-dialog.tsx:358
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:314
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:324
 msgid "BWpuKl"
 msgstr "更新"
 
@@ -873,7 +873,7 @@ msgstr "未选择资源"
 
 #: lib/translation/html/html-editor.tsx:218
 #: lib/translation/po/po-update-dialog.tsx:261
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:271
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:272
 msgid "TJo5E6"
 msgstr "预览"
 
@@ -987,13 +987,13 @@ msgid "W2t7xc"
 msgstr "新 PO 文件"
 
 #: lib/translation/po/po-update-dialog.tsx:228
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:238
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:239
 msgid "IvE1kf"
 msgstr "正在读取..."
 
 #: lib/translation/po/po-update-dialog.tsx:238
 #: lib/translation/po/po-update-dialog.tsx:324
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:248
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:249
 msgid "JoZ3lc"
 msgstr "点击以更改文件"
 
@@ -1002,27 +1002,27 @@ msgid "Ezb82t"
 msgstr "将更新的 .po 文件拖放到此处或点击浏览"
 
 #: lib/translation/po/po-update-dialog.tsx:264
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:274
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:278
 msgid "okWaMT"
 msgstr "保留 {count} 项"
 
 #: lib/translation/po/po-update-dialog.tsx:269
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:279
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:286
 msgid "bS10Bv"
 msgstr "新增 {count} 项"
 
 #: lib/translation/po/po-update-dialog.tsx:272
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:282
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:292
 msgid "yae7QN"
 msgstr "移除 {count} 项"
 
 #: lib/translation/po/po-update-dialog.tsx:277
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:287
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:297
 msgid "hQLBM5"
 msgstr "总计 {count} 项"
 
 #: lib/translation/po/po-update-dialog.tsx:282
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:292
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:302
 msgid "ayEdX9"
 msgstr "警告：不会保留任何现有翻译。"
 
@@ -1059,30 +1059,30 @@ msgstr "此资源中没有条目"
 msgid "LPpMyQ"
 msgstr "上下文："
 
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:128
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:124
 msgid "jez2hN"
 msgstr "所选文件不是有效的 xcloc 归档。"
 
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:138
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:133
 msgid "0ysE8I"
 msgstr "无法解析 xcloc 包。请确保其中包含有效的 contents.json 和 XLIFF 文件。"
 
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:148
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:146
 msgid "qygJrQ"
 msgstr "读取文件失败。请确保它是有效的 xcloc 归档。"
 
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:190
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:191
 msgid "ll+9qp"
 msgstr "更新 Xcode 本地化"
 
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:195
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:196
 msgid "sUpZG3"
 msgstr "上传新版本的 xcloc 文件。已有翻译将保留用于匹配的条目。新条目将以空翻译添加，过时的条目将被移除。"
 
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:203
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:204
 msgid "OSe9Ue"
 msgstr "新 xcloc 文件"
 
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:255
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:256
 msgid "R8pOEs"
 msgstr "拖放更新的 .xcloc 文件到此处或点击浏览"

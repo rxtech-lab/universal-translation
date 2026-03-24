@@ -19,20 +19,17 @@ export function asProjectMetadata(metadata: unknown): ProjectMetadata {
   return metadata as ProjectMetadata;
 }
 
-export function getTranslationRun(metadata: unknown): TranslationRunState | null {
+export function getTranslationRun(
+  metadata: unknown,
+): TranslationRunState | null {
   const value = asProjectMetadata(metadata).translationRun;
 
   if (!value || typeof value !== "object" || Array.isArray(value)) {
     return null;
   }
 
-  const {
-    runId,
-    status,
-    current,
-    total,
-    updatedAt,
-  } = value as unknown as Record<string, unknown>;
+  const { runId, status, current, total, updatedAt } =
+    value as unknown as Record<string, unknown>;
 
   if (
     typeof runId !== "string" ||

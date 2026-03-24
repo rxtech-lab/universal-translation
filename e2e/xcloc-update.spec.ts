@@ -31,9 +31,7 @@ test.describe("Xcode Localization Update Flow", () => {
     await updateButton.click();
 
     // 6. Upload the updated xcloc file via the dialog
-    const dialogFileInput = page
-      .locator("input[accept='.zip,.xcloc']")
-      .first();
+    const dialogFileInput = page.locator("input[accept='.zip,.xcloc']").first();
     await dialogFileInput.setInputFiles(
       path.resolve(__dirname, "../test-assets/zh-Hans-updated.xcloc.zip"),
     );
@@ -42,16 +40,14 @@ test.describe("Xcode Localization Update Flow", () => {
     await expect(page.getByTestId("xcloc-update-diff-preview")).toBeVisible({
       timeout: 5_000,
     });
-    await expect(
-      page.getByTestId("xcloc-update-stat-preserved"),
-    ).toBeVisible();
+    await expect(page.getByTestId("xcloc-update-stat-preserved")).toBeVisible();
     await expect(page.getByTestId("xcloc-update-stat-added")).toBeVisible();
     await expect(page.getByTestId("xcloc-update-stat-removed")).toBeVisible();
 
     // Verify stats values: 243 preserved, 2 added, 3 removed, 245 total
-    await expect(
-      page.getByTestId("xcloc-update-stat-preserved"),
-    ).toContainText("243");
+    await expect(page.getByTestId("xcloc-update-stat-preserved")).toContainText(
+      "243",
+    );
     await expect(page.getByTestId("xcloc-update-stat-added")).toContainText(
       "2",
     );
@@ -97,9 +93,7 @@ test.describe("Xcode Localization Update Flow", () => {
     const updateButton = page.getByRole("button", { name: /update/i }).first();
     await updateButton.click();
 
-    const dialogFileInput = page
-      .locator("input[accept='.zip,.xcloc']")
-      .first();
+    const dialogFileInput = page.locator("input[accept='.zip,.xcloc']").first();
     await dialogFileInput.setInputFiles(
       path.resolve(__dirname, "../test-assets/zh-Hans-updated.xcloc.zip"),
     );

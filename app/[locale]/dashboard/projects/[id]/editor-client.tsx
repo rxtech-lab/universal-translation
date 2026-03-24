@@ -46,7 +46,10 @@ import { SrtClient, type SrtFormatData } from "@/lib/translation/srt/client";
 import { SrtEditor } from "@/lib/translation/srt/srt-editor";
 import { VttClient, type VttFormatData } from "@/lib/translation/vtt/client";
 import type { Term } from "@/lib/translation/tools/term-tools";
-import type { TranslationProject, UploadPayload } from "@/lib/translation/types";
+import type {
+  TranslationProject,
+  UploadPayload,
+} from "@/lib/translation/types";
 import {
   XclocClient,
   type XclocFormatData,
@@ -798,14 +801,14 @@ export function EditorClient({
         : dbProject.formatId === "vtt"
           ? "WebVTT Subtitles"
           : dbProject.formatId === "po"
-          ? "Gettext PO"
-          : dbProject.formatId === "document"
-            ? "Document"
-            : dbProject.formatId === "lyrics"
-              ? "Lyrics"
-              : dbProject.formatId === "html"
-                ? "HTML"
-                : dbProject.formatId;
+            ? "Gettext PO"
+            : dbProject.formatId === "document"
+              ? "Document"
+              : dbProject.formatId === "lyrics"
+                ? "Lyrics"
+                : dbProject.formatId === "html"
+                  ? "HTML"
+                  : dbProject.formatId;
 
   return (
     <>

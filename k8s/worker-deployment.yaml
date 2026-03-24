@@ -24,18 +24,37 @@ spec:
         - name: ut-worker
           image: ghcr.io/rxtech-lab/ut-frontend:latest
           command: ["bun", "run", "worker"]
+          ports:
+            - containerPort: 8081
+              protocol: TCP
           envFrom:
             - configMapRef:
                 name: ut-config
             - secretRef:
                 name: ut-secrets
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8081
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8081
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 3
           resources:
             requests:
-              memory: "512Mi"
+              memory: "256Mi"
               cpu: "250m"
             limits:
-              memory: "1024Mi"
-              cpu: "1000m"
+              memory: "512Mi"
+              cpu: "500m"
           securityContext:
             allowPrivilegeEscalation: false
             runAsNonRoot: true

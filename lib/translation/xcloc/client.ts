@@ -216,9 +216,7 @@ export class XclocClient implements TranslationClient<XclocTranslationEvent> {
    * for entries whose IDs match. New entries are added with empty translations,
    * and stale entries are removed.
    */
-  updateFromXcloc(
-    payload: UploadPayload,
-  ): OperationResult<XclocUpdateStats> {
+  updateFromXcloc(payload: UploadPayload): OperationResult<XclocUpdateStats> {
     if (payload.kind !== "archive") {
       return {
         hasError: true,
@@ -267,7 +265,10 @@ export class XclocClient implements TranslationClient<XclocTranslationEvent> {
     for (const resource of this.project.resources) {
       for (const entry of resource.entries) {
         if (entry.targetText.trim()) {
-          oldTranslations.set(`${resource.id}\x00${entry.id}`, entry.targetText);
+          oldTranslations.set(
+            `${resource.id}\x00${entry.id}`,
+            entry.targetText,
+          );
         }
       }
     }
@@ -314,7 +315,9 @@ export class XclocClient implements TranslationClient<XclocTranslationEvent> {
       }
     }
     const removedCount = this.project.resources.reduce((sum, r) => {
-      return sum + r.entries.filter((e) => !newKeys.has(`${r.id}\x00${e.id}`)).length;
+      return (
+        sum + r.entries.filter((e) => !newKeys.has(`${r.id}\x00${e.id}`)).length
+      );
     }, 0);
     const added = newKeyCount - (oldKeyCount - removedCount);
 

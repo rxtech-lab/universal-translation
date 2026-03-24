@@ -74,67 +74,67 @@ msgstr "Recent Projects"
 msgid "pFK6bJ"
 msgstr "View all"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:261
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:280
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:405
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:264
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:283
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:408
 #: lib/translation/components/entry-row-actions.tsx:61
 #: lib/translation/lyrics/lyrics-entry-row.tsx:232
 msgid "2C42E7"
 msgstr "Translating..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:407
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:410
 msgid "by2lJ5"
 msgstr "Starting translation..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:464
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:467
 msgid "qvr1Bb"
 msgstr "Translating line..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:466
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:469
 msgid "G+DatO"
 msgstr "Translating line #{id}..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:522
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:525
 msgid "Rx9EpS"
 msgstr "Translation stopped"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:635
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:638
 msgid "S/NHSE"
 msgstr "Clearing translations..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:636
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:639
 msgid "wYNhGP"
 msgstr "All translations cleared"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:637
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:640
 msgid "R38RUr"
 msgstr "Failed to clear translations"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:657
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:679
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:660
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:682
 msgid "fq475d"
 msgstr "Updated: {preserved} preserved, {added} new, {removed} removed"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:694
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:697
 #: app/[locale]/dashboard/projects/project-card.tsx:67
 msgid "fouJn6"
 msgstr "Project renamed"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:696
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:699
 #: app/[locale]/dashboard/projects/project-card.tsx:70
 msgid "m3LbFk"
 msgstr "Failed to rename project"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:712
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:731
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:715
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:734
 msgid "heAhPr"
 msgstr "Export failed"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:784
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:787
 msgid "eBOgRU"
 msgstr "Version restored"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:789
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:792
 msgid "pz9eEL"
 msgstr "Failed to restore version"
 
@@ -177,7 +177,7 @@ msgstr "Rhythm & rhyme preserving"
 #: lib/translation/lyrics/lyrics-entry-row.tsx:458
 #: lib/translation/lyrics/lyrics-export-dialog.tsx:78
 #: lib/translation/po/po-update-dialog.tsx:349
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:305
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:315
 msgid "47FYwb"
 msgstr "Cancel"
 
@@ -712,7 +712,7 @@ msgstr "Terms"
 #: lib/translation/components/translation-editor.tsx:182
 #: lib/translation/components/translation-editor.tsx:275
 #: lib/translation/po/po-update-dialog.tsx:358
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:314
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:324
 msgid "BWpuKl"
 msgstr "Update"
 
@@ -873,7 +873,7 @@ msgstr "No resource selected"
 
 #: lib/translation/html/html-editor.tsx:218
 #: lib/translation/po/po-update-dialog.tsx:261
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:271
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:272
 msgid "TJo5E6"
 msgstr "Preview"
 
@@ -987,13 +987,13 @@ msgid "W2t7xc"
 msgstr "New PO file"
 
 #: lib/translation/po/po-update-dialog.tsx:228
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:238
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:239
 msgid "IvE1kf"
 msgstr "Reading..."
 
 #: lib/translation/po/po-update-dialog.tsx:238
 #: lib/translation/po/po-update-dialog.tsx:324
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:248
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:249
 msgid "JoZ3lc"
 msgstr "Click to change file"
 
@@ -1002,27 +1002,27 @@ msgid "Ezb82t"
 msgstr "Drop updated .po file here or click to browse"
 
 #: lib/translation/po/po-update-dialog.tsx:264
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:274
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:278
 msgid "okWaMT"
 msgstr "{count} preserved"
 
 #: lib/translation/po/po-update-dialog.tsx:269
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:279
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:286
 msgid "bS10Bv"
 msgstr "{count} new"
 
 #: lib/translation/po/po-update-dialog.tsx:272
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:282
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:292
 msgid "yae7QN"
 msgstr "{count} removed"
 
 #: lib/translation/po/po-update-dialog.tsx:277
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:287
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:297
 msgid "hQLBM5"
 msgstr "{count} total"
 
 #: lib/translation/po/po-update-dialog.tsx:282
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:292
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:302
 msgid "ayEdX9"
 msgstr "Warning: no existing translations will be preserved."
 
@@ -1059,30 +1059,30 @@ msgstr "No entries in this resource"
 msgid "LPpMyQ"
 msgstr "Context:"
 
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:128
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:124
 msgid "jez2hN"
 msgstr "The selected file is not a valid xcloc archive."
 
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:138
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:133
 msgid "0ysE8I"
 msgstr "Could not parse the xcloc bundle. Ensure it contains a valid contents.json and XLIFF file."
 
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:148
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:146
 msgid "qygJrQ"
 msgstr "Failed to read the file. Please ensure it is a valid xcloc archive."
 
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:190
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:191
 msgid "ll+9qp"
 msgstr "Update Xcode Localization"
 
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:195
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:196
 msgid "sUpZG3"
 msgstr "Upload a new version of your xcloc file. Existing translations will be preserved for matching entries. New entries will be added with empty translations, and stale entries will be removed."
 
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:203
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:204
 msgid "OSe9Ue"
 msgstr "New xcloc file"
 
-#: lib/translation/xcloc/xcloc-update-dialog.tsx:255
+#: lib/translation/xcloc/xcloc-update-dialog.tsx:256
 msgid "R8pOEs"
 msgstr "Drop updated .xcloc file here or click to browse"

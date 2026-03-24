@@ -26,40 +26,46 @@ export async function consumeTasks(
     `queue=${TRANSLATION_TASK_QUEUE} prefetch=${prefetch} ready=${queueState.messageCount} consumers=${queueState.consumerCount}`,
   );
 
-  await channel.consume(TRANSLATION_TASK_QUEUE, async (message: ConsumeMessage | null) => {
-    if (!message) return;
+  await channel.consume(
+    TRANSLATION_TASK_QUEUE,
+    async (message: ConsumeMessage | null) => {
+      if (!message) return;
 
-    try {
-      logQueue(
-        "message_received",
-        `deliveryTag=${message.fields.deliveryTag} redelivered=${message.fields.redelivered}`,
-      );
-      if (message.fields.redelivered) {
+      try {
         logQueue(
-          "message_redelivered",
-          `deliveryTag=${message.fields.deliveryTag}`,
+          "message_received",
+          `deliveryTag=${message.fields.deliveryTag} redelivered=${message.fields.redelivered}`,
         );
-      }
-      const task = parseJson<TranslationTask>(message);
-      if (!task) {
-        logQueue("message_invalid", `deliveryTag=${message.fields.deliveryTag}`);
-        channel.nack(message, false, false);
-        return;
-      }
+        if (message.fields.redelivered) {
+          logQueue(
+            "message_redelivered",
+            `deliveryTag=${message.fields.deliveryTag}`,
+          );
+        }
+        const task = parseJson<TranslationTask>(message);
+        if (!task) {
+          logQueue(
+            "message_invalid",
+            `deliveryTag=${message.fields.deliveryTag}`,
+          );
+          channel.nack(message, false, false);
+          return;
+        }
 
-      logQueue("task_received", taskDetails(task));
-      await handler(task);
-      channel.ack(message);
-      logQueue("message_acked", taskDetails(task));
-    } catch (error) {
-      console.error("[worker] task failed", error);
-      logQueue(
-        "message_nacked",
-        `deliveryTag=${message.fields.deliveryTag} error=${error instanceof Error ? error.message : String(error)}`,
-      );
-      channel.nack(message, false, false);
-    }
-  });
+        logQueue("task_received", taskDetails(task));
+        await handler(task);
+        channel.ack(message);
+        logQueue("message_acked", taskDetails(task));
+      } catch (error) {
+        console.error("[worker] task failed", error);
+        logQueue(
+          "message_nacked",
+          `deliveryTag=${message.fields.deliveryTag} error=${error instanceof Error ? error.message : String(error)}`,
+        );
+        channel.nack(message, false, false);
+      }
+    },
+  );
 
   return channel;
 }

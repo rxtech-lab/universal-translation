@@ -312,7 +312,10 @@ export function useTranslationStream() {
           return;
         }
 
-        const data = (await response.json()) as { queued?: boolean; runId?: string };
+        const data = (await response.json()) as {
+          queued?: boolean;
+          runId?: string;
+        };
         if (!data.queued || !data.runId) {
           setStatus({
             state: "error",
@@ -325,7 +328,10 @@ export function useTranslationStream() {
       } catch (err) {
         setStatus({ state: "error", message: String(err) });
       } finally {
-        if (eventSourceRef.current === null && activeRunIdRef.current === null) {
+        if (
+          eventSourceRef.current === null &&
+          activeRunIdRef.current === null
+        ) {
           setStreamingEntryIds(new Set());
         }
       }

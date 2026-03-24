@@ -10,6 +10,21 @@ import {
 import type { TranslationTask } from "@/lib/queue/types";
 import { runWorkerTask } from "@/lib/translation/worker";
 
+const HEALTH_PORT = Number(process.env.WORKER_HEALTH_PORT ?? 8081);
+
+const healthServer = Bun.serve({
+  port: HEALTH_PORT,
+  fetch(req) {
+    const url = new URL(req.url);
+    if (url.pathname === "/healthz") {
+      return new Response("ok", { status: 200 });
+    }
+    return new Response("not found", { status: 404 });
+  },
+});
+
+logWorker("health_server", `port=${healthServer.port}`);
+
 async function emitLockFailure(task: TranslationTask) {
   logWorker("lock_rejected", taskDetails(task));
   if (task.type === "translate") {
@@ -72,6 +87,7 @@ async function shutdown(signal: string) {
   shuttingDown = true;
 
   logWorker("shutdown_started", `signal=${signal}`);
+  healthServer.stop();
   await closeAmqpConnection();
   logWorker("shutdown_completed", `signal=${signal}`);
   process.exit(0);

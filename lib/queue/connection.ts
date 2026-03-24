@@ -1,8 +1,5 @@
 import amqp, { type Channel, type ChannelModel } from "amqplib";
-import {
-  TRANSLATION_EVENTS_EXCHANGE,
-  TRANSLATION_TASK_QUEUE,
-} from "./types";
+import { TRANSLATION_EVENTS_EXCHANGE, TRANSLATION_TASK_QUEUE } from "./types";
 
 let connectionPromise: Promise<ChannelModel> | null = null;
 let closeHandlersBound = false;

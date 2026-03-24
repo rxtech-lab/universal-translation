@@ -327,9 +327,7 @@ describe("XclocClient", () => {
       expect(resource.entries.find((e) => e.id === "Back")).toBeUndefined();
 
       // Verify new entries added
-      const newFeature = resource.entries.find(
-        (e) => e.id === "New Feature",
-      );
+      const newFeature = resource.entries.find((e) => e.id === "New Feature");
       expect(newFeature).toBeDefined();
       expect(newFeature?.targetText).toBe("");
       expect(newFeature?.comment).toBe("A newly added feature label");
@@ -354,9 +352,7 @@ describe("XclocClient", () => {
       expect(result.hasError).toBe(false);
 
       const resource = client.getResource(infoResourceId)!;
-      const entry = resource.entries.find(
-        (e) => e.id === "Argo Trading App",
-      );
+      const entry = resource.entries.find((e) => e.id === "Argo Trading App");
       expect(entry?.targetText).toBe("Argo 交易应用");
 
       // ArgoTrading was removed in updated version
@@ -392,9 +388,7 @@ describe("XclocClient", () => {
       const localizable = doc.files.find(
         (f) => f.original === "ArgoTradingSwift/Localizable.xcstrings",
       )!;
-      const cancelUnit = localizable.transUnits.find(
-        (t) => t.id === "Cancel",
-      )!;
+      const cancelUnit = localizable.transUnits.find((t) => t.id === "Cancel")!;
       expect(cancelUnit.target).toBe("取消");
 
       // New entries should exist in exported XLIFF
