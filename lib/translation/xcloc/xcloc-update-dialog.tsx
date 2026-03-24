@@ -37,9 +37,7 @@ function computeDiffStats(
 ): DiffStats | null {
   if (payload.kind !== "archive") return null;
 
-  const files = payload.tree.files.filter(
-    (f) => !f.path.includes("__MACOSX"),
-  );
+  const files = payload.tree.files.filter((f) => !f.path.includes("__MACOSX"));
 
   const contentsFile = files.find((f) => f.path.endsWith("contents.json"));
   if (!contentsFile) return null;
@@ -48,8 +46,7 @@ function computeDiffStats(
   if (contentsResult.hasError) return null;
 
   const xliffFile = files.find(
-    (f) =>
-      f.path.includes("Localized Contents/") && f.path.endsWith(".xliff"),
+    (f) => f.path.includes("Localized Contents/") && f.path.endsWith(".xliff"),
   );
   if (!xliffFile) return null;
 
@@ -124,9 +121,7 @@ export function XclocUpdateDialog({
         }
 
         if (result.data.kind !== "archive") {
-          setParseError(
-            t("The selected file is not a valid xcloc archive."),
-          );
+          setParseError(t("The selected file is not a valid xcloc archive."));
           setPayload(null);
           setDiffStats(null);
           return;
@@ -135,7 +130,9 @@ export function XclocUpdateDialog({
         const stats = computeDiffStats(currentProject, result.data);
         if (!stats) {
           setParseError(
-            t("Could not parse the xcloc bundle. Ensure it contains a valid contents.json and XLIFF file."),
+            t(
+              "Could not parse the xcloc bundle. Ensure it contains a valid contents.json and XLIFF file.",
+            ),
           );
           setPayload(null);
           setDiffStats(null);
@@ -145,7 +142,11 @@ export function XclocUpdateDialog({
         setPayload(result.data);
         setDiffStats(stats);
       } catch {
-        setParseError(t("Failed to read the file. Please ensure it is a valid xcloc archive."));
+        setParseError(
+          t(
+            "Failed to read the file. Please ensure it is a valid xcloc archive.",
+          ),
+        );
       } finally {
         setLoading(false);
       }
@@ -270,15 +271,24 @@ export function XclocUpdateDialog({
             >
               <p className="text-xs font-medium">{t("Preview")}</p>
               <div className="flex flex-wrap gap-2">
-                <Badge variant="default" data-testid="xcloc-update-stat-preserved">
+                <Badge
+                  variant="default"
+                  data-testid="xcloc-update-stat-preserved"
+                >
                   {t("{count} preserved", {
                     count: String(diffStats.preserved),
                   })}
                 </Badge>
-                <Badge variant="secondary" data-testid="xcloc-update-stat-added">
+                <Badge
+                  variant="secondary"
+                  data-testid="xcloc-update-stat-added"
+                >
                   {t("{count} new", { count: String(diffStats.added) })}
                 </Badge>
-                <Badge variant="outline" data-testid="xcloc-update-stat-removed">
+                <Badge
+                  variant="outline"
+                  data-testid="xcloc-update-stat-removed"
+                >
                   {t("{count} removed", {
                     count: String(diffStats.removed),
                   })}

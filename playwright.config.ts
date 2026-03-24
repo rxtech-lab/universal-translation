@@ -17,12 +17,22 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"] },
     },
   ],
-  webServer: {
-    command: "bun run db:push && bun run dev",
-    url: "http://localhost:3000",
-    reuseExistingServer: !process.env.CI,
-    env: {
-      IS_E2E: "true",
+  webServer: [
+    {
+      command: "bun run db:push && bun run dev",
+      url: "http://localhost:3000",
+      reuseExistingServer: !process.env.CI,
+      env: {
+        IS_E2E: "true",
+      },
     },
-  },
+    {
+      command: "bun run worker:dev",
+      url: "http://localhost:8081/healthz",
+      reuseExistingServer: !process.env.CI,
+      env: {
+        IS_E2E: "true",
+      },
+    },
+  ],
 });

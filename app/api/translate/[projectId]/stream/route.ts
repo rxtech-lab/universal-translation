@@ -3,13 +3,11 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { projects } from "@/lib/db/schema";
-import { publishTask } from "@/lib/queue/producer";
-import { createChatStreamResponse } from "@/lib/queue/stream";
-import { getChatPayload } from "@/lib/translation/worker";
+import { createTranslationEventStream } from "@/lib/queue/stream";
 
-export const maxDuration = 120;
+export const maxDuration = 300;
 
-export async function POST(
+export async function GET(
   request: Request,
   { params }: { params: Promise<{ projectId: string }> },
 ) {
@@ -20,6 +18,11 @@ export async function POST(
 
   const { projectId } = await params;
   const userId = session.user.id;
+  const runId = new URL(request.url).searchParams.get("runId");
+
+  if (!runId) {
+    return NextResponse.json({ error: "runId is required" }, { status: 400 });
+  }
 
   const [project] = await db
     .select({ id: projects.id })
@@ -30,16 +33,11 @@ export async function POST(
     return NextResponse.json({ error: "Project not found" }, { status: 404 });
   }
 
-  const payload = getChatPayload(await request.json());
-  const runId = crypto.randomUUID();
-
-  await publishTask({
-    type: "chat",
-    runId,
-    projectId,
-    userId,
-    payload,
+  return new Response(createTranslationEventStream(runId), {
+    headers: {
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache",
+      Connection: "keep-alive",
+    },
   });
-
-  return createChatStreamResponse(runId);
 }

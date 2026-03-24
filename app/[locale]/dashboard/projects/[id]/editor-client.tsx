@@ -1,6 +1,12 @@
 "use client";
 
-import { useCallback, useMemo, useState, useTransition } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  useTransition,
+} from "react";
 import { useRouter } from "next/navigation";
 import { useExtracted } from "next-intl";
 import { toast } from "sonner";
@@ -22,6 +28,7 @@ import {
   DocumentClient,
   type DocumentFormatData,
 } from "@/lib/translation/document/client";
+import { getTranslationRun } from "@/lib/translation/run-state";
 import { DocumentEditor } from "@/lib/translation/document/document-editor";
 import { HtmlClient, type HtmlFormatData } from "@/lib/translation/html/client";
 import { HtmlEditor } from "@/lib/translation/html/html-editor";
@@ -39,7 +46,10 @@ import { SrtClient, type SrtFormatData } from "@/lib/translation/srt/client";
 import { SrtEditor } from "@/lib/translation/srt/srt-editor";
 import { VttClient, type VttFormatData } from "@/lib/translation/vtt/client";
 import type { Term } from "@/lib/translation/tools/term-tools";
-import type { TranslationProject, UploadPayload } from "@/lib/translation/types";
+import type {
+  TranslationProject,
+  UploadPayload,
+} from "@/lib/translation/types";
 import {
   XclocClient,
   type XclocFormatData,
@@ -58,12 +68,14 @@ interface EditorClientProps {
   project: {
     id: string;
     name: string;
+    status: string;
     formatId: string;
     sourceLanguage: string | null;
     targetLanguage: string | null;
     blobUrl: string | null;
     content: unknown;
     formatData: unknown;
+    metadata: unknown;
   };
   initialTerms?: Term[];
   versionCount?: number;
@@ -182,6 +194,11 @@ export function EditorClient({
   const [projectName, setProjectName] = useState(dbProject.name);
   const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
   const [lyricsExportDialogOpen, setLyricsExportDialogOpen] = useState(false);
+  const persistedTranslationRun =
+    !isPreview &&
+    (dbProject.status === "queued" || dbProject.status === "translating")
+      ? getTranslationRun(dbProject.metadata)
+      : null;
 
   const { project, updateEntry, applyStreamUpdate, refreshFromClient } =
     useTranslationProject(client);
@@ -196,6 +213,7 @@ export function EditorClient({
     clearLyricsAnalysis,
     clearEntryAnalysis,
     startStream,
+    resumeStream,
     cancelStream,
     markUserEdited,
   } = useTranslationStream();
@@ -507,6 +525,91 @@ export function EditorClient({
     toast.info(t("Translation stopped"), { id: TOAST_ID, duration: 2000 });
   }, [cancelStream, t]);
 
+  useEffect(() => {
+    if (isPreview) return;
+
+    let cancelled = false;
+
+    if (persistedTranslationRun) {
+      setStatus({
+        state: "translating",
+        current: persistedTranslationRun.current,
+        total: persistedTranslationRun.total,
+      });
+    }
+
+    const reconnectToActiveRun = async () => {
+      try {
+        const response = await fetch(`/api/translate/${dbProject.id}/active`, {
+          cache: "no-store",
+        });
+        if (!response.ok) return;
+
+        const data = (await response.json()) as {
+          active?: boolean;
+          runId?: string | null;
+          current?: number;
+          total?: number;
+        };
+
+        if (!data.active || !data.runId || cancelled) {
+          if (!cancelled && persistedTranslationRun) {
+            setStatus({ state: "idle" });
+          }
+          return;
+        }
+
+        const current = data.current ?? persistedTranslationRun?.current ?? 0;
+        const total = data.total ?? persistedTranslationRun?.total ?? 0;
+        setStatus({ state: "translating", current, total });
+
+        await resumeStream({
+          projectId: dbProject.id,
+          runId: data.runId,
+          onEntryTranslated: (resourceId, entryId, targetText) => {
+            applyStreamUpdate(resourceId, entryId, { targetText });
+            client.updateEntry(resourceId, entryId, { targetText });
+          },
+          onTermsFound: (foundTerms) => {
+            saveProjectTerms(dbProject.id, foundTerms).then(() => {
+              startTransition(() => router.refresh());
+            });
+          },
+          onComplete: () => {
+            refreshFromClient();
+            dismissTranslationToast();
+          },
+          onAgentTextDelta: handleAgentTextDelta,
+          onAgentToolCall: handleAgentToolCall,
+          onAgentToolResult: handleAgentToolResult,
+        });
+      } catch {
+        // Best-effort reconnect only.
+      }
+    };
+
+    void reconnectToActiveRun();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    isPreview,
+    dbProject.id,
+    resumeStream,
+    applyStreamUpdate,
+    client,
+    router,
+    startTransition,
+    refreshFromClient,
+    dismissTranslationToast,
+    handleAgentTextDelta,
+    handleAgentToolCall,
+    handleAgentToolResult,
+    persistedTranslationRun?.current,
+    persistedTranslationRun?.total,
+  ]);
+
   const handleClearAllTranslations = useCallback(() => {
     const proj = client.getProject();
     const promise = new Promise<void>((resolve) => {
@@ -698,14 +801,14 @@ export function EditorClient({
         : dbProject.formatId === "vtt"
           ? "WebVTT Subtitles"
           : dbProject.formatId === "po"
-          ? "Gettext PO"
-          : dbProject.formatId === "document"
-            ? "Document"
-            : dbProject.formatId === "lyrics"
-              ? "Lyrics"
-              : dbProject.formatId === "html"
-                ? "HTML"
-                : dbProject.formatId;
+            ? "Gettext PO"
+            : dbProject.formatId === "document"
+              ? "Document"
+              : dbProject.formatId === "lyrics"
+                ? "Lyrics"
+                : dbProject.formatId === "html"
+                  ? "HTML"
+                  : dbProject.formatId;
 
   return (
     <>
