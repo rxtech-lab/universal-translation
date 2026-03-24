@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { GlobeIcon } from "lucide-react";
 import { useLocale } from "next-intl";
 import {
@@ -22,9 +23,29 @@ export function LanguageSwitcher({
 }: {
   align?: "start" | "center" | "end";
 } = {}) {
+  const [mounted, setMounted] = useState(false);
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
+  const label = localeLabels[locale] ?? locale;
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <button
+        type="button"
+        disabled
+        aria-hidden="true"
+        className="flex items-center gap-1.5 text-xs text-muted-foreground"
+      >
+        <GlobeIcon className="size-3.5" />
+        {label}
+      </button>
+    );
+  }
 
   return (
     <DropdownMenu>
@@ -34,7 +55,7 @@ export function LanguageSwitcher({
           className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
         >
           <GlobeIcon className="size-3.5" />
-          {localeLabels[locale] ?? locale}
+          {label}
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align={align}>

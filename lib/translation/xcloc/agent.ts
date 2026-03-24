@@ -164,7 +164,12 @@ async function* translateBatch(params: {
   model: ReturnType<typeof createModel>;
   globalOffset: number;
   formatContext?: string;
+  shouldCancel?: () => Promise<boolean>;
 }): AsyncGenerator<XclocTranslationEvent> {
+  if (await params.shouldCancel?.()) {
+    return;
+  }
+
   for (const entry of params.batch) {
     yield {
       type: "translate-line-start",
@@ -280,6 +285,10 @@ You MUST include all entries in the output. Use the exact entry IDs as given.`,
   const THROTTLE_MS = 300;
 
   for await (const part of result.fullStream) {
+    if (await params.shouldCancel?.()) {
+      return;
+    }
+
     if (part.type === "text-delta") {
       fullText += part.text;
 
@@ -371,6 +380,7 @@ export async function* translateEntries(params: {
   projectId: string;
   model?: string;
   formatContext?: string;
+  shouldCancel?: () => Promise<boolean>;
 }): AsyncGenerator<XclocTranslationEvent> {
   const model = createModel(params.model);
 
@@ -385,6 +395,10 @@ export async function* translateEntries(params: {
   });
 
   for await (const event of scanner) {
+    if (await params.shouldCancel?.()) {
+      return;
+    }
+
     yield event;
     if (event.type === "terminology-found") {
       terms = event.terms;
@@ -396,6 +410,10 @@ export async function* translateEntries(params: {
   yield { type: "translate-start", total: params.entries.length };
 
   for (let i = 0; i < batches.length; i++) {
+    if (await params.shouldCancel?.()) {
+      return;
+    }
+
     const batchGen = translateBatch({
       batch: batches[i],
       batchIndex: i,
@@ -407,9 +425,14 @@ export async function* translateEntries(params: {
       model,
       globalOffset: i * BATCH_SIZE,
       formatContext: params.formatContext,
+      shouldCancel: params.shouldCancel,
     });
 
     for await (const event of batchGen) {
+      if (await params.shouldCancel?.()) {
+        return;
+      }
+
       yield event;
     }
   }

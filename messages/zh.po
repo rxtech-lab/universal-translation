@@ -74,67 +74,67 @@ msgstr "最近项目"
 msgid "pFK6bJ"
 msgstr "查看全部"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:246
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:265
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:390
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:261
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:280
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:405
 #: lib/translation/components/entry-row-actions.tsx:61
 #: lib/translation/lyrics/lyrics-entry-row.tsx:232
 msgid "2C42E7"
 msgstr "翻译中..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:392
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:407
 msgid "by2lJ5"
 msgstr "正在开始翻译..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:449
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:464
 msgid "qvr1Bb"
 msgstr "正在翻译行..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:451
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:466
 msgid "G+DatO"
 msgstr "正在翻译第 {id} 行..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:507
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:522
 msgid "Rx9EpS"
 msgstr "翻译已停止"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:535
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:635
 msgid "S/NHSE"
 msgstr "正在清除翻译..."
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:536
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:636
 msgid "wYNhGP"
 msgstr "所有翻译已清除"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:537
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:637
 msgid "R38RUr"
 msgstr "清除翻译失败"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:557
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:579
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:657
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:679
 msgid "fq475d"
 msgstr "已更新：保留 {preserved} 个，新增 {added} 个，移除 {removed} 个"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:594
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:694
 #: app/[locale]/dashboard/projects/project-card.tsx:67
 msgid "fouJn6"
 msgstr "项目已重命名"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:596
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:696
 #: app/[locale]/dashboard/projects/project-card.tsx:70
 msgid "m3LbFk"
 msgstr "重命名项目失败"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:612
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:631
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:712
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:731
 msgid "heAhPr"
 msgstr "导出失败"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:684
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:784
 msgid "eBOgRU"
 msgstr "版本已恢复"
 
-#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:689
+#: app/[locale]/dashboard/projects/[id]/editor-client.tsx:789
 msgid "pz9eEL"
 msgstr "恢复版本失败"
 

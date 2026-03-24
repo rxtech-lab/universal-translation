@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ut-worker
+  namespace: universal-translation
+  labels:
+    app: ut-worker
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: ut-worker
+  template:
+    metadata:
+      labels:
+        app: ut-worker
+    spec:
+      containers:
+        - name: ut-worker
+          image: ghcr.io/rxtech-lab/ut-frontend:latest
+          command: ["bun", "run", "worker"]
+          envFrom:
+            - configMapRef:
+                name: ut-config
+            - secretRef:
+                name: ut-secrets
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "1024Mi"
+              cpu: "1000m"
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 1001
+            runAsGroup: 1001
+            capabilities:
+              drop:
+                - ALL
+      securityContext:
+        fsGroup: 1001
+      restartPolicy: Always

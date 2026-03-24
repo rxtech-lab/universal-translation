@@ -3,11 +3,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { projects } from "@/lib/db/schema";
-import { publishTask } from "@/lib/queue/producer";
-import { createChatStreamResponse } from "@/lib/queue/stream";
-import { getChatPayload } from "@/lib/translation/worker";
-
-export const maxDuration = 120;
+import { setRunCancelled } from "@/lib/queue/stream-cache";
 
 export async function POST(
   request: Request,
@@ -20,6 +16,11 @@ export async function POST(
 
   const { projectId } = await params;
   const userId = session.user.id;
+  const body = (await request.json()) as { runId?: string };
+
+  if (!body.runId) {
+    return NextResponse.json({ error: "runId is required" }, { status: 400 });
+  }
 
   const [project] = await db
     .select({ id: projects.id })
@@ -30,16 +31,7 @@ export async function POST(
     return NextResponse.json({ error: "Project not found" }, { status: 404 });
   }
 
-  const payload = getChatPayload(await request.json());
-  const runId = crypto.randomUUID();
+  await setRunCancelled(body.runId);
 
-  await publishTask({
-    type: "chat",
-    runId,
-    projectId,
-    userId,
-    payload,
-  });
-
-  return createChatStreamResponse(runId);
+  return NextResponse.json({ cancelled: true });
 }

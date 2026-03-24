@@ -88,12 +88,14 @@ export default async function ProjectPage({
         project={{
           id: project.id,
           name: project.name,
+          status: project.status,
           formatId: project.formatId,
           sourceLanguage: project.sourceLanguage,
           targetLanguage: project.targetLanguage,
           blobUrl: project.blobUrl,
           content: effectiveContent,
           formatData: effectiveFormatData,
+          metadata: previewVersion ? null : project.metadata,
         }}
         initialTerms={projectTerms}
         versionCount={versionCountResult?.count ?? 0}

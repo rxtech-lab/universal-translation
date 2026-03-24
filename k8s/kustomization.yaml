@@ -9,6 +9,7 @@ resources:
   - namespace.yaml
   - configmap.yaml
   - frontend-deployment.yaml
+  - worker-deployment.yaml
   - frontend-service.yaml
   - ingress.yaml
 

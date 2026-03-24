@@ -116,10 +116,14 @@ jobs:
           kubectl set image deployment/ut-frontend \
             ut-frontend=ghcr.io/${{ github.repository_owner }}/ut-frontend:${VERSION} \
             -n universal-translation
+          kubectl set image deployment/ut-worker \
+            ut-worker=ghcr.io/${{ github.repository_owner }}/ut-frontend:${VERSION} \
+            -n universal-translation
 
       - name: Wait for rollouts
         run: |
           kubectl rollout status deployment/ut-frontend -n universal-translation --timeout=300s
+          kubectl rollout status deployment/ut-worker -n universal-translation --timeout=300s
 
       - name: Verify deployment
         run: |
