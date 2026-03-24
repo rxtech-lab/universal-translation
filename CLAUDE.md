@@ -78,3 +78,4 @@ const t = await getExtracted();
 - Install dependencies with `bun add <package>` — do not manually edit `package.json`
 - Always use the latest version of dependencies
 - shadcn config in `components.json` — RSC enabled, aliases for `@/components`, `@/lib`, `@/hooks`
+- Never include `secrets.yaml` in `kustomization.yaml` — secrets are managed separately

@@ -8,6 +8,8 @@ metadata:
 resources:
   - namespace.yaml
   - configmap.yaml
+  - redis-deployment.yaml
+  - redis-service.yaml
   - frontend-deployment.yaml
   - worker-deployment.yaml
   - frontend-service.yaml

@@ -8,3 +8,4 @@ metadata:
 data:
   IS_WAITING_LIST_ENABLE: "true"
   AUTH_TRUST_HOST: "true"
+  AUTH_URL: "https://translate.rxlab.app"
