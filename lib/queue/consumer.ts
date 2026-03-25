@@ -28,42 +28,41 @@ export async function consumeTasks(
 
   await channel.consume(
     TRANSLATION_TASK_QUEUE,
-    async (message: ConsumeMessage | null) => {
+    (message: ConsumeMessage | null) => {
       if (!message) return;
 
-      try {
-        logQueue(
-          "message_received",
-          `deliveryTag=${message.fields.deliveryTag} redelivered=${message.fields.redelivered}`,
-        );
-        if (message.fields.redelivered) {
-          logQueue(
-            "message_redelivered",
-            `deliveryTag=${message.fields.deliveryTag}`,
-          );
-        }
-        const task = parseJson<TranslationTask>(message);
-        if (!task) {
-          logQueue(
-            "message_invalid",
-            `deliveryTag=${message.fields.deliveryTag}`,
-          );
-          channel.nack(message, false, false);
-          return;
-        }
+      logQueue(
+        "message_received",
+        `deliveryTag=${message.fields.deliveryTag} redelivered=${message.fields.redelivered}`,
+      );
 
-        logQueue("task_received", taskDetails(task));
-        await handler(task);
-        channel.ack(message);
-        logQueue("message_acked", taskDetails(task));
-      } catch (error) {
-        console.error("[worker] task failed", error);
+      const task = parseJson<TranslationTask>(message);
+      if (!task) {
         logQueue(
-          "message_nacked",
-          `deliveryTag=${message.fields.deliveryTag} error=${error instanceof Error ? error.message : String(error)}`,
+          "message_invalid",
+          `deliveryTag=${message.fields.deliveryTag}`,
         );
         channel.nack(message, false, false);
+        return;
       }
+
+      logQueue("task_received", taskDetails(task));
+
+      handler(task)
+        .then(() => {
+          channel.ack(message);
+          logQueue("message_acked", taskDetails(task));
+        })
+        .catch((error) => {
+          console.error("[worker] task failed", error);
+          logQueue(
+            "message_nacked",
+            `deliveryTag=${message.fields.deliveryTag} requeue=${!message.fields.redelivered} error=${error instanceof Error ? error.message : String(error)}`,
+          );
+          // Requeue the message once; discard if already redelivered to
+          // prevent infinite loops.
+          channel.nack(message, false, !message.fields.redelivered);
+        });
     },
   );
 
