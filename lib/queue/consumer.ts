@@ -11,7 +11,11 @@ import {
 function parseJson<T>(message: ConsumeMessage | null) {
   if (!message) return null;
 
-  return JSON.parse(message.content.toString("utf8")) as T;
+  try {
+    return JSON.parse(message.content.toString("utf8")) as T;
+  } catch {
+    return null;
+  }
 }
 
 export async function consumeTasks(

@@ -729,7 +729,13 @@ Always explain what you're doing and confirm changes with the user.`,
   logWorker("chat_finished", taskDetails(task));
 }
 
-const WORKER_MAX_RETRIES = Number(process.env.WORKER_MAX_RETRIES ?? "3");
+function getWorkerMaxRetries(): number {
+  const parsed = Number.parseInt(process.env.WORKER_MAX_RETRIES ?? "", 10);
+  if (!Number.isFinite(parsed) || parsed < 0) return 3;
+  return Math.min(parsed, 10);
+}
+
+const WORKER_MAX_RETRIES = getWorkerMaxRetries();
 const BASE_RETRY_DELAY_MS = 1_000;
 
 function retryDelayMs(attempt: number) {
@@ -748,13 +754,30 @@ export async function runWorkerTask(task: TranslationTask) {
   for (let attempt = 0; attempt <= WORKER_MAX_RETRIES; attempt++) {
     try {
       if (attempt > 0) {
+        // Check for cancellation before retrying
+        if (await isRunCancelled(task.runId)) {
+          logWorker(
+            "task_retry_cancelled",
+            `${taskDetails(task)} attempt=${attempt + 1}/${WORKER_MAX_RETRIES + 1}`,
+          );
+          return;
+        }
+
         const delay = retryDelayMs(attempt - 1);
         logWorker(
           "task_retry",
           `${taskDetails(task)} attempt=${attempt + 1}/${WORKER_MAX_RETRIES + 1} delay=${delay}ms`,
         );
         await sleep(delay);
-        await renewActiveRun(task.projectId, task.runId);
+
+        const renewed = await renewActiveRun(task.projectId, task.runId);
+        if (!renewed) {
+          logWorker(
+            "task_retry_lock_lost",
+            `${taskDetails(task)} attempt=${attempt + 1}/${WORKER_MAX_RETRIES + 1}`,
+          );
+          return;
+        }
       }
 
       if (task.type === "translate") {
