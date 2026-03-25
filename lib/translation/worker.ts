@@ -729,7 +729,7 @@ Always explain what you're doing and confirm changes with the user.`,
   logWorker("chat_finished", taskDetails(task));
 }
 
-const MAX_RETRIES = Number(process.env.WORKER_MAX_RETRIES ?? "3");
+const WORKER_MAX_RETRIES = Number(process.env.WORKER_MAX_RETRIES ?? "3");
 const BASE_RETRY_DELAY_MS = 1_000;
 
 function retryDelayMs(attempt: number) {
@@ -745,13 +745,13 @@ export async function runWorkerTask(task: TranslationTask) {
 
   logWorker("task_runner_started", taskDetails(task));
 
-  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+  for (let attempt = 0; attempt <= WORKER_MAX_RETRIES; attempt++) {
     try {
       if (attempt > 0) {
         const delay = retryDelayMs(attempt - 1);
         logWorker(
           "task_retry",
-          `${taskDetails(task)} attempt=${attempt + 1}/${MAX_RETRIES + 1} delay=${delay}ms`,
+          `${taskDetails(task)} attempt=${attempt + 1}/${WORKER_MAX_RETRIES + 1} delay=${delay}ms`,
         );
         await sleep(delay);
         await renewActiveRun(task.projectId, task.runId);
@@ -770,10 +770,10 @@ export async function runWorkerTask(task: TranslationTask) {
         error instanceof Error ? error.message : String(error);
       logWorker(
         "task_runner_failed",
-        `${taskDetails(task)} attempt=${attempt + 1}/${MAX_RETRIES + 1} error=${errorMessage}`,
+        `${taskDetails(task)} attempt=${attempt + 1}/${WORKER_MAX_RETRIES + 1} error=${errorMessage}`,
       );
 
-      if (attempt < MAX_RETRIES) {
+      if (attempt < WORKER_MAX_RETRIES) {
         continue;
       }
 
