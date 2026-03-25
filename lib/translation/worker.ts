@@ -16,7 +16,6 @@ import {
   clearRunCancelled,
   clearRunEventCache,
   isRunCancelled,
-  releaseActiveRun,
   renewActiveRun,
 } from "@/lib/queue/stream-cache";
 import type {
@@ -730,44 +729,92 @@ Always explain what you're doing and confirm changes with the user.`,
   logWorker("chat_finished", taskDetails(task));
 }
 
+function getWorkerMaxRetries(): number {
+  const parsed = Number.parseInt(process.env.WORKER_MAX_RETRIES ?? "", 10);
+  if (!Number.isFinite(parsed) || parsed < 0) return 3;
+  return Math.min(parsed, 10);
+}
+
+const WORKER_MAX_RETRIES = getWorkerMaxRetries();
+const BASE_RETRY_DELAY_MS = 1_000;
+
+function retryDelayMs(attempt: number) {
+  return BASE_RETRY_DELAY_MS * 2 ** attempt;
+}
+
+function sleep(ms: number) {
+  return new Promise<void>((resolve) => setTimeout(resolve, ms));
+}
+
 export async function runWorkerTask(task: TranslationTask) {
   const emit = buildEmitter(task);
 
-  try {
-    logWorker("task_runner_started", taskDetails(task));
-    if (task.type === "translate") {
-      await runTranslateTask(task, emit);
-    } else {
-      await runChatTask(task, emit);
-    }
-    logWorker("task_runner_finished", taskDetails(task));
-  } catch (error) {
-    if (task.type === "translate") {
+  logWorker("task_runner_started", taskDetails(task));
+
+  for (let attempt = 0; attempt <= WORKER_MAX_RETRIES; attempt++) {
+    try {
+      if (attempt > 0) {
+        // Check for cancellation before retrying
+        if (await isRunCancelled(task.runId)) {
+          logWorker(
+            "task_retry_cancelled",
+            `${taskDetails(task)} attempt=${attempt + 1}/${WORKER_MAX_RETRIES + 1}`,
+          );
+          return;
+        }
+
+        const delay = retryDelayMs(attempt - 1);
+        logWorker(
+          "task_retry",
+          `${taskDetails(task)} attempt=${attempt + 1}/${WORKER_MAX_RETRIES + 1} delay=${delay}ms`,
+        );
+        await sleep(delay);
+
+        const renewed = await renewActiveRun(task.projectId, task.runId);
+        if (!renewed) {
+          logWorker(
+            "task_retry_lock_lost",
+            `${taskDetails(task)} attempt=${attempt + 1}/${WORKER_MAX_RETRIES + 1}`,
+          );
+          return;
+        }
+      }
+
+      if (task.type === "translate") {
+        await runTranslateTask(task, emit);
+      } else {
+        await runChatTask(task, emit);
+      }
+
+      logWorker("task_runner_finished", taskDetails(task));
+      return;
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
       logWorker(
         "task_runner_failed",
-        `${taskDetails(task)} error=${error instanceof Error ? error.message : String(error)}`,
+        `${taskDetails(task)} attempt=${attempt + 1}/${WORKER_MAX_RETRIES + 1} error=${errorMessage}`,
       );
-      await clearProjectTranslationRun(
-        task.projectId,
-        task.userId,
-        "error",
-      ).catch(() => undefined);
-      await emit("translation-event", {
-        type: "error",
-        message: error instanceof Error ? error.message : String(error),
-      });
-    } else {
-      logWorker(
-        "task_runner_failed",
-        `${taskDetails(task)} error=${error instanceof Error ? error.message : String(error)}`,
-      );
-      await createChatErrorStream(
-        emit,
-        error instanceof Error ? error.message : String(error),
-      );
+
+      if (attempt < WORKER_MAX_RETRIES) {
+        continue;
+      }
+
+      // Final attempt failed — report the error to the client
+      if (task.type === "translate") {
+        await clearProjectTranslationRun(
+          task.projectId,
+          task.userId,
+          "error",
+        ).catch(() => undefined);
+        await emit("translation-event", {
+          type: "error",
+          message: errorMessage,
+        });
+      } else {
+        await createChatErrorStream(emit, errorMessage);
+      }
     }
-  } finally {
-    await releaseActiveRun(task.projectId, task.runId).catch(() => undefined);
   }
 }
 
