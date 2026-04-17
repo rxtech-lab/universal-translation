@@ -387,11 +387,12 @@ export class XclocClient implements TranslationClient<XclocTranslationEvent> {
   ): Promise<
     OperationResult<{ downloadUrl?: string; blob?: Blob; fileName: string }>
   > {
-    // Resolve term templates in a clone before serializing
-    let docToSerialize = this.xliffDoc;
+    // Clone the xliff doc, sync project entries, then resolve term templates
+    const docToSerialize = structuredClone(this.xliffDoc);
+    this.syncAllToXliff(docToSerialize);
+
     if (terms && terms.length > 0) {
       const termsMap = new Map(terms.map((t) => [t.slug, t]));
-      docToSerialize = structuredClone(this.xliffDoc);
       for (const file of docToSerialize.files) {
         for (const tu of file.transUnits) {
           if (tu.target) {
@@ -535,5 +536,25 @@ export class XclocClient implements TranslationClient<XclocTranslationEvent> {
 
     if (update.targetText !== undefined) tu.target = update.targetText;
     if (update.comment !== undefined) tu.note = update.comment;
+  }
+
+  /**
+   * Sync all translations from project entries back into an XLIFF document.
+   * Ensures the XLIFF doc reflects the latest translations from the project,
+   * which is critical when formatData.xliffDoc may be stale (e.g. the worker
+   * saved content but not formatData).
+   */
+  private syncAllToXliff(doc: XliffDocument): void {
+    for (const resource of this.project.resources) {
+      const xliffFile = doc.files.find((f) => f.original === resource.id);
+      if (!xliffFile) continue;
+
+      for (const entry of resource.entries) {
+        const tu = xliffFile.transUnits.find((t) => t.id === entry.id);
+        if (!tu) continue;
+
+        tu.target = entry.targetText;
+      }
+    }
   }
 }
