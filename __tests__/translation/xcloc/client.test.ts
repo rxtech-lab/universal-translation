@@ -275,6 +275,61 @@ describe("XclocClient", () => {
     });
   });
 
+  describe("exportFile after loadFromJson with stale xliffDoc", () => {
+    it("exports translations even when formatData.xliffDoc has no targets", async () => {
+      // Simulate the scenario where the worker saved content (with translations)
+      // but did NOT save formatData (xliffDoc still has no target elements).
+      const client1 = new XclocClient();
+      await client1.load(loadTestPayload());
+
+      // Translate entries on client1 so both project and xliffDoc are in sync
+      const resourceId = "ArgoTradingSwift/Localizable.xcstrings";
+      client1.updateEntry(resourceId, "All", { targetText: "全部" });
+      client1.updateEntry(resourceId, "Back", { targetText: "返回" });
+      client1.updateEntry(resourceId, "Cancel", { targetText: "取消" });
+
+      // Get the content WITH translations
+      const content = structuredClone(client1.getProject());
+
+      // Get formatData with a STALE xliffDoc (simulate worker not saving formatData)
+      // by loading a fresh client with no translations
+      const freshClient = new XclocClient();
+      await freshClient.load(loadTestPayload());
+      const staleFormatData = freshClient.getFormatData();
+
+      // Now create a new client via loadFromJson — simulates the export route
+      const exportClient = new XclocClient();
+      exportClient.loadFromJson(content, staleFormatData);
+
+      const result = await exportClient.exportFile();
+      expect(result.hasError).toBe(false);
+      if (result.hasError) return;
+
+      // Decompress and parse the exported XLIFF
+      const zipBuffer = new Uint8Array(await result.data.blob?.arrayBuffer());
+      const entries = unzipSync(zipBuffer);
+      const xliffContent =
+        entries["zh-Hans.xcloc/Localized Contents/zh-Hans.xliff"];
+      const xliffXml = new TextDecoder().decode(xliffContent);
+
+      const doc = parseXliff(xliffXml);
+      const localizable = doc.files.find(
+        (f) => f.original === "ArgoTradingSwift/Localizable.xcstrings",
+      )!;
+
+      // These translations MUST appear in the exported XLIFF
+      expect(localizable.transUnits.find((t) => t.id === "All")?.target).toBe(
+        "全部",
+      );
+      expect(localizable.transUnits.find((t) => t.id === "Back")?.target).toBe(
+        "返回",
+      );
+      expect(
+        localizable.transUnits.find((t) => t.id === "Cancel")?.target,
+      ).toBe("取消");
+    });
+  });
+
   describe("updateFromXcloc", () => {
     function loadUpdatedPayload(): UploadPayload {
       const zipPath = resolve(
