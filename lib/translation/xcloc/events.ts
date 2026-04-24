@@ -20,6 +20,7 @@ export type XclocTranslationEvent =
   | { type: "term-resolution-complete" }
   | { type: "entries-saved"; batchIndex: number }
   | { type: "save-error"; message: string; batchIndex: number }
+  | { type: "batch-error"; message: string; batchIndex: number }
   | {
       type: "agent-text-delta";
       batchIndex: number;

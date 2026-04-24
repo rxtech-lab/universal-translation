@@ -297,7 +297,7 @@ describe("translateProject (mocked AI)", () => {
       }),
     );
 
-    const errorEvents = events.filter((e) => e.type === "error");
+    const errorEvents = events.filter((e) => e.type === "batch-error");
     expect(errorEvents.length).toBeGreaterThan(0);
 
     // Should still complete

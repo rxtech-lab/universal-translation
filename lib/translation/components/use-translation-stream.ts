@@ -194,6 +194,8 @@ export function useTranslationStream() {
                 ...prev,
                 `Save failed (batch ${event.batchIndex + 1}): ${event.message}`,
               ]);
+            } else if (event.type === "batch-error") {
+              setErrors((prev) => [...prev, event.message]);
             } else if (event.type === "error") {
               setErrors((prev) => [...prev, event.message]);
               setStatus({ state: "error", message: event.message });
