@@ -330,33 +330,34 @@ You MUST include all entries in the output. Use the exact entry IDs as given.`,
   const jsonMatch = fullText.match(/\{[\s\S]*"translations"[\s\S]*\}/);
   if (!jsonMatch) {
     yield {
-      type: "error",
+      type: "batch-error",
+      batchIndex: params.batchIndex,
       message: `Failed to parse translation response for batch ${params.batchIndex + 1}`,
     };
-    return;
-  }
+  } else {
+    try {
+      const parsed = translationResultSchema.parse(JSON.parse(jsonMatch[0]));
 
-  try {
-    const parsed = translationResultSchema.parse(JSON.parse(jsonMatch[0]));
+      for (const translation of parsed.translations) {
+        const entry = params.batch.find((e) => e.id === translation.id);
+        if (!entry) continue;
 
-    for (const translation of parsed.translations) {
-      const entry = params.batch.find((e) => e.id === translation.id);
-      if (!entry) continue;
-
+        yield {
+          type: "entry-translated",
+          resourceId: entry.resourceId,
+          entryId: translation.id,
+          targetText: translation.targetText,
+          current: params.globalOffset + params.batch.indexOf(entry) + 1,
+          total: params.allEntries.length,
+        };
+      }
+    } catch (err) {
       yield {
-        type: "entry-translated",
-        resourceId: entry.resourceId,
-        entryId: translation.id,
-        targetText: translation.targetText,
-        current: params.globalOffset + params.batch.indexOf(entry) + 1,
-        total: params.allEntries.length,
+        type: "batch-error",
+        batchIndex: params.batchIndex,
+        message: `Failed to parse batch ${params.batchIndex + 1} translations: ${err instanceof Error ? err.message : String(err)}`,
       };
     }
-  } catch (err) {
-    yield {
-      type: "error",
-      message: `Failed to parse batch ${params.batchIndex + 1} translations: ${err instanceof Error ? err.message : String(err)}`,
-    };
   }
 
   yield {
