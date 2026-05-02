@@ -4,7 +4,8 @@ import type { LanguageInfo } from "./types";
 export const LANGUAGES: LanguageInfo[] = [
   { code: "en", name: "English" },
   { code: "zh-Hans", name: "Chinese (Simplified)" },
-  { code: "zh-Hant", name: "Chinese (Traditional)" },
+  { code: "zh-Hant-HK", name: "Chinese (Traditional, Hong Kong)" },
+  { code: "zh-Hant-TW", name: "Chinese (Traditional, Taiwan)" },
   { code: "ja", name: "Japanese" },
   { code: "ko", name: "Korean" },
   { code: "es", name: "Spanish" },
