@@ -1,36 +1,107 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<p align="center">
+  <img src="./public/banner.svg" alt="Universal Translation banner" width="900"/>
+</p>
+
+**Universal Translation** is an AI-powered software localization platform. Upload any translation file, get context-aware, terminology-consistent translations in seconds, and export back to the original format — all in the browser.
+
+## Features
+
+- **Multi-format support** — `.xcloc` (Xcode String Catalogs), `.po`/`.pot` (Gettext), `.srt` (SubRip subtitles), `.vtt` (WebVTT), `.md` (Markdown), `.txt` (plain text), `.docx`/`.html` (documents)
+- **AI-powered translation** — LLM-driven, context-aware translations via Vercel AI SDK
+- **Glossary & terminology consistency** — custom glossary enforced across all translations
+- **Version history** — every save creates a snapshot; browse and restore previous versions
+- **Cloud projects** — save projects to the cloud and resume editing from any device
+- **Internationalized UI** — English and Chinese interfaces via next-intl
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | [Next.js 16](https://nextjs.org) (App Router, React 19) |
+| AI | [Vercel AI SDK 6](https://sdk.vercel.ai) |
+| Database | [Turso](https://turso.tech) (libSQL) + [Drizzle ORM](https://orm.drizzle.team) |
+| Auth | [Auth.js v5](https://authjs.dev) (OAuth) |
+| Styling | Tailwind CSS v4 + shadcn/ui |
+| Package manager | [Bun](https://bun.sh) |
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- [Bun](https://bun.sh) ≥ 1.0
+- A [Turso](https://turso.tech) database (or compatible libSQL instance)
+- OAuth provider credentials for Auth.js
+
+### Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Install dependencies
+bun install
+
+# Push the database schema
+bun run db:push
+
+# Start the development server
+bun run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to see the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Copy `.env.example` to `.env.local` and fill in your credentials:
 
-## Learn More
+| Variable | Description |
+|---|---|
+| `TURSO_DATABASE_URL` | libSQL connection URL |
+| `TURSO_AUTH_TOKEN` | Turso authentication token |
+| `AUTH_SECRET` | Auth.js secret (run `openssl rand -hex 32`) |
+| `AUTH_*` | OAuth provider credentials |
 
-To learn more about Next.js, take a look at the following resources:
+## Available Scripts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Script | Description |
+|---|---|
+| `bun run dev` | Start the Next.js development server |
+| `bun run build` | Build for production (runs `db:push` first) |
+| `bun run start` | Start the production server |
+| `bun run lint` | Run ESLint |
+| `bun run test` | Run unit tests with Vitest |
+| `bun run e2e` | Run end-to-end tests with Playwright |
+| `bun run db:generate` | Generate Drizzle migration files |
+| `bun run db:push` | Push schema changes to the database |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project Structure
 
-## Deploy on Vercel
+```
+app/                  # Next.js App Router pages & server actions
+components/           # Shared React components (UI + landing page)
+lib/
+  translation/        # Core translation engine
+    client.ts         # TranslationClient interface
+    detection.ts      # Format detection (confidence scoring)
+    registry.ts       # Registry & resolution
+    xcloc/            # Xcode .xcloc format
+    po/               # Gettext .po/.pot format
+    srt/              # SubRip .srt subtitles
+    vtt/              # WebVTT .vtt subtitles
+    document/         # .docx / .txt documents
+    html/             # HTML files
+    lyrics/           # Lyrics format
+  db/                 # Drizzle schema & database client
+messages/             # i18n translation files (en.po, zh.po)
+docs/                 # Architecture and developer documentation
+e2e/                  # Playwright end-to-end tests
+__tests__/            # Vitest unit tests
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Documentation
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Translation System Architecture](./docs/translation/architecture.md)
+- [Interface Reference](./docs/translation/interface-reference.md)
+- [Upload Flow](./docs/translation/upload-flow.md)
+- [Adding a New Format](./docs/translation/adding-a-format.md)
+
+## License
+
+[MIT](./LICENSE)
